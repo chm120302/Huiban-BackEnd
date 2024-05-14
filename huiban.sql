@@ -52,6 +52,7 @@ CREATE TABLE conference
     accepted_rate        decimal(4, 4)  NULL DEFAULT NULL COMMENT '会议录用率',
     session_num          int NOT NULL DEFAULT 1 COMMENT '会议举办届数',
     topic_details        text  CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '会议主题',
+    is_postponed         boolean NOT NULL DEFAULT false COMMENT '是否延期',
     PRIMARY KEY (conference_id) USING BTREE
 )ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT ='会议信息表';
 
@@ -112,18 +113,18 @@ This track is organised in the following topics:
     E2 Real-time, Dependable and Privacy-Enhanced Systems, Click here for details
     E3 Machine Learning Solutions for Embedded and Cyber-Physical Systems, Click here for details
     E4 Design Methodologies for Machine Learning Architectures, Click here for details
-    E5 Design Modelling and Verification for Embedded and Cyber-Physical Systems, Click here for details');
+    E5 Design Modelling and Verification for Embedded and Cyber-Physical Systems, Click here for details',false);
 
--- ---------------------------
--- 用户关注会议列表：记录用户收藏的会议
--- ---------------------------
-CREATE TABLE followList
-(
-    email          varchar(64)  CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '邮箱',
-    conference_id  varchar(16) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '会议号',
-    FOREIGN KEY (email) REFERENCES user (email),
-    FOREIGN KEY (conference_id) REFERENCES conference (conference_id)
-) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '用户会议关注列表';
+-- -- ---------------------------
+-- -- 用户关注会议列表：记录用户收藏的会议
+-- -- ---------------------------
+-- CREATE TABLE followList
+-- (
+--     email          varchar(64)  CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '邮箱',
+--     conference_id  varchar(16) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '会议号',
+--     FOREIGN KEY (email) REFERENCES user (email),
+--     FOREIGN KEY (conference_id) REFERENCES conference (conference_id)
+-- ) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '用户会议关注列表';
 
 
 -- -----------------------------
