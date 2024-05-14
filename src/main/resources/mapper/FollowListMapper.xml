@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.huibanbackend.mapper.FollowListMapper">
+    <!--
+    查询所有关注信息
+    List<FollowList> getAll();
+    -->
+    <select id="getAll" resultType="followList">
+        select email, conference_id
+        from followlist
+    </select>
+
+    <!--
+    按照email查询关注,显示关注会议信息
+    List<FollowList> getByEmail(String email);
+    -->
+    <select id="getByEmail" parameterType="string" resultType="followList">
+        select f.conference_id, c.ccf_rank, c.sub, c.paper_deadline, c.abstract_deadline
+        from followlist f join conference c
+        where f.email=#{email} and f.conference_id = c.conference_id
+    </select>
+
+    <!--
+    插入关注信息
+    int insert(FollowList followList);
+    -->
+    <insert id="insert" parameterType="followList">
+        insert into followlist (email, conference_id)
+        values (#{email}, #{conferenceId});
+    </insert>
+
+    <!--
+    删除关注信息
+    int delete(String conferenceId);
+    -->
+    <delete id="delete" parameterType="string">
+        delete from followlist
+        where conference_id=#{conferenceId}
+    </delete>
+
+    <!--
+    批量删除关注信息
+    int deleteBatch(List<String> list);
+    -->
+    <delete id="deleteBatch" parameterType="java.util.List">
+        delete from followlist
+        where conference_id in
+        <foreach collection="list" item="item" index="index" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
+    </delete>
+
+
+</mapper>
+
+
+

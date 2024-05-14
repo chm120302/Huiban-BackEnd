@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.huibanbackend.mapper.ConferenceMapper">
+
+    <sql id="selectAllColumns">
+        select c.conference_id, c.title, c.full_title, c.ccf_rank, c.sub, c.year, c.dblp_link, c.mainpage_link, c.place, c.abstract_deadline, c.paper_deadline, c.start_time, c.follow_num, c.accepted_rate, c.session_num, c.topic_details
+        from conference c
+    </sql>
+
+    <sql id="selectShowColumns">
+        select c.conference_id, c.ccf_rank, c.sub, c.dblp_link, c.start_time, c.abstract_deadline, c.paper_deadline, c.accepted_rate
+        from conference c
+    </sql>
+
+    <sql id="selectDetailColumns">
+        select c.conference_id, c.full_title, c.ccf_rank, c.mainpage_link, c.paper_deadline, c.abstract_deadline, c.paper_deadline, c.start_time, c.follow_num, c.session_num, c.topic_details
+        from conference c
+    </sql>
+
+    <!--
+    查询所有会议信息
+    List<Conference> getAll();
+    -->
+    <select id="getAll" resultType="conference">
+        <include refid="selectAllColumns"/>
+    </select>
+
+    <!--
+    查询所有会议信息(会议展示页)
+    List<Conference> getAllShow();
+    -->
+    <select id="getAllShow" resultType="conference">
+        <include refid="selectShowColumns"/>
+    </select>
+
+    <!--
+    按照会议id查询会议(会议展示页)
+    Conference getById(String conferenceId);
+    -->
+    <select id="getById" parameterType="string" resultType="conference">
+        <include refid="selectShowColumns"/>
+        where c.conference_id=#{conferenceId}
+    </select>
+
+    <!--
+    按照ccf等级查询会议(会议展示页)
+    List<Conference> getByCCFRank(String ccfRank);
+    -->
+    <select id="getByCCFRank" parameterType="string" resultType="conference">
+        <include refid="selectShowColumns"/>
+        where c.ccf_rank=#{ccfRank}
+    </select>
+
+    <!--
+    按照会议缩写查询会议(会议展示页)
+    List<Conference> getByTitle(String title);
+    -->
+    <select id="getByTitle" parameterType="string" resultType="conference">
+        <include refid="selectShowColumns"/>
+        where c.title=#{title}
+    </select>
+
+    <!--
+    按照会议全称查询会议(会议展示页)
+    List<Conference> getByFullTitle(String fullTitle);
+    -->
+    <select id="getByFullTitle" parameterType="string" resultType="conference">
+        <include refid="selectShowColumns"/>
+        where c.full_title=#{fullTitle}
+    </select>
+
+    <!--
+    按照会议领域查询会议(会议展示页)
+    List<Conference> getBySub(String sub);
+    -->
+    <select id="getBySub" parameterType="string" resultType="conference">
+        <include refid="selectShowColumns"/>
+        where c.sub=#{sub}
+    </select>
+
+    <!--
+    按照年份查询会议(会议展示页)
+    List<Conference> getByYear(int year);
+    -->
+    <select id="getByYear" parameterType="int" resultType="conference">
+        <include refid="selectShowColumns"/>
+        where c.year=#{year}
+    </select>
+
+    <!--
+    查询某段时间内的会议(会议展示页)
+    List<Conference> getByPeriod(Date start, Date end);
+    -->
+    <select id="getByPeriod" resultType="conference">
+        <include refid="selectShowColumns"/>
+        where c.start_time between #{start} and #{end}
+    </select>
+
+    <!--
+    查询所有会议详情信息(会议详情页)
+    List<Conference> getAllDetail();
+    -->
+    <select id="getAllDetail" resultType="conference">
+        <include refid="selectDetailColumns"/>
+    </select>
+
+    <!--
+    按照id查询会议详情(会议详情页)
+    Conference getDetailById(String conferenceId);
+    -->
+    <select id="getDetailById" parameterType="string" resultType="conference">
+        <include refid="selectDetailColumns"/>
+        where c.conference_id=#{id}
+    </select>
+
+    <!--
+    插入会议信息
+    int insert(Conference conference);
+    -->
+    <insert id="insert" parameterType="conference">
+        insert into conference (conference_id, title, full_title, ccf_rank, sub, year, dblp_link, mainpage_link, place, abstract_deadline, paper_deadline, start_time, accepted_rate, topic_details)
+        values (#{conferenceId}, #{title}, #{fullTitle}, #{ccfRank}, #{sub}, #{year}, #{dblpLink}, #{mainpageLink}, #{place}, #{abstractDeadline}, #{paperDeadline}, #{startTime}, #{acceptedRate}, #{topicDetails})
+    </insert>
+
+    <!--
+    批量插入会议
+    int insertBatch(List<Conference> list);
+    -->
+    <insert id="insertBatch" parameterType="java.util.List">
+        insert into conference (conference_id, title, full_title, ccf_rank, sub, year, dblp_link, mainpage_link, place, abstract_deadline, paper_deadline, start_time, accepted_rate, topic_details) values
+        <foreach collection="list" separator="," item="c">
+        (#{c.conferenceId}, #{c.title}, #{c.fullTitle}, #{c.ccfRank}, #{c.sub}, #{c.year}, #{c.dblpLink}, #{c.mainpageLink}, #{c.place}, #{c.abstractDeadline}, #{c.paperDeadline}, #{c.startTime}, #{c.acceptedRate}, #{c.topicDetails})
+        </foreach>
+    </insert>
+
+    <!--
+    删除会议
+    int delete(String conferenceId);
+    -->
+    <delete id="delete" parameterType="string">
+        delete from conference
+        where conference_id=#{conferenceId}
+    </delete>
+
+    <!--
+    更新会议信息
+    int update(Conference conference);
+    -->
+    <update id="update" parameterType="conference">
+        update conference set title=#{title}, full_title=#{fullTitle}, ccf_rank=#{ccfRank}, sub=#{sub}, year=#{year}, dblp_link=#{dblpLink},
+                              mainpage_link=#{mainpageLink}, place=#{place}, abstract_deadline=#{abstractDeadline}, paper_deadline=#{paperDeadline},
+                              start_time=#{startTime}, follow_num=#{followNum}, accepted_rate=#{acceptedRate}, session_num=#{sessionNum}, topic_details=#{topicDetails}
+        where conference_id=#{conferenceId}
+
+    </update>
+
+    <!--
+    更新全文截止日期，摘要截止日期，开会日期
+    int updateThreeTime(String conferenceId, Date abstractDeadline, Date paperDeadline, Date startTime);
+    -->
+    <update id="updateThreeTime" >
+        update conference set abstract_deadline=#{abstractDeadline}, paper_deadline=#{paperDeadline}, start_time=#{startTime}
+        where conference_id=#{conferenceId}
+    </update>
+
+
+</mapper>

@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.huibanbackend.mapper.UserMapper">
+    <!--
+    查询所有用户信息
+    List<User> getAll();
+    -->
+    <select id="getAll" resultType="user">
+        select email, image_url, user_name, institution, password
+        from user
+    </select>
+
+    <!--
+    按照email查询用户信息
+    User getByEmail(String email);
+    -->
+    <select id="getByEmail" parameterType="string" resultType="user">
+        select email, image_url, user_name, institution
+        from user
+        where email=#{email}
+    </select>
+
+    <!--
+    按照user_name查询用户信息
+    List<User> getByUserName(String userName);
+    -->
+    <select id="getByUserName" parameterType="string" resultType="user">
+        select email, image_url, user_name, institution
+        from user
+        where user_name like '%${userName}%'
+    </select>
+
+    <!--
+    增加用户
+    int insert(User user);
+    PS: 插入占位取实体类的名称
+    -->
+    <insert id="insert" parameterType="user">
+        insert into user (email, image_url, user_name, institution, password) values (#{email}, #{imageUrl}, #{userName}, #{institution}, #{password})
+    </insert>
+
+    <!--
+    删除用户
+    int delete(String email);
+    -->
+    <delete id="delete" parameterType="string">
+        delete from user
+        where email=#{email}
+    </delete>
+
+    <!--
+    更新用户信息
+    int update(User user);
+    -->
+    <update id="update" parameterType="user">
+        update user set image_url=#{imageUrl}, user_name=#{userName}, institution=#{institution}, password=#{password}
+        where email=#{email}
+    </update>
+
+    <!--
+    更新用户密码
+    int updatePassword(Map params);
+    Map封装email和password
+    -->
+    <update id="updatePassword">
+        update user set password=#{password}
+        where email=#{email}
+    </update>
+
+</mapper>
