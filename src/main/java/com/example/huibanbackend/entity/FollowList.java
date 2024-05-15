@@ -1,12 +1,25 @@
 package com.example.huibanbackend.entity;
 
 public class FollowList {
+    private Integer id;
     private String email;
     private String conferenceId;
+    public FollowList() {
 
-    public FollowList(String email, String conferenceId) {
+    }
+
+    public FollowList(Integer id, String email, String conferenceId) {
+        this.id = id;
         this.email = email;
         this.conferenceId = conferenceId;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public String getEmail() {
@@ -28,7 +41,8 @@ public class FollowList {
     @Override
     public String toString() {
         return "FollowList{" +
-                "email='" + email + '\'' +
+                "id=" + id +
+                ", email='" + email + '\'' +
                 ", conferenceId='" + conferenceId + '\'' +
                 '}';
     }

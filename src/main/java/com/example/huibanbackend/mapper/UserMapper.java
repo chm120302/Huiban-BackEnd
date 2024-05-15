@@ -10,6 +10,12 @@ import java.util.List;
  * 数据访问层接口
  */
 public interface UserMapper {
+    //查询所有用户的信息包括收藏列表
+    List<User> getAllInfo();
+
+    // 按照用户编号id查询信息包括收藏列表
+    User getAllInfoById(Integer id);
+
     List<User> getAll();
 
     User getByEmail(String email);
@@ -18,7 +24,7 @@ public interface UserMapper {
 
     int insert(User user);
 
-    int delete(String email);
+    int delete(Integer id);
 
     int update(User user);
 

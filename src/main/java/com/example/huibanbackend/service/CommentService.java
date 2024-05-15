@@ -17,4 +17,7 @@ public interface CommentService {
     //保存评论
     int saveComment(Comment comment);
 
+    //删除评论
+    int deleteComment(Integer id);
+
 }

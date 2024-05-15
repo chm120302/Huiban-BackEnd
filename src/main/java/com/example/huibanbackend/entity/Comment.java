@@ -2,6 +2,8 @@ package com.example.huibanbackend.entity;
 
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 
@@ -9,6 +11,7 @@ import java.util.Date;
 import java.util.List;
 
 public class Comment {
+    private static final Logger log = LoggerFactory.getLogger(Comment.class);
     private Integer id;
     private String userName;
     private String imageUrl;

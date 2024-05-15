@@ -98,4 +98,9 @@ public class CommentServiceImpl implements CommentService {
         comment.setCommentTime(new Date());
         return commentMapper.saveComment(comment);
     }
+
+    @Override
+    public int deleteComment(Integer id) {
+        return commentMapper.deleteComment(id);
+    }
 }

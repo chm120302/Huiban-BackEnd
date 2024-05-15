@@ -31,4 +31,10 @@
         where c.parent_id=#{childId}
         order by c.comment_time desc
     </select>
+
+    <!--删除评论-->
+    <delete id="deleteComment" parameterType="int">
+        delete from comment
+        where id=#{id}
+    </delete>
 </mapper>

@@ -1,30 +1,43 @@
 package com.example.huibanbackend.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.sql.Date;
 
 public class Conference {
+    private static final Logger log = LoggerFactory.getLogger(Conference.class);
+    private Integer id;
     private String conferenceId; // 会议缩写+年份
     private String title;
     private String fullTitle;
     private String ccfRank;
     private String sub;
-    private int year;
+    private Integer year;
     private String dblpLink;
     private String mainpageLink;
     private String place;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "UTC")
     private Date abstractDeadline;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "UTC")
     private Date paperDeadline;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "UTC")
     private Date startTime;
-    private int followNum;
-    private float acceptedRate;
-    private int sessionNum;
+    private Integer followNum;
+    private double acceptedRate;
+    private Integer sessionNum;
     private String topicDetails;
+    private boolean isPostponed;
 
-    public Conference(String conferenceId, String title, String description, String ccfRank, String sub, int year, String dblpLink, String mainpageLink, String place, Date abstractDeadline, Date paperDeadline, Date startTime, int followNum, float acceptedRate, int sessionNum, String topicDetails) {
+    public Conference() {}
+
+    public Conference(Integer id, String conferenceId, String title, String fullTitle, String ccfRank, String sub, Integer year, String dblpLink, String mainpageLink, String place, Date abstractDeadline, Date paperDeadline, Date startTime, Integer followNum, double acceptedRate, Integer sessionNum, String topicDetails, boolean isPostponed) {
+        this.id = id;
         this.conferenceId = conferenceId;
         this.title = title;
-        this.fullTitle = description;
+        this.fullTitle = fullTitle;
         this.ccfRank = ccfRank;
         this.sub = sub;
         this.year = year;
@@ -38,6 +51,35 @@ public class Conference {
         this.acceptedRate = acceptedRate;
         this.sessionNum = sessionNum;
         this.topicDetails = topicDetails;
+        this.isPostponed = isPostponed;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public void setYear(Integer year) {
+        this.year = year;
+    }
+
+    public void setFollowNum(Integer followNum) {
+        this.followNum = followNum;
+    }
+
+    public void setSessionNum(Integer sessionNum) {
+        this.sessionNum = sessionNum;
+    }
+
+    public boolean isPostponed() {
+        return isPostponed;
+    }
+
+    public void setPostponed(boolean postponed) {
+        isPostponed = postponed;
     }
 
     public String getConferenceId() {
@@ -144,11 +186,11 @@ public class Conference {
         this.followNum = followNum;
     }
 
-    public float getAcceptedRate() {
+    public double getAcceptedRate() {
         return acceptedRate;
     }
 
-    public void setAcceptedRate(float acceptedRate) {
+    public void setAcceptedRate(double acceptedRate) {
         this.acceptedRate = acceptedRate;
     }
 
@@ -171,9 +213,10 @@ public class Conference {
     @Override
     public String toString() {
         return "Conference{" +
-                "conferenceId='" + conferenceId + '\'' +
+                "id=" + id +
+                ", conferenceId='" + conferenceId + '\'' +
                 ", title='" + title + '\'' +
-                ", description='" + fullTitle + '\'' +
+                ", fullTitle='" + fullTitle + '\'' +
                 ", ccfRank='" + ccfRank + '\'' +
                 ", sub='" + sub + '\'' +
                 ", year=" + year +
@@ -187,6 +230,7 @@ public class Conference {
                 ", acceptedRate=" + acceptedRate +
                 ", sessionNum=" + sessionNum +
                 ", topicDetails='" + topicDetails + '\'' +
+                ", isPostponed=" + isPostponed +
                 '}';
     }
 }

@@ -1,19 +1,63 @@
 package com.example.huibanbackend.entity;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.List;
+
 public class User {
+    private static final Logger log = LoggerFactory.getLogger(User.class);
+    private Integer id;
     private String email;
     private String imageUrl;
     private String userName;
     private String institution;
     private String password;
 
-    public User(String email, String imageUrl, String userName, String institution, String password) {
+    //用户关注会议列表
+    private List<Conference> followConferences;
+    //用户关注期刊列表
+    private List<Journal> followJournals;
+
+    public User(){
+
+    }
+
+    public User(Integer id, String email, String imageUrl, String userName, String institution, String password, List<Conference> followConferences, List<Journal> followJournals) {
+        this.id = id;
         this.email = email;
         this.imageUrl = imageUrl;
         this.userName = userName;
         this.institution = institution;
         this.password = password;
+        this.followConferences = followConferences;
+        this.followJournals = followJournals;
     }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public List<Conference> getFollowConferences() {
+        return followConferences;
+    }
+
+    public void setFollowConferences(List<Conference> followConferences) {
+        this.followConferences = followConferences;
+    }
+
+    public List<Journal> getFollowJournals() {
+        return followJournals;
+    }
+
+    public void setFollowJournals(List<Journal> followJournals) {
+        this.followJournals = followJournals;
+    }
+
     public String getEmail() {
         return email;
     }
@@ -47,8 +91,15 @@ public class User {
 
     @Override
     public String toString() {
-        return "User [email=" + email + ", imageUrl=" + imageUrl + ", userName=" + userName;
+        return "User{" +
+                "id=" + id +
+                ", email='" + email + '\'' +
+                ", imageUrl='" + imageUrl + '\'' +
+                ", userName='" + userName + '\'' +
+                ", institution='" + institution + '\'' +
+                ", password='" + password + '\'' +
+                ", followConferences=" + followConferences +
+                ", followJournals=" + followJournals +
+                '}';
     }
-
-
 }
