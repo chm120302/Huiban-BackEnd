@@ -1,6 +1,7 @@
 package com.example.huibanbackend.entity;
 
-import java.util.Date;
+
+import java.sql.Date;
 
 public class Conference {
     private String conferenceId; // 会议缩写+年份

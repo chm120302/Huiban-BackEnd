@@ -8,6 +8,7 @@ use huiban;
 -- SET FOREIGN_KEY_CHECKS = 0;
 DROP TABLE IF EXISTS user;
 DROP TABLE IF EXISTS conference;
+DROP TABLE IF EXISTS journal;
 DROP TABLE IF EXISTS followList;
 DROP TABLE IF EXISTS comment;
 
@@ -17,17 +18,19 @@ DROP TABLE IF EXISTS comment;
 -- -------------------------
 CREATE TABLE user
 (
+    id           int NOT NULL  AUTO_INCREMENT COMMENT '编号id',
     email        varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '邮箱',
     image_url    varchar(512) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '用户头像',
     user_name    varchar(32)  CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '用户名',
     institution  varchar(64)  CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '机构',
-    password     varchar(8)   CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '密码',
-    PRIMARY KEY (email) USING BTREE
+    password    varchar(8)   CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '密码',
+    PRIMARY KEY (id) USING BTREE,
+    UNIQUE INDEX (email) USING BTREE
 )ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT ='用户信息表';
 
 -- 初始化用户信息
-INSERT INTO user VALUES ('chm120302@126.com', 'https://ts1.cn.mm.bing.net/th/id/R-C.748160bf925a7acb3ba1c9514bbc60db?rik=AYY%2bJ9WcXYIMgw&riu=http%3a%2f%2fseopic.699pic.com%2fphoto%2f50017%2f0822.jpg_wh1200.jpg&ehk=CMVcdZMU6xxsjVjafO70cFcmJvD62suFC1ytk8UuAUk%3d&risl=&pid=ImgRaw&r=0', 'chm', 'ECNU', '123456');
-INSERT INTO user VALUES ('xxx@163.com', 'https://ts1.cn.mm.bing.net/th/id/R-C.6b9074faed6dae2a0457e690c2aa3a03?rik=6V%2fv2rXhPCf7Pg&riu=http%3a%2f%2fn.sinaimg.cn%2fsinacn20115%2f534%2fw1280h854%2f20190221%2f9461-htknpmf9890147.jpg&ehk=RyGDdQrMiIWbz7Uxa%2fLSPOz2iXvM8JpbkBIZgttQkWc%3d&risl=&pid=ImgRaw&r=0', 'admin', 'ECNU', '12345678');
+INSERT INTO user VALUES (null, 'chm120302@126.com', 'https://ts1.cn.mm.bing.net/th/id/R-C.748160bf925a7acb3ba1c9514bbc60db?rik=AYY%2bJ9WcXYIMgw&riu=http%3a%2f%2fseopic.699pic.com%2fphoto%2f50017%2f0822.jpg_wh1200.jpg&ehk=CMVcdZMU6xxsjVjafO70cFcmJvD62suFC1ytk8UuAUk%3d&risl=&pid=ImgRaw&r=0', 'chm', 'ECNU', '123456');
+INSERT INTO user VALUES (null, 'xxx@163.com', 'https://ts1.cn.mm.bing.net/th/id/R-C.6b9074faed6dae2a0457e690c2aa3a03?rik=6V%2fv2rXhPCf7Pg&riu=http%3a%2f%2fn.sinaimg.cn%2fsinacn20115%2f534%2fw1280h854%2f20190221%2f9461-htknpmf9890147.jpg&ehk=RyGDdQrMiIWbz7Uxa%2fLSPOz2iXvM8JpbkBIZgttQkWc%3d&risl=&pid=ImgRaw&r=0', 'admin', 'ECNU', '12345678');
 
 
 
@@ -36,9 +39,10 @@ INSERT INTO user VALUES ('xxx@163.com', 'https://ts1.cn.mm.bing.net/th/id/R-C.6b
 -- ---------------------------
 CREATE TABLE conference
 (
+    id                   int NOT NULL  AUTO_INCREMENT COMMENT '编号id',
     conference_id        varchar(16) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '会议号',
     title                varchar(16) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '会议简称',
-    full_title                 varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '会议全称',
+    full_title           varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '会议全称',
     ccf_rank             varchar(2) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT 'CCF等级',
     sub                  varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '所在领域',
     year                 int  NOT NULL COMMENT '会议年份',
@@ -49,15 +53,16 @@ CREATE TABLE conference
     paper_deadline       datetime NULL DEFAULT NULL COMMENT '全文截止时间',
     start_time           date NULL DEFAULT NULL COMMENT '会议开始时间',
     follow_num           int NOT NULL DEFAULT 0 COMMENT '会议收藏数量',
-    accepted_rate        decimal(4, 4)  NULL DEFAULT NULL COMMENT '会议录用率',
+    accepted_rate        float  NULL DEFAULT NULL COMMENT '会议录用率',
     session_num          int NOT NULL DEFAULT 1 COMMENT '会议举办届数',
     topic_details        text  CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '会议主题',
     is_postponed         boolean NOT NULL DEFAULT false COMMENT '是否延期',
-    PRIMARY KEY (conference_id) USING BTREE
+    PRIMARY KEY (id) USING BTREE,
+    UNIQUE INDEX (conference_id) USING BTREE
 )ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT ='会议信息表';
 
 -- 初始化会议信息
-INSERT INTO conference VALUES ('date2023', 'DATE', 'Design, Automation & Test in Europe', 'B','DS','2023', 'https://dblp.org/db/conf/date/index.html', 'https://date23.date-conference.com/', 'Valencia, Spain','2022-09-18 23:59:59', '2022-09-25 23:59:59', '2023-09-17', 0, NULL, 26,
+INSERT INTO conference VALUES (null, 'date2023', 'DATE', 'Design, Automation & Test in Europe', 'B','DS','2023', 'https://dblp.org/db/conf/date/index.html', 'https://date23.date-conference.com/', 'Valencia, Spain','2022-09-18 23:59:59', '2022-09-25 23:59:59', '2023-09-17', 0, NULL, 26,
                                'Within the scope of the conference, the main areas of interest are organised in the following tracks. Submissions can be made to any of the track topics.
 
 Track D: Design Methods and Tools, addresses design automation, design tools and hardware architectures for electronic and embedded systems. The emphasis is on methods, algorithms, and tools related to the use of computers in designing complete systems. The track focus includes significant improvements on existing design methods and tools as well as forward-looking approaches to model and design future system architectures, design flows, and environments.
@@ -115,30 +120,56 @@ This track is organised in the following topics:
     E4 Design Methodologies for Machine Learning Architectures, Click here for details
     E5 Design Modelling and Verification for Embedded and Cyber-Physical Systems, Click here for details',false);
 
--- -- ---------------------------
--- -- 用户关注会议列表：记录用户收藏的会议
--- -- ---------------------------
--- CREATE TABLE followList
--- (
---     email          varchar(64)  CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '邮箱',
---     conference_id  varchar(16) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '会议号',
---     FOREIGN KEY (email) REFERENCES user (email),
---     FOREIGN KEY (conference_id) REFERENCES conference (conference_id)
--- ) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '用户会议关注列表';
+-- ---------------------------
+-- 期刊表：记录期刊详细信息
+-- ---------------------------
+CREATE TABLE journal
+(
+    id             int NOT NULL  AUTO_INCREMENT COMMENT '编号id',
+    journal_id        varchar(16) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '期刊号(期刊全称)',
+    ccf_rank             varchar(2) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT 'CCF等级',
+    sub                  varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '所在领域',
+    dblp_link            varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '期刊dblp链接',
+    mainpage_link        varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '期刊主页链接',
+    paper_deadline       datetime NULL DEFAULT NULL COMMENT '截稿时间',
+    follow_num           int NOT NULL DEFAULT 0 COMMENT '期刊收藏数量',
+    accepted_rate        float  NULL DEFAULT NULL COMMENT '期刊录用率',
+    impact_factor        float  NULL DEFAULT NULL COMMENT '期刊影响因子',
+    publisher            varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '出版商',
+    topic_details        text  CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '会议主题',
+    is_postponed         boolean NOT NULL DEFAULT false COMMENT '是否延期',
+    PRIMARY KEY (id) USING BTREE,
+    UNIQUE INDEX (journal_id) USING BTREE
+)ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT ='期刊信息表';
+
+
+-- ---------------------------
+-- 用户关注会议/期刊列表：记录用户收藏的会议/期刊
+-- ---------------------------
+CREATE TABLE followList
+(
+    id             int NOT NULL  AUTO_INCREMENT COMMENT '编号id',
+    email          varchar(64)  CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '邮箱',
+    category       varchar(32)  CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '类型(Conference/ Journal)',
+    academic_id    varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '会议id或期刊id',
+    PRIMARY KEY (id) USING BTREE,
+    FOREIGN KEY (email) REFERENCES user (email)
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '用户会议关注列表';
 
 
 -- -----------------------------
--- 评论表: 记录用户在会议页的评论
+-- 评论表: 记录用户在会议/期刊页的评论
 -- -----------------------------
 CREATE TABLE comment
 (
-    comment_id      int NOT NULL  AUTO_INCREMENT COMMENT '评论id',
-    email           varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '邮箱',
-    comment_time    datetime NOT NULL COMMENT '评论时间',
-    content         text CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '评论内容',
-    last_id         int NULL DEFAULT NULL COMMENT '上一条回复id, 为NULL说明是第一条评论',
-    conference_id   varchar(16) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '评论会议id',
-    PRIMARY KEY (comment_id) USING BTREE,
-    FOREIGN KEY (email) REFERENCES user (email),
-    FOREIGN KEY (conference_id) REFERENCES conference (conference_id)
+    id              int NOT NULL  AUTO_INCREMENT COMMENT '评论编号id',
+    image_url       varchar(512) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '用户头像',
+    user_name       varchar(32)  CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '用户名',
+    comment_time    datetime DEFAULT NULL COMMENT '评论时间',
+    content         text CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '评论内容',
+    category        varchar(32)  CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '类型(Conference/ Journal)',
+    academic_id     varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '评论会议/期刊id',
+    parent_id       int NOT NULL DEFAULT -1 COMMENT '父评论id',
+    PRIMARY KEY (id) USING BTREE
  ) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '评论表';
+

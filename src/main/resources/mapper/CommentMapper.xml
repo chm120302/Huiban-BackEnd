@@ -2,59 +2,33 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.example.huibanbackend.mapper.CommentMapper">
-    <sql id="selectAllColumns">
-        select c.comment_id, c.email, c.comment_time, c.content, c.last_id, c.conference_id
-        from comment c
-    </sql>
-    <!--
-    查询所有评论信息
-    List<CommentList> getAll();
-    -->
-    <select id="getAll" resultType="comment">
-        <include refid="selectAllColumns"/>
-    </select>
-
-    <!--
-    按照评论id查询
-    Comment getById(int commentId);
-    -->
-    <select id="getById" parameterType="int" resultType="comment">
-        <include refid="selectAllColumns"/>
-        where c.comment_id=#{commentId}
-    </select>
-
-    <!--
-    按照会议id查询
-    List<Comment> getByConference(String conferenceId);
-    -->
-    <select id="getByConference" parameterType="string" resultType="comment">
-        select u.user_name, u.image_url, c.comment_time, c.content, c.last_id, c.conference_id
-        from comment c join user u
-        where c.conference_id=#{conferenceId} and c.email = u.email
-    </select>
-
-    <!--
-    按照会议id和last id查询
-    List<Comment> getReplay(String conferenceId, int lastId);
-    -->
-    <select id="getReplay" parameterType="string" resultType="comment">
-        select u.user_name, u.image_url, c.comment_time, c.content, c.last_id, c.conference_id
-        from comment c join user u
-        where c.conference_id=#{conferenceId} and c.email = u.email and c.last_id=#{lastId}
-    </select>
-
-    <!--
-    插入评论
-    int insert(Comment comment);
-    -->
-    <insert id="insert" parameterType="comment">
-        insert into comment (comment_id, email, comment_time, content, last_id, conference_id)
-        values (NULL, #{email}, #{commentTime}, #{content}, #{liastId}, #{conferenceId})
+    <!--添加一个评论 -->
+    <insert id="saveComment"  parameterType="comment">
+        insert into comment (image_url, user_name, comment_time, content, category, academic_id, parent_id)
+        values (#{imageUrl}, #{userName}, #{commentTime}, #{content}, #{category}, #{academicId}, #{parentId})
     </insert>
 
-    <!--
-    删除评论
-    int delete
-    -->
+    <!--查询父级评论-->
+    <select id="findByParentId" resultType="comment">
+        select *
+        from comment c
+        where c.parent_id=#{parentId}
+        order by c.comment_time desc
+    </select>
 
+    <!--查询一级回复-->
+    <select id="findByCommentId" resultType="comment">
+        select *
+        from comment c
+        where c.parent_id=#{id}
+        order by c.comment_time desc
+    </select>
+
+    <!--查询二级以及所有子集回复-->
+    <select id="findByReplyId" resultType="comment">
+        select *
+        from comment c
+        where c.parent_id=#{childId}
+        order by c.comment_time desc
+    </select>
 </mapper>

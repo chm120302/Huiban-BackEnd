@@ -1,0 +1,29 @@
+package com.example.huibanbackend.mapper;
+
+import com.example.huibanbackend.entity.Comment;
+import jakarta.annotation.Resource;
+import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
+
+import java.util.List;
+
+@Repository
+@Mapper
+public interface CommentMapper {
+
+    //添加一个评论
+    int saveComment(Comment comment);
+
+    //查询父级评论
+    List<Comment> findByParentId(@Param("parentId") Integer parentId);
+
+    //查询一级回复
+    List<Comment> findByCommentId(@Param("id") Integer id);
+
+    // 查询二级以及所有子集回复
+    List<Comment> findByReplyId(@Param("childId") Integer childId);
+
+    int deleteComment(@Param("id") Integer id);
+}

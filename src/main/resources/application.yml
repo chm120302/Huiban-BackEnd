@@ -3,7 +3,7 @@ spring:
     name: Huiban-BackEnd
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/huiban?useUnicode=true&characterEncoding=utf8&ServerTimezone=UTC
+    url: jdbc:mysql://localhost:3306/huiban?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai&tinyInt1isBit=false
     username: root
     password: root
     # druid-spring-boot-starter 依赖自动生效 druid，可以不配置 type 属性，但建议配置
