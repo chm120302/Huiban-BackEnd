@@ -6,13 +6,12 @@ import org.slf4j.LoggerFactory;
 
 import java.util.Date;
 
-public class Journal {
-    private static final Logger log = LoggerFactory.getLogger(Journal.class);
+public class JournalDetail {
+    private static final Logger log = LoggerFactory.getLogger(JournalDetail.class);
     private Integer id;
     private String journalId;
     private String ccfRank;
     private String sub;
-    private String dblpLink;
     private String mainpageLink;
     @JsonFormat(pattern = "yyyy-MM-dd", timezone = "UTC")
     private Date paperDeadline;
@@ -23,8 +22,8 @@ public class Journal {
     private String topicDetails;
     private boolean isPostponed;
 
-    public Journal(){}
-
+    public JournalDetail() {
+    }
 
     public Integer getId() {
         return id;
@@ -56,14 +55,6 @@ public class Journal {
 
     public void setSub(String sub) {
         this.sub = sub;
-    }
-
-    public String getDblpLink() {
-        return dblpLink;
-    }
-
-    public void setDblpLink(String dblpLink) {
-        this.dblpLink = dblpLink;
     }
 
     public String getMainpageLink() {
@@ -132,12 +123,11 @@ public class Journal {
 
     @Override
     public String toString() {
-        return "Journal{" +
+        return "JournalDetail{" +
                 "id=" + id +
                 ", journalId='" + journalId + '\'' +
                 ", ccfRank='" + ccfRank + '\'' +
                 ", sub='" + sub + '\'' +
-                ", dblpLink='" + dblpLink + '\'' +
                 ", mainpageLink='" + mainpageLink + '\'' +
                 ", paperDeadline=" + paperDeadline +
                 ", followNum=" + followNum +
@@ -148,4 +138,6 @@ public class Journal {
                 ", isPostponed=" + isPostponed +
                 '}';
     }
+
+
 }

@@ -2,50 +2,53 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.example.huibanbackend.mapper.FollowListMapper">
-    <!--
-    查询所有关注信息
-    List<FollowList> getAll();
-    -->
-    <select id="getAll" resultType="followList">
-        select email, conference_id
-        from followlist
-    </select>
 
     <!--
-    按照email查询关注,显示关注会议信息
+    按照email查询关注的会议/期刊
     List<FollowList> getByEmail(String email);
     -->
     <select id="getByEmail" parameterType="string" resultType="followList">
-        select f.conference_id, c.ccf_rank, c.sub, c.paper_deadline, c.abstract_deadline
-        from followlist f join conference c
-        where f.email=#{email} and f.conference_id = c.conference_id
+        select id, category, academic_id
+        from followlist
+        where email=#{email}
     </select>
+
+    <!--
+    按照email和category查询关注的会议/期刊
+    List<FollowList> getByCategory(String email, String category);
+    -->
+    <select id="getByCategory" >
+        select id, category, academic_id
+        from followlist
+        where email=#{email} and category=#{category}
+    </select>
+
 
     <!--
     插入关注信息
     int insert(FollowList followList);
     -->
     <insert id="insert" parameterType="followList">
-        insert into followlist (email, conference_id)
-        values (#{email}, #{conferenceId});
+        insert into followlist (email, category, academic_id)
+        values (#{email}, #{category}, #{academicId});
     </insert>
 
     <!--
     删除关注信息
-    int delete(String conferenceId);
+    int delete(Integer id);
     -->
-    <delete id="delete" parameterType="string">
+    <delete id="delete" parameterType="int">
         delete from followlist
-        where conference_id=#{conferenceId}
+        where id=#{id}
     </delete>
 
     <!--
     批量删除关注信息
-    int deleteBatch(List<String> list);
+    int deleteBatch(List<Integer> list);
     -->
     <delete id="deleteBatch" parameterType="java.util.List">
         delete from followlist
-        where conference_id in
+        where id in
         <foreach collection="list" item="item" index="index" open="(" close=")" separator=",">
             #{item}
         </foreach>

@@ -12,7 +12,7 @@ import java.util.List;
 public interface CommentService {
 
     //查询评论列表
-    List<Comment> listComment();
+    List<Comment> listComment(String academicId);
 
     //保存评论
     int saveComment(Comment comment);

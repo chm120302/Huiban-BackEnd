@@ -6,25 +6,23 @@ import org.slf4j.LoggerFactory;
 
 import java.util.Date;
 
-public class Journal {
-    private static final Logger log = LoggerFactory.getLogger(Journal.class);
+public class JournalShow {
+    private static final Logger log = LoggerFactory.getLogger(JournalShow.class);
     private Integer id;
     private String journalId;
     private String ccfRank;
     private String sub;
     private String dblpLink;
-    private String mainpageLink;
     @JsonFormat(pattern = "yyyy-MM-dd", timezone = "UTC")
     private Date paperDeadline;
-    private Integer followNum;
     private double acceptedRate;
     private double impactFactor;
     private String publisher;
-    private String topicDetails;
     private boolean isPostponed;
 
-    public Journal(){}
+    public JournalShow(){
 
+    }
 
     public Integer getId() {
         return id;
@@ -66,28 +64,12 @@ public class Journal {
         this.dblpLink = dblpLink;
     }
 
-    public String getMainpageLink() {
-        return mainpageLink;
-    }
-
-    public void setMainpageLink(String mainpageLink) {
-        this.mainpageLink = mainpageLink;
-    }
-
     public Date getPaperDeadline() {
         return paperDeadline;
     }
 
     public void setPaperDeadline(Date paperDeadline) {
         this.paperDeadline = paperDeadline;
-    }
-
-    public Integer getFollowNum() {
-        return followNum;
-    }
-
-    public void setFollowNum(Integer followNum) {
-        this.followNum = followNum;
     }
 
     public double getAcceptedRate() {
@@ -114,14 +96,6 @@ public class Journal {
         this.publisher = publisher;
     }
 
-    public String getTopicDetails() {
-        return topicDetails;
-    }
-
-    public void setTopicDetails(String topicDetails) {
-        this.topicDetails = topicDetails;
-    }
-
     public boolean isPostponed() {
         return isPostponed;
     }
@@ -132,20 +106,19 @@ public class Journal {
 
     @Override
     public String toString() {
-        return "Journal{" +
+        return "JournalShow{" +
                 "id=" + id +
                 ", journalId='" + journalId + '\'' +
                 ", ccfRank='" + ccfRank + '\'' +
                 ", sub='" + sub + '\'' +
                 ", dblpLink='" + dblpLink + '\'' +
-                ", mainpageLink='" + mainpageLink + '\'' +
                 ", paperDeadline=" + paperDeadline +
-                ", followNum=" + followNum +
                 ", acceptedRate=" + acceptedRate +
                 ", impactFactor=" + impactFactor +
                 ", publisher='" + publisher + '\'' +
-                ", topicDetails='" + topicDetails + '\'' +
                 ", isPostponed=" + isPostponed +
                 '}';
     }
+
+
 }

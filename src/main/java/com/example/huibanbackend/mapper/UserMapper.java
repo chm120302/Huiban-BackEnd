@@ -13,8 +13,8 @@ public interface UserMapper {
     //查询所有用户的信息包括收藏列表
     List<User> getAllInfo();
 
-    // 按照用户编号id查询信息包括收藏列表
-    User getAllInfoById(Integer id);
+    // 按照用户email查询信息包括收藏列表
+    User getAllInfoByEmail(String email);
 
     List<User> getAll();
 

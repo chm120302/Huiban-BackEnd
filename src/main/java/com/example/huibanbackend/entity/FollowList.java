@@ -1,17 +1,16 @@
 package com.example.huibanbackend.entity;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class FollowList {
+    private static final Logger log = LoggerFactory.getLogger(FollowList.class);
     private Integer id;
     private String email;
-    private String conferenceId;
+    private String category;
+    private String academicId;
     public FollowList() {
 
-    }
-
-    public FollowList(Integer id, String email, String conferenceId) {
-        this.id = id;
-        this.email = email;
-        this.conferenceId = conferenceId;
     }
 
     public Integer getId() {
@@ -30,12 +29,20 @@ public class FollowList {
         this.email = email;
     }
 
-    public String getConferenceId() {
-        return conferenceId;
+    public String getCategory() {
+        return category;
     }
 
-    public void setConferenceId(String conferenceId) {
-        this.conferenceId = conferenceId;
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
+    public String getAcademicId() {
+        return academicId;
+    }
+
+    public void setAcademicId(String academicId) {
+        this.academicId = academicId;
     }
 
     @Override
@@ -43,7 +50,10 @@ public class FollowList {
         return "FollowList{" +
                 "id=" + id +
                 ", email='" + email + '\'' +
-                ", conferenceId='" + conferenceId + '\'' +
+                ", category='" + category + '\'' +
+                ", academicId='" + academicId + '\'' +
                 '}';
     }
+
+
 }

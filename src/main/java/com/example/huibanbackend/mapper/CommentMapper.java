@@ -17,13 +17,13 @@ public interface CommentMapper {
     int saveComment(Comment comment);
 
     //查询父级评论
-    List<Comment> findByParentId(@Param("parentId") Integer parentId);
+    List<Comment> findByParentId(@Param("academicId") String academicId, @Param("parentId") Integer parentId);
 
     //查询一级回复
-    List<Comment> findByCommentId(@Param("id") Integer id);
+    List<Comment> findByCommentId(@Param("academicId") String academicId, @Param("id") Integer id);
 
     // 查询二级以及所有子集回复
-    List<Comment> findByReplyId(@Param("childId") Integer childId);
+    List<Comment> findByReplyId(@Param("academicId") String academicId, @Param("childId") Integer childId);
 
     int deleteComment(@Param("id") Integer id);
 }

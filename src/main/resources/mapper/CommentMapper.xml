@@ -12,7 +12,7 @@
     <select id="findByParentId" resultType="comment">
         select *
         from comment c
-        where c.parent_id=#{parentId}
+        where c.parent_id=#{parentId} and c.academic_id=#{academicId}
         order by c.comment_time desc
     </select>
 
@@ -20,7 +20,7 @@
     <select id="findByCommentId" resultType="comment">
         select *
         from comment c
-        where c.parent_id=#{id}
+        where c.parent_id=#{id} and c.academic_id=#{academicId}
         order by c.comment_time desc
     </select>
 
@@ -28,7 +28,7 @@
     <select id="findByReplyId" resultType="comment">
         select *
         from comment c
-        where c.parent_id=#{childId}
+        where c.parent_id=#{childId} and c.academic_id=#{academicId}
         order by c.comment_time desc
     </select>
 

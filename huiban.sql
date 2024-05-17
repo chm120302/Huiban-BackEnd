@@ -40,22 +40,22 @@ INSERT INTO user VALUES (null, 'xxx@163.com', 'https://ts1.cn.mm.bing.net/th/id/
 CREATE TABLE conference
 (
     id                   int NOT NULL  AUTO_INCREMENT COMMENT '编号id',
-    conference_id        varchar(16) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '会议号',
-    title                varchar(16) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '会议简称',
-    full_title           varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '会议全称',
-    ccf_rank             varchar(2) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT 'CCF等级',
-    sub                  varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '所在领域',
+    conference_id        varchar(16) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '会议号',
+    title                varchar(16) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '会议简称',
+    full_title           varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '会议全称',
+    ccf_rank             varchar(2) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT 'CCF等级',
+    sub                  varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '所在领域',
     year                 int  NOT NULL COMMENT '会议年份',
-    dblp_link            varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '会议dblp链接',
-    mainpage_link        varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '会议主页链接',
-    place                varchar(32)  CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '会议地点',
+    dblp_link            varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '会议dblp链接',
+    mainpage_link        varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '会议主页链接',
+    place                varchar(32)  CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '会议地点',
     abstract_deadline    datetime NULL DEFAULT NULL COMMENT '摘要截止时间',
     paper_deadline       datetime NULL DEFAULT NULL COMMENT '全文截止时间',
     start_time           date NULL DEFAULT NULL COMMENT '会议开始时间',
     follow_num           int NOT NULL DEFAULT 0 COMMENT '会议收藏数量',
     accepted_rate        float  NULL DEFAULT NULL COMMENT '会议录用率',
     session_num          int NOT NULL DEFAULT 1 COMMENT '会议举办届数',
-    topic_details        text  CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '会议主题',
+    topic_details        text  CHARACTER SET utf8 COLLATE utf8_general_ci NULL COMMENT '会议主题',
     is_postponed         boolean NOT NULL DEFAULT false COMMENT '是否延期',
     PRIMARY KEY (id) USING BTREE,
     UNIQUE INDEX (conference_id) USING BTREE
@@ -126,17 +126,17 @@ This track is organised in the following topics:
 CREATE TABLE journal
 (
     id             int NOT NULL  AUTO_INCREMENT COMMENT '编号id',
-    journal_id        varchar(16) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '期刊号(期刊全称)',
-    ccf_rank             varchar(2) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT 'CCF等级',
-    sub                  varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '所在领域',
-    dblp_link            varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '期刊dblp链接',
-    mainpage_link        varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '期刊主页链接',
+    journal_id        varchar(16) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '期刊号(期刊全称)',
+    ccf_rank             varchar(2) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT 'CCF等级',
+    sub                  varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '所在领域',
+    dblp_link            varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '期刊dblp链接',
+    mainpage_link        varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '期刊主页链接',
     paper_deadline       datetime NULL DEFAULT NULL COMMENT '截稿时间',
     follow_num           int NOT NULL DEFAULT 0 COMMENT '期刊收藏数量',
     accepted_rate        float  NULL DEFAULT NULL COMMENT '期刊录用率',
     impact_factor        float  NULL DEFAULT NULL COMMENT '期刊影响因子',
-    publisher            varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '出版商',
-    topic_details        text  CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '会议主题',
+    publisher            varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '出版商',
+    topic_details        text  CHARACTER SET utf8 COLLATE utf8_general_ci NULL  COMMENT '会议主题',
     is_postponed         boolean NOT NULL DEFAULT false COMMENT '是否延期',
     PRIMARY KEY (id) USING BTREE,
     UNIQUE INDEX (journal_id) USING BTREE
@@ -149,9 +149,9 @@ CREATE TABLE journal
 CREATE TABLE followList
 (
     id             int NOT NULL  AUTO_INCREMENT COMMENT '编号id',
-    email          varchar(64)  CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '邮箱',
-    category       varchar(32)  CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '类型(Conference/ Journal)',
-    academic_id    varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '会议id或期刊id',
+    email          varchar(64)  CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '邮箱',
+    category       varchar(32)  CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '类型(Conference/ Journal)',
+    academic_id    varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '会议id或期刊id',
     PRIMARY KEY (id) USING BTREE,
     FOREIGN KEY (email) REFERENCES user (email)
 ) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '用户会议关注列表';
@@ -163,12 +163,12 @@ CREATE TABLE followList
 CREATE TABLE comment
 (
     id              int NOT NULL  AUTO_INCREMENT COMMENT '评论编号id',
-    image_url       varchar(512) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '用户头像',
-    user_name       varchar(32)  CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '用户名',
+    image_url       varchar(512) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '用户头像',
+    user_name       varchar(32)  CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '用户名',
     comment_time    datetime DEFAULT NULL COMMENT '评论时间',
     content         text CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '评论内容',
-    category        varchar(32)  CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '类型(Conference/ Journal)',
-    academic_id     varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '评论会议/期刊id',
+    category        varchar(32)  CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '类型(Conference/ Journal)',
+    academic_id     varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '评论会议/期刊id',
     parent_id       int NOT NULL DEFAULT -1 COMMENT '父评论id',
     PRIMARY KEY (id) USING BTREE
  ) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '评论表';

@@ -29,16 +29,16 @@ public class CommentServiceImpl implements CommentService {
      */
     @Transactional
     @Override
-    public List<Comment> listComment() {
+    public List<Comment> listComment(String academicId) {
         //查询所有父节点评论
-        List<Comment> comments = commentMapper.findByParentId(Integer.parseInt("-1"));
+        List<Comment> comments = commentMapper.findByParentId(academicId, Integer.parseInt("-1"));
         for(Comment comment : comments) {
             Integer id = comment.getId();
             String parentName = comment.getUserName();
             String parentImage = comment.getParentImageurl();
-            List<Comment> chilldComments = commentMapper.findByCommentId(id);
+            List<Comment> chilldComments = commentMapper.findByCommentId(academicId, id);
             // 查询子评论
-            combineChildren(chilldComments, parentName, parentImage);
+            combineChildren(academicId,chilldComments, parentName, parentImage);
             comment.setReplys(tempReplys);
             tempReplys.clear();
 
@@ -52,7 +52,7 @@ public class CommentServiceImpl implements CommentService {
      * @param parentUsername 父评论用户名
      * @param parentImageurl 父评论头像
      */
-    private void combineChildren(List<Comment> childComments, String parentUsername, String parentImageurl){
+    private void combineChildren(String academicId, List<Comment> childComments, String parentUsername, String parentImageurl){
         //判断是否有子一级评论
         if(!childComments.isEmpty()){
             for(Comment childComment : childComments){
@@ -62,7 +62,7 @@ public class CommentServiceImpl implements CommentService {
                 childComment.setParentImageurl(parentImageurl);
                 tempReplys.add(childComment);
                 Integer childId = childComment.getId();
-                recursively(childId, parentName, parentImage);
+                recursively(academicId, childId, parentName, parentImage);
             }
         }
     }
@@ -73,8 +73,8 @@ public class CommentServiceImpl implements CommentService {
      * @param parentUsername  子评论用户名
      * @param parentImageurl  子评论头像
      */
-    private void recursively(Integer childId, String parentUsername, String parentImageurl){
-        List<Comment> replyComments = commentMapper.findByReplyId(childId);
+    private void recursively(String academicId, Integer childId, String parentUsername, String parentImageurl){
+        List<Comment> replyComments = commentMapper.findByReplyId(academicId, childId);
         if(!replyComments.isEmpty()){
             for(Comment replyComment : replyComments){
                 String parentName = replyComment.getUserName();
@@ -84,7 +84,7 @@ public class CommentServiceImpl implements CommentService {
                 Integer replyId = replyComment.getId();
                 tempReplys.add(replyComment);
 
-                recursively(replyId, parentName, parentImage);
+                recursively(academicId, replyId, parentName, parentImage);
             }
         }
 

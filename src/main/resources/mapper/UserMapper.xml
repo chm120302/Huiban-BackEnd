@@ -66,11 +66,11 @@
 
     <!--
     按照用户编号id查询信息包括收藏列表
-    User getAllInfoById(Integer id);
+    User getAllInfoByEmail(String email);
     -->
-    <select id="getAllInfo" parameterType="int" resultMap="userMap">
+    <select id="getAllInfo" parameterType="string" resultMap="userMap">
         <include refid="getAllIncludeFollow"/>
-        where u.id=#{id}
+        where u.email=#{email}
     </select>
 
 
@@ -109,13 +109,23 @@
     PS: 插入占位取实体类的名称
     -->
     <insert id="insert" parameterType="user">
-        insert into user (email, image_url, user_name, institution, password) values (
-        <if test="email != null and email != ''">#{email},</if>
-        <if test="imageUrl != null and imageUrl != ''">#{imageUrl},</if>
-        <if test="userName != null and userName != ''">#{userName},</if>
-        <if test="institution != null and institution != ''">#{institution},</if>
-        <if test="password != null and password != ''">#{password}</if>
-        )
+        insert into user
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="email != null and email != ''">email</if>
+            <if test="imageUrl != null and imageUrl != ''">image_url</if>
+            <if test="userName != null and userName != ''">user_name</if>
+            <if test="institution != null and institution != ''">institution</if>
+            <if test="password != null and password != ''">`password`</if>
+        </trim>
+
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="email != null and email != ''">#{email}</if>
+            <if test="imageUrl != null and imageUrl != ''">#{imageUrl}</if>
+            <if test="userName != null and userName != ''">#{userName}</if>
+            <if test="institution != null and institution != ''">#{institution}</if>
+            <if test="password != null and password != ''">#{password}</if>
+        </trim>
+
     </insert>
 
     <!--

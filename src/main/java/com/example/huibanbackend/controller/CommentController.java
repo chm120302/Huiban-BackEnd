@@ -24,9 +24,9 @@ public class CommentController {
         return "comment";
     }
 
-    @GetMapping("/comment")
-    public String listComments(Model model) {
-        List<Comment> comments = commentService.listComment();
+    @GetMapping("/{academicId}/comments")
+    public String listComments(Model model, @PathVariable String academicId) {
+        List<Comment> comments = commentService.listComment(academicId);
         model.addAttribute("comments", comments);
         return "comment :: commentList";
     }

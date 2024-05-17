@@ -41,7 +41,7 @@ class CommentServiceImplTest {
 
     @Test
     void listComment() {
-        commentService.listComment();
+        commentService.listComment("Ad Hoc Network");
     }
 
     @Test

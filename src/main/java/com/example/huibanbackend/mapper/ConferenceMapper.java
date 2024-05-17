@@ -1,44 +1,56 @@
 package com.example.huibanbackend.mapper;
 
 import com.example.huibanbackend.entity.Conference;
+import com.example.huibanbackend.entity.ConferenceDetail;
+import com.example.huibanbackend.entity.ConferenceShow;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.Date;
 import java.util.List;
 
 public interface ConferenceMapper {
-    List<Conference> getAll();
 
-    List<Conference> getAllShow();
+    //查询截稿日期最近的前10个会议
+    List<ConferenceShow> getRecentList();
 
-    Conference getById(String conferenceId);
+    //查询所有会议信息(会议展示页)
+    List<ConferenceShow> getAllShow();
 
-    List<Conference> getByCCFRank(String ccfRank);
+    //按照会议id查询会议(会议展示页)
+    ConferenceShow getById(String conferenceId);
 
-    List<Conference> getByTitle(String title);
+    //按照ccf等级查询会议(会议展示页)
+    List<ConferenceShow> getByCCFRank(String ccfRank);
 
-    List<Conference> getByFullTitle(String fullTitle);
+    //按照会议缩写查询会议(会议展示页)
+    List<ConferenceShow> getByTitle(String title);
 
-    List<Conference> getBySub(String sub);
+    //按照会议领域查询会议(会议展示页)
+    List<ConferenceShow> getBySub(String sub);
 
-    List<Conference> getByYear(int year);
+    //查询某段时间内的会议(会议展示页)
+    List<ConferenceShow> getByPeriod(@Param("start") Date start, @Param("end") Date end);
 
-    List<Conference> getByPeriod(@Param("start") Date start, @Param("end") Date end);
+    //查询所有会议详情信息(会议详情页)
+    List<ConferenceDetail> getAllDetail();
 
-    List<Conference> getAllDetail();
+    //按照id查询会议详情(会议详情页)
+    ConferenceDetail getDetailById(String conferenceId);
 
-    Conference getDetailById(String conferenceId);
-
+    //插入会议信息
     int insert(Conference conference);
 
+    //批量插入
     int insertBatch(List<Conference> list);
 
-    int delete(String conferenceId);
+    //删除会议
+    int delete(Integer id);
 
+    //更新会议
     int update(Conference conference);
 
-    int updateThreeTime(@Param("conferenceId") String conferenceId, @Param("abstractDeadline") Date abstractDeadline,
-                        @Param("paperDeadline") Date paperDeadline, @Param("startTime") Date startTime);
+    //更新收藏数
+    int updateFollowNum(@Param("conferenceId") String conferenceId);
 
 
 }
