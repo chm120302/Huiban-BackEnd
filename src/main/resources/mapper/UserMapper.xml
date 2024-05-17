@@ -142,7 +142,10 @@
     int update(User user);
     -->
     <update id="update" parameterType="user">
-        update user set image_url=#{imageUrl}, user_name=#{userName}, institution=#{institution}, password=#{password}
+        update user set
+        <if test="imageUrl != null and imageUrl != ''">image_url=#{imageUrl},</if>
+        <if test="userName != null and userName != ''">user_name=#{userName},</if>
+        <if test="institution != null and institution !=''">institution=#{institution}</if>
         where email=#{email}
     </update>
 

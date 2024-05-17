@@ -25,5 +25,6 @@ public interface CommentMapper {
     // 查询二级以及所有子集回复
     List<Comment> findByReplyId(@Param("academicId") String academicId, @Param("childId") Integer childId);
 
+    //删除评论
     int deleteComment(@Param("id") Integer id);
 }
