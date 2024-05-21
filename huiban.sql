@@ -10,6 +10,9 @@ DROP TABLE IF EXISTS user;
 DROP TABLE IF EXISTS conference;
 DROP TABLE IF EXISTS journal;
 DROP TABLE IF EXISTS followList;
+DROP TABLE IF EXISTS followList2;
+DROP TABLE IF EXISTS attendList;
+DROP TABLE IF EXISTS attendList2;
 DROP TABLE IF EXISTS comment;
 
 
@@ -42,19 +45,20 @@ CREATE TABLE conference
     id                   int NOT NULL  AUTO_INCREMENT COMMENT '编号id',
     conference_id        varchar(16) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '会议号',
     title                varchar(16) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '会议简称',
-    full_title           varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '会议全称',
+    full_title           varchar(256) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '会议全称',
     ccf_rank             varchar(2) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT 'CCF等级',
     sub                  varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '所在领域',
     year                 int  NOT NULL COMMENT '会议年份',
     dblp_link            varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '会议dblp链接',
     mainpage_link        varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '会议主页链接',
-    place                varchar(32)  CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '会议地点',
+    place                varchar(256)  CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '会议地点',
     abstract_deadline    datetime NULL DEFAULT NULL COMMENT '摘要截止时间',
     paper_deadline       datetime NULL DEFAULT NULL COMMENT '全文截止时间',
     start_time           date NULL DEFAULT NULL COMMENT '会议开始时间',
-    follow_num           int NOT NULL DEFAULT 0 COMMENT '会议收藏数量',
+    follow_num           int NULL DEFAULT 0 COMMENT '会议收藏数量',
+    attend_num           int NULL DEFAULT 0 COMMENT '会议参加数量',
     accepted_rate        float  NULL DEFAULT NULL COMMENT '会议录用率',
-    session_num          int NOT NULL DEFAULT 1 COMMENT '会议举办届数',
+    session_num          int NULL DEFAULT 1 COMMENT '会议举办届数',
     topic_details        text  CHARACTER SET utf8 COLLATE utf8_general_ci NULL COMMENT '会议主题',
     is_postponed         boolean NOT NULL DEFAULT false COMMENT '是否延期',
     PRIMARY KEY (id) USING BTREE,
@@ -62,7 +66,7 @@ CREATE TABLE conference
 )ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT ='会议信息表';
 
 -- 初始化会议信息
-INSERT INTO conference VALUES (null, 'date2023', 'DATE', 'Design, Automation & Test in Europe', 'B','DS','2023', 'https://dblp.org/db/conf/date/index.html', 'https://date23.date-conference.com/', 'Valencia, Spain','2022-09-18 23:59:59', '2022-09-25 23:59:59', '2023-09-17', 0, NULL, 26,
+INSERT INTO conference VALUES (null, 'date2023', 'DATE', 'Design, Automation & Test in Europe', 'B','DS','2023', 'https://dblp.org/db/conf/date/index.html', 'https://date23.date-conference.com/', 'Valencia, Spain','2022-09-18 23:59:59', '2022-09-25 23:59:59', '2023-09-17', 0, 0, NULL, 26,
                                'Within the scope of the conference, the main areas of interest are organised in the following tracks. Submissions can be made to any of the track topics.
 
 Track D: Design Methods and Tools, addresses design automation, design tools and hardware architectures for electronic and embedded systems. The emphasis is on methods, algorithms, and tools related to the use of computers in designing complete systems. The track focus includes significant improvements on existing design methods and tools as well as forward-looking approaches to model and design future system architectures, design flows, and environments.
@@ -126,14 +130,14 @@ This track is organised in the following topics:
 CREATE TABLE journal
 (
     id             int NOT NULL  AUTO_INCREMENT COMMENT '编号id',
-    journal_id        varchar(16) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '期刊号(期刊全称)',
+    journal_id        varchar(128) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '期刊号(期刊全称)',
     ccf_rank             varchar(2) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT 'CCF等级',
     sub                  varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '所在领域',
     dblp_link            varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '期刊dblp链接',
     mainpage_link        varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '期刊主页链接',
-    paper_deadline       datetime NULL DEFAULT NULL COMMENT '截稿时间',
-    follow_num           int NOT NULL DEFAULT 0 COMMENT '期刊收藏数量',
-    accepted_rate        float  NULL DEFAULT NULL COMMENT '期刊录用率',
+    paper_deadline       date NULL DEFAULT NULL COMMENT '截稿时间',
+    follow_num           int NULL DEFAULT 0 COMMENT '期刊收藏数量',
+    attend_num           int NULL DEFAULT 0 COMMENT '会议收藏数量',
     impact_factor        float  NULL DEFAULT NULL COMMENT '期刊影响因子',
     publisher            varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '出版商',
     topic_details        text  CHARACTER SET utf8 COLLATE utf8_general_ci NULL  COMMENT '会议主题',
@@ -142,19 +146,94 @@ CREATE TABLE journal
     UNIQUE INDEX (journal_id) USING BTREE
 )ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT ='期刊信息表';
 
+-- 初始化期刊信息
+INSERT INTO journal VALUES (null, 'IEEE Journal on Selected Areas in Communications', 'A', 'computer networking', 'https://dblp.org/db/journals/jsac/index.html', 'https://ieeexplore.ieee.org/xpl/RecentIssue.jsp?punumber=49', '2024-05-31', 0, 0,  16.4, 'IEEE',
+                            'Conventional security architectures and models are considered a single network architecture solution, where devices authenticated within the network are assumed to be implicitly trusted. Such a conventional solution assumes that once devices have been authenticated within the network, are free to access, move, or exfiltrate data. This may introduce security threats and attacks. Although such an approach may be adopted in certain network scenarios, it definitely cannot be applied to NGNs. Zero-Trust security was introduced to overcome these obstacles, in which it does not rely on entry-point authentication, but rather uses context-aware, dynamic, and intelligent authentication schemes to detect and prevent security threats and attacks. Given that zero-trust security is a new security paradigm, little work has been done in this area to secure NGNs using zero-trust models. Zero-trust security models will highly benefit from two elements: threat intelligence and decentralized authentication. Continuous and dynamic trust evaluation is needed to attain high levels of access control in NGN. The use of Artificial Intelligence (AI) and Deep Learning (DL) will grant tremendous capabilities for zero-trust architectures to maintain high levels of intrusion detection and prevention. Moreover, through decentralized authentication methods like blockchain, data will both be stored and shared safely.
+
+This Special Issue aims to foster original research and innovative solutions on the above subject to tackle the challenging issues related to security and trust in NGNs. We welcome the dissemination of high-quality research on emerging ideas, approaches, theories, frameworks, and practices of zero-trust in NGNs. Researchers, developers, and industry experts are welcome to submit their work that may focus on fundamental methodological studies or use cases and application demonstrations.
+
+Topics of interest include, but are not limited to:
+- Utilizing zero-trust to secure wireless communication and networks.
+- Securing critical infrastructure communication with zero-trust.
+- Applying zero-trust for aerial communication and network security.
+- Federated Deep Learning-based zero-trust models.
+- Distributed and decentralized zero-trust architectures and frameworks for NGN.
+- Blockchain-enabled zero-trust architectures and frameworks for NGN.
+- Access management and identity authentication using zero-trust in NGN.
+- Testing and evaluating zero-trust security in networks.
+- Zero-trust for 6G applications and services.
+- Security of virtual Environments (e.g., Metaverse) in 6G.
+- Conflict detection using AI/ML embedding/representation models.
+- Access management for AI/ML model life cycle management in 6G networks.
+- Integration of Zero-trust at the physical, data link, and network layers of the OSI model. ', false);
+
+INSERT INTO journal VALUES (null, 'IEEE Internet of Things', 'C', 'computer networking','', '', null, 0, 0, null,  'IEEE', 'details', false);
+INSERT INTO journal VALUES (null, 'TWC', 'B', 'computer networking', '', '', null, 0, 0, null, 'IEEE', 'dd', false);
 
 -- ---------------------------
--- 用户关注会议/期刊列表：记录用户收藏的会议/期刊
+-- 用户关注会议列表：记录用户收藏的会议
 -- ---------------------------
 CREATE TABLE followList
 (
     id             int NOT NULL  AUTO_INCREMENT COMMENT '编号id',
     email          varchar(64)  CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '邮箱',
-    category       varchar(32)  CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '类型(Conference/ Journal)',
+    category       varchar(32)  CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '类型(Conference)',
     academic_id    varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '会议id或期刊id',
     PRIMARY KEY (id) USING BTREE,
     FOREIGN KEY (email) REFERENCES user (email)
 ) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '用户会议关注列表';
+
+
+-- ---------------------------
+-- 用户关注期刊列表：记录用户收藏的期刊
+-- ---------------------------
+CREATE TABLE followList2
+(
+    id             int NOT NULL  AUTO_INCREMENT COMMENT '编号id',
+    email          varchar(64)  CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '邮箱',
+    category       varchar(32)  CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '类型(Journal)',
+    academic_id    varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '会议id或期刊id',
+    PRIMARY KEY (id) USING BTREE,
+    FOREIGN KEY (email) REFERENCES user (email)
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '用户会议关注列表';
+
+
+-- 初始化关注列表
+INSERT INTO followList VALUES (null, 'chm120302@126.com', 'conference', 'date2023');
+INSERT INTO followList2 VALUES (null, 'chm120302@126.com', 'journal', 'IEEE Journal on Selected Areas in Communications');
+INSERT INTO followList2 VALUES (null, 'chm120302@126.com', 'journal', 'IEEE Internet of Things');
+
+-- ---------------------------
+-- 用户参加会议列表：记录用户参加的会议
+-- ---------------------------
+CREATE TABLE attendList
+(
+    id             int NOT NULL  AUTO_INCREMENT COMMENT '编号id',
+    email          varchar(64)  CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '邮箱',
+    category       varchar(32)  CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '类型(Conference)',
+    academic_id    varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '会议id或期刊id',
+    PRIMARY KEY (id) USING BTREE,
+    FOREIGN KEY (email) REFERENCES user (email)
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '用户参加会议/期刊列表';
+
+-- ---------------------------
+-- 用户参加期刊列表：记录用户参加的期刊
+-- ---------------------------
+CREATE TABLE attendList2
+(
+    id             int NOT NULL  AUTO_INCREMENT COMMENT '编号id',
+    email          varchar(64)  CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '邮箱',
+    category       varchar(32)  CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '类型(Journal)',
+    academic_id    varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '会议id或期刊id',
+    PRIMARY KEY (id) USING BTREE,
+    FOREIGN KEY (email) REFERENCES user (email)
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '用户参加会议/期刊列表';
+
+
+-- 初始化参加列表
+INSERT INTO attendList VALUES (null, 'chm120302@126.com', 'conference', 'date2023');
+INSERT INTO attendList2 VALUES (null, 'chm120302@126.com', 'journal', 'TWC');
+INSERT INTO attendList2 VALUES (null, 'chm120302@126.com', 'journal', 'IEEE Internet of Things');
 
 
 -- -----------------------------

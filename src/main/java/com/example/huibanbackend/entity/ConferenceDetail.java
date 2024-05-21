@@ -12,6 +12,7 @@ public class ConferenceDetail {
     private String conferenceId; // 会议缩写+年份
     private String fullTitle;
     private String ccfRank;
+    private String dblpLink;
     private String mainpageLink;
     private String place;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "UTC")
@@ -21,12 +22,39 @@ public class ConferenceDetail {
     @JsonFormat(pattern = "yyyy-MM-dd", timezone = "UTC")
     private Date startTime;
     private int followNum;
+    private Integer attendNum;
     private int sessionNum;
     private String topicDetails;
     private boolean isPostponed;
 
+    public ConferenceDetail(String conferenceId, String fullTitle, String ccfRank, String dblpLink, String mainpageLink, String place, Date abstractDeadline, Date paperDeadline, Date startTime, int followNum, Integer attendNum, int sessionNum, String topicDetails, boolean isPostponed) {
+
+        this.conferenceId = conferenceId;
+        this.fullTitle = fullTitle;
+        this.ccfRank = ccfRank;
+        this.dblpLink = dblpLink;
+        this.mainpageLink = mainpageLink;
+        this.place = place;
+        this.abstractDeadline = abstractDeadline;
+        this.paperDeadline = paperDeadline;
+        this.startTime = startTime;
+        this.followNum = followNum;
+        this.attendNum = attendNum;
+        this.sessionNum = sessionNum;
+        this.topicDetails = topicDetails;
+        this.isPostponed = isPostponed;
+    }
+
     public boolean isPostponed() {
         return isPostponed;
+    }
+
+    public Integer getAttendNum() {
+        return attendNum;
+    }
+
+    public void setAttendNum(Integer attendNum) {
+        this.attendNum = attendNum;
     }
 
     public void setPostponed(boolean postponed) {
@@ -35,6 +63,14 @@ public class ConferenceDetail {
 
     public ConferenceDetail() {
 
+    }
+
+    public String getDblpLink() {
+        return dblpLink;
+    }
+
+    public void setDblpLink(String dblpLink) {
+        this.dblpLink = dblpLink;
     }
 
     public Integer getId() {
@@ -140,12 +176,14 @@ public class ConferenceDetail {
                 ", conferenceId='" + conferenceId + '\'' +
                 ", fullTitle='" + fullTitle + '\'' +
                 ", ccfRank='" + ccfRank + '\'' +
+                ", dblpLink='" + dblpLink + '\'' +
                 ", mainpageLink='" + mainpageLink + '\'' +
                 ", place='" + place + '\'' +
                 ", abstractDeadline=" + abstractDeadline +
                 ", paperDeadline=" + paperDeadline +
                 ", startTime=" + startTime +
                 ", followNum=" + followNum +
+                ", attendNum=" + attendNum +
                 ", sessionNum=" + sessionNum +
                 ", topicDetails='" + topicDetails + '\'' +
                 ", isPostponed=" + isPostponed +

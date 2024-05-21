@@ -3,14 +3,26 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.example.huibanbackend.mapper.JournalMapper">
     <sql id="selectShowColumns">
-        select id, journal_id, ccf_rank, sub, dblp_link, paper_deadline, accepted_rate, impact_factor, publisher, is_postponed
+        select id, journal_id, ccf_rank, sub,paper_deadline, impact_factor, publisher, is_postponed
         from journal c
     </sql>
     
     <sql id="selectDetailColumns">
-        select id, journal_id, ccf_rank, sub,mainpage_link, paper_deadline, follow_num, accepted_rate, impact_factor, publisher, topic_details, is_postponed
-        from journal
+        select id, journal_id, ccf_rank, sub, dblp_link, mainpage_link, paper_deadline, follow_num, attend_num, impact_factor, publisher, topic_details, is_postponed
+        from journal c
     </sql>
+
+    <!--
+    查询最受欢迎的5个期刊
+    List<HashMap<String, Integer>> getPopularList();
+    -->
+    <select id="getPopularList" resultType="java.util.HashMap">
+        select journal_id, follow_num
+        from journal
+        order by follow_num desc
+        limit 5
+    </select>
+
 
     <!--
     查询截稿日期最近的前10个期刊
@@ -19,7 +31,7 @@
     <select id="getRecentList" resultType="conferenceShow">
         <include refid="selectShowColumns"/>
         where c.paper_deadline >= sysdate()
-        order by c.paper_dedaline asc
+        order by c.paper_deadline asc
         limit 10
     </select>
 
@@ -83,75 +95,77 @@
     <insert id="insert" parameterType="journal">
         insert into journal
         <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="journalId != null and journalId != ''">journal_id</if>
-            <if test="ccfRank != null and ccfRank != ''">ccf_rank</if>
-            <if test="sub != null and sub != ''">sub</if>
-            <if test="dblpLink != null and dblpLink != ''">dblp_link</if>
-            <if test="mainpageLink != null and mainpageLink != null">mainpage_link</if>
-            <if test="paperDeadline != null and paperDeadline != ''">paper_deadline</if>
-            <if test="followNum != null and followNum != ''">follow_num</if>
-            <if test="acceptedRate != null and acceptedRate != ''">accepted_rate</if>
-            <if test="impactFactor != null and impactFactor != ''">impact_factor</if>
-            <if test="publisher != null and publisher != ''">publisher</if>
-            <if test="topicDetails != null and topicDetails != ''">topic_details</if>
+            <if test="journalId != null and journalId != ''">journal_id,</if>
+            <if test="ccfRank != null and ccfRank != ''">ccf_rank,</if>
+            <if test="sub != null and sub != ''">sub,</if>
+            <if test="dblpLink != null and dblpLink != ''">dblp_link,</if>
+            <if test="mainpageLink != null and mainpageLink != null">mainpage_link,</if>
+            <if test="paperDeadline != null">paper_deadline,</if>
+            <if test="followNum != null and followNum != ''">follow_num,</if>
+            <if test="attendNum != null and attendNum != ''">attend_num,</if>
+            <if test="impactFactor != null and impactFactor != ''">impact_factor,</if>
+            <if test="publisher != null and publisher != ''">publisher,</if>
+            <if test="topicDetails != null and topicDetails != ''">topic_details,</if>
             <if test="isPostponed != null and isPostponed != ''">is_postponed</if>
         </trim>
 
         <trim prefix="values (" suffix=")" suffixOverrides=",">
-            <if test="journalId != null and journalId != ''">#{journalId}</if>
-            <if test="ccfRank != null and ccfRank != ''">#{ccfRank}</if>
-            <if test="sub != null and sub != ''">#{sub}</if>
-            <if test="dblpLink != null and dblpLink != ''">#{dblpLink}</if>
-            <if test="mainpageLink != null and mainpageLink != null">#{mainpageLink}</if>
-            <if test="paperDeadline != null and paperDeadline != ''">#{paperDeadline}</if>
-            <if test="followNum != null and followNum != ''">#{followNum}</if>
-            <if test="acceptedRate != null and acceptedRate != ''">#{acceptedRate}</if>
-            <if test="impactFactor != null and impactFactor != ''">#{impactFactor}</if>
-            <if test="publisher != null and publisher != ''">#{publisher}</if>
-            <if test="topicDetails != null and topicDetails != ''">#{topicDetails}</if>
+            <if test="journalId != null and journalId != ''">#{journalId},</if>
+            <if test="ccfRank != null and ccfRank != ''">#{ccfRank},</if>
+            <if test="sub != null and sub != ''">#{sub},</if>
+            <if test="dblpLink != null and dblpLink != ''">#{dblpLink},</if>
+            <if test="mainpageLink != null and mainpageLink != null">#{mainpageLink},</if>
+            <if test="paperDeadline != null">#{paperDeadline},</if>
+            <if test="followNum != null and followNum != ''">#{followNum},</if>
+            <if test="attendNum != null and attendNum != ''">{attendNum},</if>
+            <if test="impactFactor != null and impactFactor != ''">#{impactFactor},</if>
+            <if test="publisher != null and publisher != ''">#{publisher},</if>
+            <if test="topicDetails != null and topicDetails != ''">#{topicDetails},</if>
             <if test="isPostponed != null and isPostponed != ''">#{isPostponed}</if>
         </trim>
     </insert>
 
 
-    <!--
-   批量插入期刊
-   int insertBatch(List<Journal> list);
-   -->
-    <insert id="insertBatch" parameterType="java.util.List">
-        insert into journal
-        <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="journalId != null and journalId != ''">journal_id</if>
-            <if test="ccfRank != null and ccfRank != ''">ccf_rank</if>
-            <if test="sub != null and sub != ''">sub</if>
-            <if test="dblpLink != null and dblpLink != ''">dblp_link</if>
-            <if test="mainpageLink != null and mainpageLink != null">mainpage_link</if>
-            <if test="paperDeadline != null and paperDeadline != ''">paper_deadline</if>
-            <if test="followNum != null and followNum != ''">follow_num</if>
-            <if test="acceptedRate != null and acceptedRate != ''">accepted_rate</if>
-            <if test="impactFactor != null and impactFactor != ''">impact_factor</if>
-            <if test="publisher != null and publisher != ''">publisher</if>
-            <if test="topicDetails != null and topicDetails != ''">topic_details</if>
-            <if test="isPostponed != null and isPostponed != ''">is_postponed</if>
-        </trim>
-        values
-        <foreach collection="list" separator="," item="c">
-            (
-            <if test="journalId != null and journalId != ''">#{c.journalId}</if>
-            <if test="ccfRank != null and ccfRank != ''">#{c.ccfRank}</if>
-            <if test="sub != null and sub != ''">#{c.sub}</if>
-            <if test="dblpLink != null and dblpLink != ''">#{c.dblpLink}</if>
-            <if test="mainpageLink != null and mainpageLink != null">#{c.mainpageLink}</if>
-            <if test="paperDeadline != null and paperDeadline != ''">#{c.paperDeadline}</if>
-            <if test="followNum != null and followNum != ''">#{c.followNum}</if>
-            <if test="acceptedRate != null and acceptedRate != ''">#{c.acceptedRate}</if>
-            <if test="impactFactor != null and impactFactor != ''">#{c.impactFactor}</if>
-            <if test="publisher != null and publisher != ''">#{c.publisher}</if>
-            <if test="topicDetails != null and topicDetails != ''">#{c.topicDetails}</if>
-            <if test="isPostponed != null and isPostponed != ''">#{c.isPostponed}</if>
-            )
-        </foreach>
-    </insert>
+<!--    &lt;!&ndash;-->
+<!--   批量插入期刊-->
+<!--   int insertBatch(List<Journal> list);-->
+<!--   &ndash;&gt;-->
+<!--    <insert id="insertBatch" parameterType="java.util.List">-->
+<!--        insert into journal-->
+<!--        <trim prefix="(" suffix=")" suffixOverrides=",">-->
+<!--            <if test="journalId != null and journalId != ''">journal_id</if>-->
+<!--            <if test="ccfRank != null and ccfRank != ''">ccf_rank</if>-->
+<!--            <if test="sub != null and sub != ''">sub</if>-->
+<!--            <if test="dblpLink != null and dblpLink != ''">dblp_link</if>-->
+<!--            <if test="mainpageLink != null and mainpageLink != null">mainpage_link</if>-->
+<!--            <if test="paperDeadline != null and paperDeadline != ''">paper_deadline</if>-->
+<!--            <if test="followNum != null and followNum != ''">follow_num</if>-->
+<!--            <if test="attendNum != null and attendNum != ''">attend_num</if>-->
+<!--            <if test="acceptedRate != null and acceptedRate != ''">accepted_rate</if>-->
+<!--            <if test="impactFactor != null and impactFactor != ''">impact_factor</if>-->
+<!--            <if test="publisher != null and publisher != ''">publisher</if>-->
+<!--            <if test="topicDetails != null and topicDetails != ''">topic_details</if>-->
+<!--            <if test="isPostponed != null and isPostponed != ''">is_postponed</if>-->
+<!--        </trim>-->
+<!--        values-->
+<!--        <foreach collection="list" separator="," item="c">-->
+<!--            (-->
+<!--            <if test="journalId != null and journalId != ''">#{c.journalId},</if>-->
+<!--            <if test="ccfRank != null and ccfRank != ''">#{c.ccfRank},</if>-->
+<!--            <if test="sub != null and sub != ''">#{c.sub},</if>-->
+<!--            <if test="dblpLink != null and dblpLink != ''">#{c.dblpLink},</if>-->
+<!--            <if test="mainpageLink != null and mainpageLink != null">#{c.mainpageLink},</if>-->
+<!--            <if test="paperDeadline != null and paperDeadline != ''">#{c.paperDeadline},</if>-->
+<!--            <if test="followNum != null and followNum != ''">#{c.followNum},</if>-->
+<!--            <if test="attendNum != null and attendNum != ''">#{c.attendNum},</if>-->
+<!--            <if test="acceptedRate != null and acceptedRate != ''">#{c.acceptedRate},</if>-->
+<!--            <if test="impactFactor != null and impactFactor != ''">#{c.impactFactor},</if>-->
+<!--            <if test="publisher != null and publisher != ''">#{c.publisher},</if>-->
+<!--            <if test="topicDetails != null and topicDetails != ''">#{c.topicDetails},</if>-->
+<!--            <if test="isPostponed != null and isPostponed != ''">#{c.isPostponed},</if>-->
+<!--            )-->
+<!--        </foreach>-->
+<!--    </insert>-->
 
 
     <!--
@@ -174,9 +188,9 @@
         <if test="sub != null and sub != ''">sub=#{sub},</if>
         <if test="dblpLink != null and dblpLink != ''">dblp_link=#{dblpLink},</if>
         <if test="mainpageLink != null and mainpageLink != null">mainpage_link=#{mainpageLink},</if>
-        <if test="paperDeadline != null and paperDeadline != ''">paper_deadline=#{paperDeadline},</if>
+        <if test="paperDeadline != null">paper_deadline=#{paperDeadline},</if>
         <if test="followNum != null and followNum != ''">follow_num=#{followNum},</if>
-        <if test="acceptedRate != null and acceptedRate != ''">accepted_rate=#{acceptedRate},</if>
+        <if test="attendNum != null and attendNum != ''">attend_num=#{attendNum},</if>
         <if test="impactFactor != null and impactFactor != ''">impact_factor=#{impactFactor},</if>
         <if test="publisher != null and publisher != ''">publisher=#{publisher},</if>
         <if test="topicDetails != null and topicDetails != ''">topic_details=#{topicDetails},</if>
@@ -194,6 +208,17 @@
             follow_num = follow_num + 1
         where journal_id=#{journalId}
     </update>
+
+    <!--
+    更新参加数
+    int updateAttendNum(String journalId);
+    -->
+    <update id="updateAttendNum">
+        update journal set
+            attend_num = attend_num + 1
+        where journal_id=#{journalId}
+    </update>
+
 
 
 </mapper>

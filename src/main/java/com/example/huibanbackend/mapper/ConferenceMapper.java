@@ -3,12 +3,19 @@ package com.example.huibanbackend.mapper;
 import com.example.huibanbackend.entity.Conference;
 import com.example.huibanbackend.entity.ConferenceDetail;
 import com.example.huibanbackend.entity.ConferenceShow;
+import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Repository;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
-
+@Repository
+@Mapper
 public interface ConferenceMapper {
+
+    //查询最受欢迎的5个会议
+    List<HashMap<String, Integer>> getPopularList();
 
     //查询截稿日期最近的前10个会议
     List<ConferenceShow> getRecentList();
@@ -40,8 +47,8 @@ public interface ConferenceMapper {
     //插入会议信息
     int insert(Conference conference);
 
-    //批量插入
-    int insertBatch(List<Conference> list);
+//    //批量插入
+//    int insertBatch(List<Conference> cList);
 
     //删除会议
     int delete(Integer id);
@@ -52,5 +59,7 @@ public interface ConferenceMapper {
     //更新收藏数
     int updateFollowNum(@Param("conferenceId") String conferenceId);
 
+    //更新参加数
+    int updateAttendNum(@Param("conferenceId")String conferenceId);
 
 }

@@ -3,12 +3,12 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.example.huibanbackend.mapper.UserMapper">
 
-    <resultMap id="userMap" type="user">
+    <resultMap id="userMap" type="com.example.huibanbackend.entity.User">
         <id property="id" column="id"/>
         <result property="email" column="email"/>
         <result property="imageUrl" column="image_url"/>
         <result property="userName" column="user_name"/>
-        <result property="institution" column="instituton"/>
+        <result property="institution" column="institution"/>
         <result property="password" column="password"/>
         <!-- 配置关注会议的映射集合-->
         <collection property="followConferences" ofType="conference">
@@ -26,6 +26,7 @@
             <result property="paperDeadline" column="paper_deadline"/>
             <result property="startTime" column="start_time"/>
             <result property="followNum" column="follow_num"/>
+            <result property="attendNum" column="attend_num"/>
             <result property="acceptedRate" column="accepted_rate"/>
             <result property="sessionNum" column="session_num"/>
             <result property="topicDetails" column="topic_details"/>
@@ -40,20 +41,67 @@
             <result property="sub" column="sub"/>
             <result property="dblpLink" column="dblp_link"/>
             <result property="mainpageLink" column="mainpage_link"/>
+            <result property="paperDeadline" column="paper_deadline"/>
             <result property="followNum" column="follow_num"/>
+            <result property="attendNum" column="attend_num"/>
+            <result property="impactFactor" column="impact_factor"/>
+            <result property="publisher" column="publisher"/>
+            <result property="topicDetails" column="topic_details"/>
+            <result property="isPostponed" column="is_postponed"/>
+        </collection>
+
+        <!-- 配置参加会议的映射集合-->
+        <collection property="attendConferences" ofType="conference">
+            <id property="id" column="id"/>
+            <result property="conferenceId" column="conference_id"/>
+            <result property="title" column="title"/>
+            <result property="fullTitle" column="full_title"/>
+            <result property="ccfRank" column="ccf_rank"/>
+            <result property="sub" column="sub"/>
+            <result property="year" column="year"/>
+            <result property="dblpLink" column="dblp_link"/>
+            <result property="mainpageLink" column="mainpage_link"/>
+            <result property="place" column="place"/>
+            <result property="abstractDeadline" column="abstract_deadline"/>
+            <result property="paperDeadline" column="paper_deadline"/>
+            <result property="startTime" column="start_time"/>
+            <result property="followNum" column="follow_num"/>
+            <result property="attendNum" column="attend_num"/>
             <result property="acceptedRate" column="accepted_rate"/>
             <result property="sessionNum" column="session_num"/>
+            <result property="topicDetails" column="topic_details"/>
+            <result property="isPostponed" column="is_postponed"/>
+        </collection>
+
+        <!-- 配置参加期刊的映射集合-->
+        <collection property="attendJournals" ofType="journal">
+            <id property="id" column="id"/>
+            <result property="journalId" column="journal_id"/>
+            <result property="ccfRank" column="ccf_rank"/>
+            <result property="sub" column="sub"/>
+            <result property="dblpLink" column="dblp_link"/>
+            <result property="mainpageLink" column="mainpage_link"/>
+            <result property="paperDeadline" column="paper_deadline"/>
+            <result property="followNum" column="follow_num"/>
+            <result property="attendNum" column="attend_num"/>
+            <result property="impactFactor" column="impact_factor"/>
+            <result property="publisher" column="publisher"/>
             <result property="topicDetails" column="topic_details"/>
             <result property="isPostponed" column="is_postponed"/>
         </collection>
     </resultMap>
 
     <sql id="getAllIncludeFollow">
-        select u.*, c.*, j.*
+        select u.*, c.*, j.*, cc.*, jj.*
         from user u
-        left join followlist ft on u.email = ft.email
-        left join conference c on ft.academic_id = c.conference_id
-        left join journal j on ft.academic_id = j.journal_id
+                 left join followlist ft on u.email = ft.email
+                 left join conference c on ft.academic_id = c.conference_id
+                 left join followlist2 ft2 on u.email = ft2.email
+                 left join journal j on ft2.academic_id = j.journal_id
+                 left join attendlist tt on u.email = tt.email
+                 left join conference cc on tt.academic_id = cc.conference_id
+                 left join attendlist2 tt2 on u.email = tt2.email
+                 left join journal jj on tt2.academic_id = jj.journal_id
     </sql>
 
     <!--
@@ -68,7 +116,7 @@
     按照用户编号id查询信息包括收藏列表
     User getAllInfoByEmail(String email);
     -->
-    <select id="getAllInfo" parameterType="string" resultMap="userMap">
+    <select id="getAllInfoByEmail" parameterType="string" resultMap="userMap">
         <include refid="getAllIncludeFollow"/>
         where u.email=#{email}
     </select>
@@ -110,21 +158,21 @@
     -->
     <insert id="insert" parameterType="user">
         insert into user
-        <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="email != null and email != ''">email</if>
-            <if test="imageUrl != null and imageUrl != ''">image_url</if>
-            <if test="userName != null and userName != ''">user_name</if>
-            <if test="institution != null and institution != ''">institution</if>
-            <if test="password != null and password != ''">`password`</if>
-        </trim>
+        (
+        <if test="email != null and email != ''">email,</if>
+        <if test="imageUrl != null and imageUrl != ''">image_url,</if>
+        <if test="userName != null and userName != ''">user_name,</if>
+        <if test="institution != null and institution != ''">institution,</if>
+        <if test="password != null and password != ''">password</if>
+        )
+        values(
 
-        <trim prefix="values (" suffix=")" suffixOverrides=",">
-            <if test="email != null and email != ''">#{email}</if>
-            <if test="imageUrl != null and imageUrl != ''">#{imageUrl}</if>
-            <if test="userName != null and userName != ''">#{userName}</if>
-            <if test="institution != null and institution != ''">#{institution}</if>
-            <if test="password != null and password != ''">#{password}</if>
-        </trim>
+        <if test="email != null and email != ''">#{email},</if>
+        <if test="imageUrl != null and imageUrl != ''">#{imageUrl},</if>
+        <if test="userName != null and userName != ''">#{userName},</if>
+        <if test="institution != null and institution != ''">#{institution},</if>
+        <if test="password != null and password != ''">#{password}</if>
+        )
 
     </insert>
 

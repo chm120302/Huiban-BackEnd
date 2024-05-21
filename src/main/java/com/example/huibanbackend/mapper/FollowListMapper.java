@@ -1,26 +1,30 @@
 package com.example.huibanbackend.mapper;
 
 import com.example.huibanbackend.entity.FollowList;
+import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
-
+@Repository
+@Mapper
 public interface FollowListMapper {
 
-    //按照email查询关注的会议/期刊
-    List<FollowList> getByEmail(String email);
+    //插入关注会议
+    int insertConf(FollowList followList);
 
-    //按照email和category查询关注的会议/期刊
-    List<FollowList> getByCategory(@Param("email") String email, @Param("category") String category);
+    //插入关注期刊
+    int insertJour(FollowList followList);
 
-    //插入关注信息
-    int insert(FollowList followList);
+    //删除关注会议
+    int deleteConf(Integer id);
 
-    //删除关注信息
-    int delete(Integer id);
+    //删除关注期刊
+    int deleteJour(Integer id);
 
-    //批量删除关注信息
-    int deleteBatch(List<Integer> list);
+
+//    //批量删除关注信息
+//    int deleteBatch(List<Integer> list);
 
 
 }

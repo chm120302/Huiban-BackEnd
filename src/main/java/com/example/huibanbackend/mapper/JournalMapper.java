@@ -3,10 +3,17 @@ package com.example.huibanbackend.mapper;
 import com.example.huibanbackend.entity.Journal;
 import com.example.huibanbackend.entity.JournalDetail;
 import com.example.huibanbackend.entity.JournalShow;
+import org.apache.ibatis.annotations.Mapper;
+import org.springframework.stereotype.Repository;
 
+import java.util.HashMap;
 import java.util.List;
-
+@Repository
+@Mapper
 public interface JournalMapper {
+
+    //查询最受欢迎的5个期刊
+    List<HashMap<String, Integer>> getPopularList();
 
     //查询截稿日期最近的前10个期刊
     List<JournalShow> getRecentList();
@@ -32,8 +39,8 @@ public interface JournalMapper {
     //插入期刊信息
     int insert(Journal journal);
 
-    //批量插入期刊
-    int insertBatch(List<Journal> list);
+//    //批量插入期刊
+//    int insertBatch(List<Journal> list);
 
     //删除期刊
     int delete(Integer id);
@@ -43,4 +50,7 @@ public interface JournalMapper {
 
     //更新收藏数
     int updateFollowNum(String journalId);
+
+    //更新参加数
+    int updateAttendNum(String journalId);
 }

@@ -1,7 +1,9 @@
 package com.example.huibanbackend.mapper;
 
 import com.example.huibanbackend.entity.User;
+import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Repository;
 
 import java.util.HashMap;
 import java.util.List;
@@ -9,6 +11,8 @@ import java.util.List;
 /**
  * 数据访问层接口
  */
+@Repository
+@Mapper
 public interface UserMapper {
     //查询所有用户的信息包括收藏列表
     List<User> getAllInfo();
