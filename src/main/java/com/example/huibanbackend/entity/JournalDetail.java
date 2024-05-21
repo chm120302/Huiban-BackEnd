@@ -12,11 +12,12 @@ public class JournalDetail {
     private String journalId;
     private String ccfRank;
     private String sub;
+    private String dblpLink;
     private String mainpageLink;
     @JsonFormat(pattern = "yyyy-MM-dd", timezone = "UTC")
     private Date paperDeadline;
     private Integer followNum;
-    private double acceptedRate;
+    private Integer attendNum;
     private double impactFactor;
     private String publisher;
     private String topicDetails;
@@ -24,6 +25,38 @@ public class JournalDetail {
 
     public JournalDetail() {
     }
+
+    public JournalDetail(String journalId, String ccfRank, String sub, String dblpLink, String mainpageLink, Date paperDeadline, Integer followNum, Integer attendNum,  double impactFactor, String publisher, String topicDetails, boolean isPostponed) {
+        this.journalId = journalId;
+        this.ccfRank = ccfRank;
+        this.sub = sub;
+        this.dblpLink = dblpLink;
+        this.mainpageLink = mainpageLink;
+        this.paperDeadline = paperDeadline;
+        this.followNum = followNum;
+        this.attendNum = attendNum;
+        this.impactFactor = impactFactor;
+        this.publisher = publisher;
+        this.topicDetails = topicDetails;
+        this.isPostponed = isPostponed;
+    }
+
+    public String getDblpLink() {
+        return dblpLink;
+    }
+
+    public void setDblpLink(String dblpLink) {
+        this.dblpLink = dblpLink;
+    }
+
+    public Integer getAttendNum() {
+        return attendNum;
+    }
+
+    public void setAttendNum(Integer attendNum) {
+        this.attendNum = attendNum;
+    }
+
 
     public Integer getId() {
         return id;
@@ -81,13 +114,6 @@ public class JournalDetail {
         this.followNum = followNum;
     }
 
-    public double getAcceptedRate() {
-        return acceptedRate;
-    }
-
-    public void setAcceptedRate(double acceptedRate) {
-        this.acceptedRate = acceptedRate;
-    }
 
     public double getImpactFactor() {
         return impactFactor;
@@ -128,16 +154,15 @@ public class JournalDetail {
                 ", journalId='" + journalId + '\'' +
                 ", ccfRank='" + ccfRank + '\'' +
                 ", sub='" + sub + '\'' +
+                ", dblpLink='" + dblpLink + '\'' +
                 ", mainpageLink='" + mainpageLink + '\'' +
                 ", paperDeadline=" + paperDeadline +
                 ", followNum=" + followNum +
-                ", acceptedRate=" + acceptedRate +
+                ", attendNum=" + attendNum +
                 ", impactFactor=" + impactFactor +
                 ", publisher='" + publisher + '\'' +
                 ", topicDetails='" + topicDetails + '\'' +
                 ", isPostponed=" + isPostponed +
                 '}';
     }
-
-
 }

@@ -5,7 +5,8 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.sql.Date;
+import java.util.Date;
+
 
 public class Conference {
     private static final Logger log = LoggerFactory.getLogger(Conference.class);
@@ -26,15 +27,15 @@ public class Conference {
     @JsonFormat(pattern = "yyyy-MM-dd", timezone = "UTC")
     private Date startTime;
     private Integer followNum;
-    private double acceptedRate;
+    private Integer attendNum;
+    private Double acceptedRate;
     private Integer sessionNum;
     private String topicDetails;
-    private boolean isPostponed;
+    private Boolean isPostponed;
 
     public Conference() {}
 
-    public Conference(Integer id, String conferenceId, String title, String fullTitle, String ccfRank, String sub, Integer year, String dblpLink, String mainpageLink, String place, Date abstractDeadline, Date paperDeadline, Date startTime, Integer followNum, double acceptedRate, Integer sessionNum, String topicDetails, boolean isPostponed) {
-        this.id = id;
+    public Conference(String conferenceId, String title, String fullTitle, String ccfRank, String sub, Integer year, String dblpLink, String mainpageLink, String place, Date abstractDeadline, Date paperDeadline, Date startTime, Integer followNum, Integer attendNum, double acceptedRate, Integer sessionNum, String topicDetails, boolean isPostponed) {
         this.conferenceId = conferenceId;
         this.title = title;
         this.fullTitle = fullTitle;
@@ -48,10 +49,19 @@ public class Conference {
         this.paperDeadline = paperDeadline;
         this.startTime = startTime;
         this.followNum = followNum;
+        this.attendNum = attendNum;
         this.acceptedRate = acceptedRate;
         this.sessionNum = sessionNum;
         this.topicDetails = topicDetails;
         this.isPostponed = isPostponed;
+    }
+
+    public Integer getAttendNum() {
+        return attendNum;
+    }
+
+    public void setAttendNum(Integer attendNum) {
+        this.attendNum = attendNum;
     }
 
     public Integer getId() {
@@ -74,7 +84,7 @@ public class Conference {
         this.sessionNum = sessionNum;
     }
 
-    public boolean isPostponed() {
+    public Boolean isPostponed() {
         return isPostponed;
     }
 
@@ -122,7 +132,7 @@ public class Conference {
         this.sub = sub;
     }
 
-    public int getYear() {
+    public Integer getYear() {
         return year;
     }
 
@@ -178,7 +188,8 @@ public class Conference {
         this.startTime = startTime;
     }
 
-    public int getFollowNum() {
+    public Integer getFollowNum() {
+
         return followNum;
     }
 
@@ -186,7 +197,7 @@ public class Conference {
         this.followNum = followNum;
     }
 
-    public double getAcceptedRate() {
+    public Double getAcceptedRate() {
         return acceptedRate;
     }
 
@@ -194,7 +205,8 @@ public class Conference {
         this.acceptedRate = acceptedRate;
     }
 
-    public int getSessionNum() {
+    public Integer getSessionNum() {
+
         return sessionNum;
     }
 
@@ -227,6 +239,7 @@ public class Conference {
                 ", paperDeadline=" + paperDeadline +
                 ", startTime=" + startTime +
                 ", followNum=" + followNum +
+                ", attendNum=" + attendNum +
                 ", acceptedRate=" + acceptedRate +
                 ", sessionNum=" + sessionNum +
                 ", topicDetails='" + topicDetails + '\'' +

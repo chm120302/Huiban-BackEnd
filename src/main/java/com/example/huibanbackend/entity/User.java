@@ -2,7 +2,6 @@ package com.example.huibanbackend.entity;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import java.util.List;
 
 public class User {
@@ -18,13 +17,17 @@ public class User {
     private List<Conference> followConferences;
     //用户关注期刊列表
     private List<Journal> followJournals;
+    //用户参加会议列表
+    private List<Conference> attendConferences;
+    //用户参加期刊列表
+    private List<Journal> attendJournals;
 
     public User(){
 
     }
 
-    public User(Integer id, String email, String imageUrl, String userName, String institution, String password, List<Conference> followConferences, List<Journal> followJournals) {
-        this.id = id;
+    public User(String email, String imageUrl, String userName, String institution, String password, List<Conference> followConferences, List<Journal> followJournals, List<Conference> attendConferences, List<Journal> attendJournals) {
+
         this.email = email;
         this.imageUrl = imageUrl;
         this.userName = userName;
@@ -32,6 +35,24 @@ public class User {
         this.password = password;
         this.followConferences = followConferences;
         this.followJournals = followJournals;
+        this.attendConferences = attendConferences;
+        this.attendJournals = attendJournals;
+    }
+
+    public List<Conference> getAttendConferences() {
+        return attendConferences;
+    }
+
+    public void setAttendConferences(List<Conference> attendConferences) {
+        this.attendConferences = attendConferences;
+    }
+
+    public List<Journal> getAttendJournals() {
+        return attendJournals;
+    }
+
+    public void setAttendJournals(List<Journal> attendJournals) {
+        this.attendJournals = attendJournals;
     }
 
     public Integer getId() {
@@ -100,6 +121,8 @@ public class User {
                 ", password='" + password + '\'' +
                 ", followConferences=" + followConferences +
                 ", followJournals=" + followJournals +
+                ", attendConferences=" + attendConferences +
+                ", attendJournals=" + attendJournals +
                 '}';
     }
 }

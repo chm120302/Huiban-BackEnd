@@ -8,6 +8,15 @@ spring:
     password: root
     # druid-spring-boot-starter 依赖自动生效 druid，可以不配置 type 属性，但建议配置
     type: com.alibaba.druid.pool.DruidDataSource
+  thymeleaf:
+    prefix: classpath:/templates/
+    suffix: .html
+    cache: true
+    enabled: true
+    encoding: UTF-8
+    mode: HTML
+
+
 
 mybatis:
   mapper-locations: classpath:mapper/**Mapper.xml

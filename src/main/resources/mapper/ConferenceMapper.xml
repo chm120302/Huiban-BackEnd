@@ -4,14 +4,25 @@
 <mapper namespace="com.example.huibanbackend.mapper.ConferenceMapper">
 
     <sql id="selectShowColumns">
-        select c.id, c.conference_id, c.title, c.ccf_rank, c.sub, c.dblp_link, c.start_time, c.abstract_deadline, c.paper_deadline, c.accepted_rate, c.place, c.is_postponed
+        select c.id, c.conference_id, c.full_title, c.ccf_rank, c.sub, c.mainpage_link, c.abstract_deadline, c.paper_deadline, c.start_time, c.accepted_rate, c.place, c.is_postponed
         from conference c
     </sql>
 
     <sql id="selectDetailColumns">
-        select c.id, c.conference_id, c.full_title, c.ccf_rank, c.mainpage_link, c.paper_deadline, c.abstract_deadline, c.paper_deadline, c.start_time, c.follow_num, c.session_num, c.topic_details, c.is_postponed
+        select c.id, c.conference_id, c.full_title, c.ccf_rank, c.dblp_link, c.mainpage_link, c.paper_deadline, c.abstract_deadline, c.paper_deadline, c.start_time, c.follow_num, c.attend_num, c.session_num, c.topic_details, c.is_postponed
         from conference c
     </sql>
+
+    <!--
+    查询最受欢迎的5个会议
+    List<HashMap<String, Integer>> getPopularList();
+    -->
+    <select id="getPopularList" resultType="java.util.HashMap">
+        select conference_id, follow_num
+        from conference
+        order by follow_num desc
+        limit 5
+    </select>
 
     <!--
     查询截稿日期最近的前10个会议
@@ -20,7 +31,7 @@
     <select id="getRecentList" resultType="conferenceShow">
         <include refid="selectShowColumns"/>
         where c.paper_deadline >= sysdate()
-        order by c.paper_dedaline asc
+        order by c.paper_deadline asc
         limit 10
     </select>
 
@@ -103,44 +114,47 @@
     <insert id="insert" parameterType="conference">
         insert into conference
         <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="conferenceId != null and conferenceId != ''">conference_id</if>
-            <if test="title != null and title != '' ">title</if>
-            <if test="fullTitle != null and fullTitle != ''">full_title</if>
-            <if test="ccfRank != null and ccfRank != ''">ccf_rank</if>
-            <if test="sub != null and sub != ''">sub</if>
-            <if test="year != null and year != ''">`year`</if>
-            <if test="dblpLink != null and dblpLink !=''">dblp_link</if>
-            <if test="mainpageLink != null and mainpageLink != ''">mainpage_link</if>
-            <if test="place != null and place != ''">place</if>
-            <if test="abstractDeadline != null and abstractDeadline != ''">abstract_deadline</if>
-            <if test="paperDeadline != null and paperDeadline != ''">paper_deadline</if>
-            <if test="startTime != null and startTime != ''">start_time</if>
-            <if test="followNum != null and followNum != ''">follow_num</if>
-            <if test="acceptedRate != null and acceptedRate != ''">accepted_rate</if>
-            <if test="sessionNum != null and sessionNum != ''">session_num</if>
-            <if test="topicDetails != null and topicDetails != ''">topic_details</if>
-            <if test="isPostponed != null and isPostponed != ''">is_postponed</if>
+            <if test="conferenceId != null and conferenceId != ''">conference_id,</if>
+            <if test="title != null and title != '' ">title,</if>
+            <if test="fullTitle != null and fullTitle != ''">full_title,</if>
+            <if test="ccfRank != null and ccfRank != ''">ccf_rank,</if>
+            <if test="sub != null and sub != ''">sub,</if>
+            <if test="year != null and year != ''">year,</if>
+            <if test="dblpLink != null and dblpLink !=''">dblp_link,</if>
+            <if test="mainpageLink != null and mainpageLink != ''">mainpage_link,</if>
+            <if test="place != null and place != ''">place,</if>
+            <if test="abstractDeadline != null ">abstract_deadline,</if>
+            <if test="paperDeadline != null">paper_deadline,</if>
+            <if test="startTime != null">start_time,</if>
+            <if test="followNum != null ">follow_num,</if>
+            <if test="attendNum != null ">attend_num,</if>
+            <if test="acceptedRate != null">accepted_rate,</if>
+            <if test="sessionNum != null">session_num,</if>
+            <if test="topicDetails != null and topicDetails != ''">topic_details,</if>
+            <if test="isPostponed != null">is_postponed</if>
         </trim>
 
-        <trim prefix="values (" suffix=")" suffixOverrides=",">
+        values
+        <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="conferenceId != null and conferenceId != ''">#{conferenceId},</if>
             <if test="title != null and title != '' ">#{title},</if>
             <if test="fullTitle != null and fullTitle != ''">#{fullTitle},</if>
-            <if test="ccfRank != null and ccfRank != ''">#{ccfRank}, </if>
-            <if test="sub != null and sub != ''"> #{sub},</if>
+            <if test="ccfRank != null and ccfRank != ''">#{ccfRank},</if><if test="sub != null and sub != ''">#{sub},</if>
             <if test="year != null and year != ''">#{year},</if>
-            <if test="dblpLink != null and dblpLink !=''"> #{dblpLink},</if>
+            <if test="dblpLink != null and dblpLink !=''">#{dblpLink},</if>
             <if test="mainpageLink != null and mainpageLink != ''">#{mainpageLink},</if>
-            <if test="place != null and place != ''"> #{place},</if>
-            <if test="abstractDeadline != null and abstractDeadline != ''">#{abstractDeadline},</if>
-            <if test="paperDeadline != null and paperDeadline != ''">#{paperDeadline},</if>
-            <if test="startTime != null and startTime != ''"> #{startTime},</if>
-            <if test="followNum != null and followNum != ''">#{followNum},</if>
-            <if test="acceptedRate != null and acceptedRate != ''">#{acceptedRate},</if>
-            <if test="sessionNum != null and sessionNum != ''">#{sessionNum},</if>
-            <if test="topicDetails != null and topicDetails != ''"> #{topicDetails},</if>
-            <if test="isPostponed != null and isPostponed != ''"> #{isPostponed}</if>
+            <if test="place != null and place != ''">#{place},</if>
+            <if test="abstractDeadline != null ">#{abstractDeadline},</if>
+            <if test="paperDeadline != null ">#{paperDeadline},</if>
+            <if test="startTime != null ">#{startTime},</if>
+            <if test="followNum != null ">#{followNum},</if>
+            <if test="attendNum != null ">#{attendNum},</if>
+            <if test="acceptedRate != null">#{acceptedRate},</if>
+            <if test="sessionNum != null">#{sessionNum},</if>
+            <if test="topicDetails != null and topicDetails != ''">#{topicDetails},</if>
+            <if test="isPostponed != null ">#{isPostponed}</if>
         </trim>
+
 
     </insert>
 
@@ -148,50 +162,52 @@
     批量插入会议
     int insertBatch(List<Conference> list);
     -->
-    <insert id="insertBatch" parameterType="java.util.List">
-        insert into conference
-        <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="conferenceId != null and conferenceId != ''">conference_id</if>
-            <if test="title != null and title != '' ">title</if>
-            <if test="fullTitle != null and fullTitle != ''">full_title</if>
-            <if test="ccfRank != null and ccfRank != ''">ccf_rank</if>
-            <if test="sub != null and sub != ''">sub</if>
-            <if test="year != null and year != ''">`year`</if>
-            <if test="dblpLink != null and dblpLink !=''">dblp_link</if>
-            <if test="mainpageLink != null and mainpageLink != ''">mainpage_link</if>
-            <if test="place != null and place != ''">place</if>
-            <if test="abstractDeadline != null and abstractDeadline != ''">abstract_deadline</if>
-            <if test="paperDeadline != null and paperDeadline != ''">paper_deadline</if>
-            <if test="startTime != null and startTime != ''">start_time</if>
-            <if test="followNum != null and followNum != ''">follow_num</if>
-            <if test="acceptedRate != null and acceptedRate != ''">accepted_rate</if>
-            <if test="sessionNum != null and sessionNum != ''">session_num</if>
-            <if test="topicDetails != null and topicDetails != ''">topic_details</if>
-            <if test="isPostponed != null and isPostponed != ''">is_postponed</if>
-        </trim>
-        values
-        <foreach collection="list" separator="," item="c">
-            (
-                <if test="conferenceId != null and conferenceId != ''">#{c.conferenceId},</if>
-                <if test="title != null and title != '' ">#{c.title},</if>
-                <if test="fullTitle != null and fullTitle != ''">#{c.fullTitle},</if>
-                <if test="ccfRank != null and ccfRank != ''">#{c.ccfRank}, </if>
-            <if test="sub != null and sub != ''"> #{c.sub},</if>
-                <if test="year != null and year != ''">#{c.year},</if>
-            <if test="dblpLink != null and dblpLink !=''"> #{c.dblpLink},</if>
-                <if test="mainpageLink != null and mainpageLink != ''">#{c.mainpageLink},</if>
-            <if test="place != null and place != ''"> #{c.place},</if>
-                <if test="abstractDeadline != null and abstractDeadline != ''">#{c.abstractDeadline},</if>
-                <if test="paperDeadline != null and paperDeadline != ''">#{c.paperDeadline},</if>
-            <if test="startTime != null and startTime != ''"> #{c.startTime},</if>
-                <if test="followNum != null and followNum != ''">#{followNum},</if>
-                <if test="acceptedRate != null and acceptedRate != ''">#{c.acceptedRate},</if>
-                <if test="sessionNum != null and sessionNum != ''">#{sessionNum},</if>
-            <if test="topicDetails != null and topicDetails != ''"> #{c.topicDetails},</if>
-            <if test="isPostponed != null and isPostponed != ''"> #{c.isPostponed}</if>
-            )
-        </foreach>
-    </insert>
+<!--    <insert id="insertBatch" parameterType="java.util.ArrayList">-->
+<!--        insert into conference-->
+<!--        (-->
+<!--            <if test="conferenceId != null and conferenceId != ''">conference_id</if>-->
+<!--            <if test="title != null and title != '' ">,title</if>-->
+<!--            <if test="fullTitle != null and fullTitle != ''">,full_title</if>-->
+<!--            <if test="ccfRank != null and ccfRank != ''">,ccf_rank</if>-->
+<!--            <if test="sub != null and sub != ''">,sub,</if>-->
+<!--            <if test="year != null and year != ''">,`year`</if>-->
+<!--            <if test="dblpLink != null and dblpLink !=''">,dblp_link</if>-->
+<!--            <if test="mainpageLink != null and mainpageLink != ''">,mainpage_link</if>-->
+<!--            <if test="place != null and place != ''">,place</if>-->
+<!--            <if test="abstractDeadline != null">,abstract_deadline</if>-->
+<!--            <if test="paperDeadline != null ">,paper_deadline</if>-->
+<!--            <if test="startTime != null">,start_time</if>-->
+<!--            <if test="followNum != null ">,follow_num</if>-->
+<!--            <if test="attendNum != null ">,attend_num</if>-->
+<!--            <if test="acceptedRate != null ">,accepted_rate</if>-->
+<!--            <if test="sessionNum != null">,session_num</if>-->
+<!--            <if test="topicDetails != null and topicDetails != ''">,topic_details</if>-->
+<!--            <if test="isPostponed != null">,is_postponed</if>-->
+<!--        )-->
+<!--        values-->
+<!--        <foreach collection="list" separator="," item="c">-->
+<!--            (-->
+<!--                <if test="conferenceId != null and conferenceId != ''">#{c.conferenceId}</if>-->
+<!--                <if test="title != null and title != '' ">,#{c.title}</if>-->
+<!--                <if test="fullTitle != null and fullTitle != ''">,#{c.fullTitle}</if>-->
+<!--                <if test="ccfRank != null and ccfRank != ''">,#{c.ccfRank}</if>-->
+<!--                <if test="sub != null and sub != ''">,#{c.sub}</if>-->
+<!--                <if test="year != null and year != ''">,#{c.year}</if>-->
+<!--                <if test="dblpLink != null and dblpLink !=''">,#{c.dblpLink}</if>-->
+<!--                <if test="mainpageLink != null and mainpageLink != ''">,#{c.mainpageLink}</if>-->
+<!--                <if test="place != null and place != ''">,#{c.place}</if>-->
+<!--                <if test="abstractDeadline != null ">,#{c.abstractDeadline}</if>-->
+<!--                <if test="paperDeadline != null">,#{c.paperDeadline}</if>-->
+<!--                <if test="startTime != null ">,#{c.startTime}</if>-->
+<!--                <if test="followNum != null">,#{c.followNum}</if>-->
+<!--                <if test="attendNum != null">,#{c.attendNum}</if>-->
+<!--                <if test="acceptedRate != null ">,#{c.acceptedRate}</if>-->
+<!--                <if test="sessionNum != null ">,#{c.sessionNum}</if>-->
+<!--                <if test="topicDetails != null and topicDetails != ''">,#{c.topicDetails}</if>-->
+<!--                <if test="isPostponed != null and isPostponed != ''">,#{c.isPostponed}</if>-->
+<!--            )-->
+<!--        </foreach>-->
+<!--    </insert>-->
 
     <!--
     删除会议
@@ -216,14 +232,15 @@
                               <if test="dblpLink != null and dblpLink !=''"> dblp_link=#{dblpLink},</if>
                               <if test="mainpageLink != null and mainpageLink != ''">mainpage_link=#{mainpageLink},</if>
                               <if test="place != null and place != ''"> place=#{place},</if>
-                              <if test="abstractDeadline != null and abstractDeadline != ''">abstract_deadline=#{abstractDeadline},</if>
-                              <if test="paperDeadline != null and paperDeadline != ''">paper_deadline=#{paperDeadline},</if>
-                              <if test="startTime != null and startTime != ''"> start_time=#{startTime},</if>
-                              <if test="followNum != null and followNum != ''">follow_num=#{followNum},</if>
-                              <if test="acceptedRate != null and acceptedRate != ''">accepted_rate=#{acceptedRate},</if>
-                              <if test="sessionNum != null and sessionNum != ''">session_num=#{sessionNum},</if>
+                              <if test="abstractDeadline != null">abstract_deadline=#{abstractDeadline},</if>
+                              <if test="paperDeadline != null ">paper_deadline=#{paperDeadline},</if>
+                              <if test="startTime != null "> start_time=#{startTime},</if>
+                              <if test="followNum != null ">follow_num=#{followNum},</if>
+                              <if test="attendNum != null ">attend_num=#{attendNum},</if>
+                              <if test="acceptedRate != null ">accepted_rate=#{acceptedRate},</if>
+                              <if test="sessionNum != null ">session_num=#{sessionNum},</if>
                               <if test="topicDetails != null and topicDetails != ''"> topic_details=#{topicDetails},</if>
-                              <if test="isPostponed != null and isPostponed != ''"> is_postponed=#{isPostponed}</if>
+                              <if test="isPostponed != null "> is_postponed=#{isPostponed}</if>
         where conference_id=#{conferenceId}
 
     </update>
@@ -235,6 +252,16 @@
     <update id="updateFollowNum">
         update conference set
                 follow_num = follow_num + 1
+        where conference_id=#{conferenceId}
+    </update>
+
+    <!--
+    更新参加数
+    int updateAttendNum(String conferenceId);
+    -->
+    <update id="updateAttendNum">
+        update conference set
+            attend_num = attend_num + 1
         where conference_id=#{conferenceId}
     </update>
 

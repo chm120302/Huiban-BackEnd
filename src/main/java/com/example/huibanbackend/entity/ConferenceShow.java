@@ -11,9 +11,10 @@ public class ConferenceShow {
     private Integer id;
 
     private String conferenceId; // 会议缩写+年份
+    private String fullTitle;
     private String ccfRank;
     private String sub;
-    private String dblpLink;
+    private String mainpageLink;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "UTC")
     private Date abstractDeadline;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "UTC")
@@ -26,6 +27,21 @@ public class ConferenceShow {
 
     public ConferenceShow() {
 
+    }
+
+    public ConferenceShow(String conferenceId, String fullTitle, String ccfRank, String sub, String mainpageLink, Date abstractDeadline, Date paperDeadline, Date startTime, float acceptedRate, String place, boolean isPostponed) {
+
+        this.conferenceId = conferenceId;
+        this.fullTitle = fullTitle;
+        this.ccfRank = ccfRank;
+        this.sub = sub;
+        this.mainpageLink = mainpageLink;
+        this.abstractDeadline = abstractDeadline;
+        this.paperDeadline = paperDeadline;
+        this.startTime = startTime;
+        this.acceptedRate = acceptedRate;
+        this.place = place;
+        this.isPostponed = isPostponed;
     }
 
     public boolean isPostponed() {
@@ -68,12 +84,20 @@ public class ConferenceShow {
         this.sub = sub;
     }
 
-    public String getDblpLink() {
-        return dblpLink;
+    public String getFullTitle() {
+        return fullTitle;
     }
 
-    public void setDblpLink(String dblpLink) {
-        this.dblpLink = dblpLink;
+    public void setFullTitle(String fullTitle) {
+        this.fullTitle = fullTitle;
+    }
+
+    public String getMainpageLink() {
+        return mainpageLink;
+    }
+
+    public void setMainpageLink(String mainpageLink) {
+        this.mainpageLink = mainpageLink;
     }
 
     public Date getAbstractDeadline() {
@@ -121,9 +145,10 @@ public class ConferenceShow {
         return "ConferenceShow{" +
                 "id=" + id +
                 ", conferenceId='" + conferenceId + '\'' +
+                ", fullTitle='" + fullTitle + '\'' +
                 ", ccfRank='" + ccfRank + '\'' +
                 ", sub='" + sub + '\'' +
-                ", dblpLink='" + dblpLink + '\'' +
+                ", mainpageLink='" + mainpageLink + '\'' +
                 ", abstractDeadline=" + abstractDeadline +
                 ", paperDeadline=" + paperDeadline +
                 ", startTime=" + startTime +

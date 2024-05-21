@@ -12,10 +12,8 @@ public class JournalShow {
     private String journalId;
     private String ccfRank;
     private String sub;
-    private String dblpLink;
     @JsonFormat(pattern = "yyyy-MM-dd", timezone = "UTC")
     private Date paperDeadline;
-    private double acceptedRate;
     private double impactFactor;
     private String publisher;
     private boolean isPostponed;
@@ -56,13 +54,6 @@ public class JournalShow {
         this.sub = sub;
     }
 
-    public String getDblpLink() {
-        return dblpLink;
-    }
-
-    public void setDblpLink(String dblpLink) {
-        this.dblpLink = dblpLink;
-    }
 
     public Date getPaperDeadline() {
         return paperDeadline;
@@ -72,13 +63,6 @@ public class JournalShow {
         this.paperDeadline = paperDeadline;
     }
 
-    public double getAcceptedRate() {
-        return acceptedRate;
-    }
-
-    public void setAcceptedRate(double acceptedRate) {
-        this.acceptedRate = acceptedRate;
-    }
 
     public double getImpactFactor() {
         return impactFactor;
@@ -111,9 +95,7 @@ public class JournalShow {
                 ", journalId='" + journalId + '\'' +
                 ", ccfRank='" + ccfRank + '\'' +
                 ", sub='" + sub + '\'' +
-                ", dblpLink='" + dblpLink + '\'' +
                 ", paperDeadline=" + paperDeadline +
-                ", acceptedRate=" + acceptedRate +
                 ", impactFactor=" + impactFactor +
                 ", publisher='" + publisher + '\'' +
                 ", isPostponed=" + isPostponed +

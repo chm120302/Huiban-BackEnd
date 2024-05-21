@@ -1,53 +1,51 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.example.huibanbackend.mapper.FollowListMapper">
-
-
+<mapper namespace="com.example.huibanbackend.mapper.AttendMapper">
+    
 
     <!--
-    插入关注会议
-    int insertConf(FollowList followList);
+    插入参加会议
+    int insertConf(AttendList attendList);
     -->
-    <insert id="insertConf" parameterType="followList">
-        insert into followlist (email, category, academic_id)
+    <insert id="insertConf" parameterType="attendList">
+        insert into attendlist (email, category, academic_id)
         values (#{email}, #{category}, #{academicId});
     </insert>
 
     <!--
-    插入关注期刊
-    int insertJour(FollowList followList);
+    插入参加期刊
+    int insertJour(AttendList attendList);
     -->
-    <insert id="insertJour" parameterType="followList">
-        insert into followlist2 (email, category, academic_id)
+    <insert id="insertJour" parameterType="attendList">
+        insert into attendlist2 (email, category, academic_id)
         values (#{email}, #{category}, #{academicId});
     </insert>
 
     <!--
-    删除关注会议
+    删除参加会议
     int deleteConf(Integer id);
     -->
     <delete id="deleteConf" parameterType="int">
-        delete from followlist
+        delete from attendlist
         where id=#{id}
     </delete>
 
     <!--
-    删除关注期刊
+    删除参加期刊
     int deleteJour(Integer id);
     -->
     <delete id="deleteJour" parameterType="int">
-        delete from followlist2
+        delete from attendlist2
         where id=#{id}
     </delete>
 
-
 <!--    &lt;!&ndash;-->
-<!--    批量删除关注信息-->
+<!--    批量删除参加信息-->
 <!--    int deleteBatch(List<Integer> list);-->
 <!--    &ndash;&gt;-->
 <!--    <delete id="deleteBatch" parameterType="java.util.List">-->
-<!--        delete from followlist-->
+<!--        delete from attendlist-->
 <!--        where id in-->
 <!--        <foreach collection="list" item="item" index="index" open="(" close=")" separator=",">-->
 <!--            #{item}-->
