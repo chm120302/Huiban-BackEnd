@@ -3,6 +3,7 @@ package com.example.huibanbackend.entity;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
 
@@ -15,12 +16,17 @@ public class ConferenceShow {
     private String ccfRank;
     private String sub;
     private String mainpageLink;
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "UTC")
+//    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "UTC")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date abstractDeadline;
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "UTC")
+//    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "UTC")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date paperDeadline;
-    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "UTC")
+//    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "UTC")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date startTime;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private Date endTime;
     private float acceptedRate;
     private String place;
     private boolean isPostponed;
@@ -29,7 +35,7 @@ public class ConferenceShow {
 
     }
 
-    public ConferenceShow(String conferenceId, String fullTitle, String ccfRank, String sub, String mainpageLink, Date abstractDeadline, Date paperDeadline, Date startTime, float acceptedRate, String place, boolean isPostponed) {
+    public ConferenceShow(String conferenceId, String fullTitle, String ccfRank, String sub, String mainpageLink, Date abstractDeadline, Date paperDeadline, Date startTime, Date endTime, float acceptedRate, String place, boolean isPostponed) {
 
         this.conferenceId = conferenceId;
         this.fullTitle = fullTitle;
@@ -39,9 +45,18 @@ public class ConferenceShow {
         this.abstractDeadline = abstractDeadline;
         this.paperDeadline = paperDeadline;
         this.startTime = startTime;
+        this.endTime = endTime;
         this.acceptedRate = acceptedRate;
         this.place = place;
         this.isPostponed = isPostponed;
+    }
+
+    public Date getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(Date endTime) {
+        this.endTime = endTime;
     }
 
     public boolean isPostponed() {
@@ -152,6 +167,7 @@ public class ConferenceShow {
                 ", abstractDeadline=" + abstractDeadline +
                 ", paperDeadline=" + paperDeadline +
                 ", startTime=" + startTime +
+                ", endTime=" + endTime +
                 ", acceptedRate=" + acceptedRate +
                 ", place='" + place + '\'' +
                 ", isPostponed=" + isPostponed +

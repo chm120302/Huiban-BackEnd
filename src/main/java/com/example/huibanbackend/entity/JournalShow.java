@@ -3,6 +3,7 @@ package com.example.huibanbackend.entity;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
 
@@ -12,7 +13,8 @@ public class JournalShow {
     private String journalId;
     private String ccfRank;
     private String sub;
-    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "UTC")
+//    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "UTC")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date paperDeadline;
     private double impactFactor;
     private String publisher;

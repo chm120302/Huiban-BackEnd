@@ -4,6 +4,7 @@ import com.example.huibanbackend.entity.Journal;
 import com.example.huibanbackend.entity.JournalDetail;
 import com.example.huibanbackend.entity.JournalShow;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.HashMap;
@@ -49,8 +50,12 @@ public interface JournalMapper {
     int update(Journal journal);
 
     //更新收藏数
-    int updateFollowNum(String journalId);
+    int addFollowNum(@Param("journalId") String journalId);
+
+    int subFollowNum(@Param("journalId")String journalId);
 
     //更新参加数
-    int updateAttendNum(String journalId);
+    int addAttendNum(@Param("journalId")String journalId);
+
+    int subAttendNum(@Param("journalId")String journalId);
 }

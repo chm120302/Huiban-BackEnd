@@ -57,9 +57,15 @@ public interface ConferenceMapper {
     int update(Conference conference);
 
     //更新收藏数
-    int updateFollowNum(@Param("conferenceId") String conferenceId);
+    int addFollowNum(@Param("conferenceId") String conferenceId);
+
+    int subFollowNum(@Param("conferenceId")String conferenceId);
 
     //更新参加数
-    int updateAttendNum(@Param("conferenceId")String conferenceId);
+    int addAttendNum(@Param("conferenceId")String conferenceId);
+
+    int subAttendNum(@Param("conferenceId")String conferenceId);
+
+
 
 }

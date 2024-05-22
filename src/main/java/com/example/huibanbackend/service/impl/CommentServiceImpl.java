@@ -3,6 +3,7 @@ package com.example.huibanbackend.service.impl;
 import com.example.huibanbackend.entity.Comment;
 import com.example.huibanbackend.mapper.CommentMapper;
 import com.example.huibanbackend.service.CommentService;
+import com.example.huibanbackend.utils.dateUtils;
 import jakarta.annotation.Resource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -95,7 +96,7 @@ public class CommentServiceImpl implements CommentService {
      */
     @Override
     public int saveComment(Comment comment) {
-        comment.setCommentTime(new Date());
+//        comment.setCommentTime(new Date());
         return commentMapper.saveComment(comment);
     }
 

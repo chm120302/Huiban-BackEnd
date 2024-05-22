@@ -52,9 +52,10 @@ CREATE TABLE conference
     dblp_link            varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '会议dblp链接',
     mainpage_link        varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '会议主页链接',
     place                varchar(256)  CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '会议地点',
-    abstract_deadline    datetime NULL DEFAULT NULL COMMENT '摘要截止时间',
-    paper_deadline       datetime NULL DEFAULT NULL COMMENT '全文截止时间',
+    abstract_deadline    date NULL DEFAULT NULL COMMENT '摘要截止时间',
+    paper_deadline       date NULL DEFAULT NULL COMMENT '全文截止时间',
     start_time           date NULL DEFAULT NULL COMMENT '会议开始时间',
+    end_time             date NULL DEFAULT NULL COMMENT '会议结束时间',
     follow_num           int NULL DEFAULT 0 COMMENT '会议收藏数量',
     attend_num           int NULL DEFAULT 0 COMMENT '会议参加数量',
     accepted_rate        float  NULL DEFAULT NULL COMMENT '会议录用率',
@@ -66,7 +67,7 @@ CREATE TABLE conference
 )ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT ='会议信息表';
 
 -- 初始化会议信息
-INSERT INTO conference VALUES (null, 'date2023', 'DATE', 'Design, Automation & Test in Europe', 'B','DS','2023', 'https://dblp.org/db/conf/date/index.html', 'https://date23.date-conference.com/', 'Valencia, Spain','2022-09-18 23:59:59', '2022-09-25 23:59:59', '2023-09-17', 0, 0, NULL, 26,
+INSERT INTO conference VALUES (null, 'date2023', 'DATE', 'Design, Automation & Test in Europe', 'B','DS','2023', 'https://dblp.org/db/conf/date/index.html', 'https://date23.date-conference.com/', 'Valencia, Spain','2022-09-18', '2022-09-25', '2023-09-17', '2023-09-20',0, 0, NULL, 26,
                                'Within the scope of the conference, the main areas of interest are organised in the following tracks. Submissions can be made to any of the track topics.
 
 Track D: Design Methods and Tools, addresses design automation, design tools and hardware architectures for electronic and embedded systems. The emphasis is on methods, algorithms, and tools related to the use of computers in designing complete systems. The track focus includes significant improvements on existing design methods and tools as well as forward-looking approaches to model and design future system architectures, design flows, and environments.

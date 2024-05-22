@@ -4,6 +4,7 @@ package com.example.huibanbackend.entity;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
 
@@ -20,12 +21,17 @@ public class Conference {
     private String dblpLink;
     private String mainpageLink;
     private String place;
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "UTC")
+//    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "UTC")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date abstractDeadline;
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "UTC")
+//    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "UTC")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date paperDeadline;
-    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "UTC")
+//    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "UTC")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date startTime;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private Date endTime;
     private Integer followNum;
     private Integer attendNum;
     private Double acceptedRate;
@@ -35,7 +41,8 @@ public class Conference {
 
     public Conference() {}
 
-    public Conference(String conferenceId, String title, String fullTitle, String ccfRank, String sub, Integer year, String dblpLink, String mainpageLink, String place, Date abstractDeadline, Date paperDeadline, Date startTime, Integer followNum, Integer attendNum, double acceptedRate, Integer sessionNum, String topicDetails, boolean isPostponed) {
+    public Conference(String conferenceId, String title, String fullTitle, String ccfRank, String sub, Integer year, String dblpLink, String mainpageLink, String place, Date abstractDeadline, Date paperDeadline, Date startTime, Date endTime, Integer followNum, Integer attendNum, Double acceptedRate, Integer sessionNum, String topicDetails, Boolean isPostponed) {
+
         this.conferenceId = conferenceId;
         this.title = title;
         this.fullTitle = fullTitle;
@@ -48,12 +55,33 @@ public class Conference {
         this.abstractDeadline = abstractDeadline;
         this.paperDeadline = paperDeadline;
         this.startTime = startTime;
+        this.endTime = endTime;
         this.followNum = followNum;
         this.attendNum = attendNum;
         this.acceptedRate = acceptedRate;
         this.sessionNum = sessionNum;
         this.topicDetails = topicDetails;
         this.isPostponed = isPostponed;
+    }
+
+    public Date getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(Date endTime) {
+        this.endTime = endTime;
+    }
+
+    public void setAcceptedRate(Double acceptedRate) {
+        this.acceptedRate = acceptedRate;
+    }
+
+    public Boolean getPostponed() {
+        return isPostponed;
+    }
+
+    public void setPostponed(Boolean postponed) {
+        isPostponed = postponed;
     }
 
     public Integer getAttendNum() {
@@ -238,6 +266,7 @@ public class Conference {
                 ", abstractDeadline=" + abstractDeadline +
                 ", paperDeadline=" + paperDeadline +
                 ", startTime=" + startTime +
+                ", endTime=" + endTime +
                 ", followNum=" + followNum +
                 ", attendNum=" + attendNum +
                 ", acceptedRate=" + acceptedRate +

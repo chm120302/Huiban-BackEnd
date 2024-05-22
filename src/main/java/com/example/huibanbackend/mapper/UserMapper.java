@@ -34,7 +34,7 @@ public interface UserMapper {
     int insert(User user);
 
     //删除用户
-    int delete(Integer id);
+    int delete(String email);
 
     //更新用户(不包括密码)
     int update(User user);

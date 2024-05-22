@@ -46,7 +46,22 @@
             <scope>compile</scope>
         </dependency>
 
-        <!--springboot-->
+        <!-- openAPI包，替换 Swagger 的 SpringFox -->
+        <dependency>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+            <version>2.2.0</version>
+        </dependency>
+
+<!--        <dependency>-->
+<!--            <groupId>org.projectlombok</groupId>-->
+<!--            <artifactId>lombok</artifactId>-->
+<!--            <optional>true</optional>-->
+<!--        </dependency>-->
+
+
+
+        <!--spring security-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-security</artifactId>
@@ -116,6 +131,8 @@
             <artifactId>ip2region</artifactId>
             <version>1.7.2</version>
         </dependency>
+
+
 
     </dependencies>
 

@@ -65,6 +65,7 @@
             <result property="abstractDeadline" column="abstract_deadline"/>
             <result property="paperDeadline" column="paper_deadline"/>
             <result property="startTime" column="start_time"/>
+            <result property="endTime" column="end_time"/>
             <result property="followNum" column="follow_num"/>
             <result property="attendNum" column="attend_num"/>
             <result property="acceptedRate" column="accepted_rate"/>
@@ -178,11 +179,11 @@
 
     <!--
     删除用户
-    int delete(Integer id);
+    int delete(String email);
     -->
-    <delete id="delete" parameterType="int">
+    <delete id="delete" parameterType="string">
         delete from user
-        where id=#{id}
+        where email=#{email}
     </delete>
 
     <!--

@@ -4,6 +4,7 @@ package com.example.huibanbackend.entity;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.ArrayList;
 
@@ -16,7 +17,8 @@ public class Comment {
     private String userName;
     private String imageUrl;
 
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "UTC")
+//    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "UTC")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date commentTime;
 
     private String content;

@@ -200,22 +200,42 @@
     </update>
 
     <!--
-    更新收藏数
-    int updateFollowNum(String journalId);
+    更新收藏数(增加）
+    int addFollowNum(String journalId);
     -->
-    <update id="updateFollowNum">
+    <update id="addFollowNum">
         update journal set
             follow_num = follow_num + 1
         where journal_id=#{journalId}
     </update>
 
     <!--
-    更新参加数
-    int updateAttendNum(String journalId);
+    更新收藏数(减少）
+    int subFollowNum(String journalId);
     -->
-    <update id="updateAttendNum">
+    <update id="subFollowNum">
+        update journal set
+            follow_num = follow_num - 1
+        where journal_id=#{journalId}
+    </update>
+
+    <!--
+    更新参加数（增加）
+    int addAttendNum(String journalId);
+    -->
+    <update id="addAttendNum">
         update journal set
             attend_num = attend_num + 1
+        where journal_id=#{journalId}
+    </update>
+
+    <!--
+   更新参加数（减少）
+   int subAttendNum(String journalId);
+   -->
+    <update id="subAttendNum">
+        update journal set
+            attend_num = attend_num - 1
         where journal_id=#{journalId}
     </update>
 

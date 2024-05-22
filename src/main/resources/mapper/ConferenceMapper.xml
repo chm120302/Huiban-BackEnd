@@ -4,12 +4,12 @@
 <mapper namespace="com.example.huibanbackend.mapper.ConferenceMapper">
 
     <sql id="selectShowColumns">
-        select c.id, c.conference_id, c.full_title, c.ccf_rank, c.sub, c.mainpage_link, c.abstract_deadline, c.paper_deadline, c.start_time, c.accepted_rate, c.place, c.is_postponed
+        select c.id, c.conference_id, c.full_title, c.ccf_rank, c.sub, c.mainpage_link, c.abstract_deadline, c.paper_deadline, c.start_time, c.end_time, c.accepted_rate, c.place, c.is_postponed
         from conference c
     </sql>
 
     <sql id="selectDetailColumns">
-        select c.id, c.conference_id, c.full_title, c.ccf_rank, c.dblp_link, c.mainpage_link, c.paper_deadline, c.abstract_deadline, c.paper_deadline, c.start_time, c.follow_num, c.attend_num, c.session_num, c.topic_details, c.is_postponed
+        select c.id, c.conference_id, c.full_title, c.ccf_rank, c.dblp_link, c.mainpage_link, c.paper_deadline, c.abstract_deadline, c.paper_deadline, c.start_time, c.end_time, c.follow_num, c.attend_num, c.session_num, c.topic_details, c.is_postponed
         from conference c
     </sql>
 
@@ -126,6 +126,7 @@
             <if test="abstractDeadline != null ">abstract_deadline,</if>
             <if test="paperDeadline != null">paper_deadline,</if>
             <if test="startTime != null">start_time,</if>
+            <if test="endTime != null">end_time,</if>
             <if test="followNum != null ">follow_num,</if>
             <if test="attendNum != null ">attend_num,</if>
             <if test="acceptedRate != null">accepted_rate,</if>
@@ -147,6 +148,7 @@
             <if test="abstractDeadline != null ">#{abstractDeadline},</if>
             <if test="paperDeadline != null ">#{paperDeadline},</if>
             <if test="startTime != null ">#{startTime},</if>
+            <if test="endTime != null">#{endTime},</if>
             <if test="followNum != null ">#{followNum},</if>
             <if test="attendNum != null ">#{attendNum},</if>
             <if test="acceptedRate != null">#{acceptedRate},</if>
@@ -235,6 +237,7 @@
                               <if test="abstractDeadline != null">abstract_deadline=#{abstractDeadline},</if>
                               <if test="paperDeadline != null ">paper_deadline=#{paperDeadline},</if>
                               <if test="startTime != null "> start_time=#{startTime},</if>
+                              <if test="endTime != null">end_time=#{endTime},</if>
                               <if test="followNum != null ">follow_num=#{followNum},</if>
                               <if test="attendNum != null ">attend_num=#{attendNum},</if>
                               <if test="acceptedRate != null ">accepted_rate=#{acceptedRate},</if>
@@ -247,21 +250,42 @@
 
     <!--
     更新收藏数
-    int updateFollowNum(String conferenceId);
+    int addFollowNum(String conferenceId);
     -->
-    <update id="updateFollowNum">
+    <update id="addFollowNum">
         update conference set
                 follow_num = follow_num + 1
         where conference_id=#{conferenceId}
     </update>
 
     <!--
-    更新参加数
-    int updateAttendNum(String conferenceId);
+    更新收藏数
+    int subFollowNum(String conferenceId);
     -->
-    <update id="updateAttendNum">
+    <update id="subFollowNum">
+        update conference set
+            follow_num = follow_num - 1
+        where conference_id=#{conferenceId}
+    </update>
+
+
+    <!--
+    更新参加数
+    int addAttendNum(String conferenceId);
+    -->
+    <update id="addAttendNum">
         update conference set
             attend_num = attend_num + 1
+        where conference_id=#{conferenceId}
+    </update>
+
+    <!--
+   更新参加数
+   int subAttendNum(String conferenceId);
+   -->
+    <update id="subAttendNum">
+        update conference set
+            attend_num = attend_num - 1
         where conference_id=#{conferenceId}
     </update>
 

@@ -99,15 +99,5 @@ class JournalMapperTest {
         System.out.println("success");
     }
 
-    @Test
-    void updateFollowNum() {
-        journalMapper.updateFollowNum("IEEE Journal on Selected Areas in Communications");
-        System.out.println("success");
-    }
 
-    @Test
-    void updateAttendNum(){
-        journalMapper.updateAttendNum("IEEE Journal on Selected Areas in Communications");
-        System.out.println("success");
-    }
 }

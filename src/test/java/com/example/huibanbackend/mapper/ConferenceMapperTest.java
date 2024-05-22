@@ -117,17 +117,5 @@ class ConferenceMapperTest {
 
     }
 
-    @Test
-    void updateFollowNum() {
-        conferenceMapper.updateFollowNum("date2023");
-        System.out.println("success");
 
-    }
-
-    @Test
-    void updateAttendNum(){
-        conferenceMapper.updateAttendNum("date2023");
-        System.out.println("success");
-
-    }
 }
