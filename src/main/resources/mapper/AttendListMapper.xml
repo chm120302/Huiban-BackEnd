@@ -13,14 +13,7 @@
         values (#{email}, #{category}, #{academicId});
     </insert>
 
-    <!--
-    插入参加期刊
-    int insertJour(AttendList attendList);
-    -->
-    <insert id="insertJour" parameterType="attendList">
-        insert into attendlist2 (email, category, academic_id)
-        values (#{email}, #{category}, #{academicId});
-    </insert>
+
 
     <!--
     删除参加会议
@@ -31,14 +24,7 @@
         where id=#{id}
     </delete>
 
-    <!--
-    删除参加期刊
-    int deleteJour(Integer id);
-    -->
-    <delete id="deleteJour" parameterType="int">
-        delete from attendlist2
-        where id=#{id}
-    </delete>
+
 
 <!--    &lt;!&ndash;-->
 <!--    批量删除参加信息-->

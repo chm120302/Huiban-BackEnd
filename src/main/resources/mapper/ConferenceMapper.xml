@@ -228,7 +228,7 @@
     <update id="update" parameterType="conference">
         update conference set
                               <if test="title != null and title != '' ">title=#{title},</if>
-                              <if test="title != null and title != '' ">full_title=#{title},</if>
+                              <if test="fullTitle != null and fullTitle != '' ">full_title=#{title},</if>
                               <if test="ccfRank != null and ccfRank != ''">ccf_rank=#{ccfRank}, </if>
                               <if test="sub != null and sub != ''"> sub=#{sub},</if>
                               <if test="year != null and year != ''">year=#{year},</if>

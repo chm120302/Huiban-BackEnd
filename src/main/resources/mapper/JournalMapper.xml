@@ -8,15 +8,15 @@
     </sql>
     
     <sql id="selectDetailColumns">
-        select id, journal_id, ccf_rank, sub, dblp_link, mainpage_link, paper_deadline, follow_num, attend_num, impact_factor, publisher, topic_details, is_postponed
+        select id, journal_id, ccf_rank, sub, dblp_link, mainpage_link, paper_deadline, follow_num, impact_factor, publisher, topic_details, is_postponed
         from journal c
     </sql>
 
     <!--
     查询最受欢迎的5个期刊
-    List<HashMap<String, Integer>> getPopularList();
+    List<JournalDetail> getPopularList();
     -->
-    <select id="getPopularList" resultType="java.util.HashMap">
+    <select id="getPopularList" resultType="journalDetail">
         select journal_id, follow_num
         from journal
         order by follow_num desc
@@ -28,7 +28,7 @@
     查询截稿日期最近的前10个期刊
     List<JournalShow> getRecentList();
     -->
-    <select id="getRecentList" resultType="conferenceShow">
+    <select id="getRecentList" resultType="journalShow">
         <include refid="selectShowColumns"/>
         where c.paper_deadline >= sysdate()
         order by c.paper_deadline asc
@@ -102,7 +102,6 @@
             <if test="mainpageLink != null and mainpageLink != null">mainpage_link,</if>
             <if test="paperDeadline != null">paper_deadline,</if>
             <if test="followNum != null and followNum != ''">follow_num,</if>
-            <if test="attendNum != null and attendNum != ''">attend_num,</if>
             <if test="impactFactor != null and impactFactor != ''">impact_factor,</if>
             <if test="publisher != null and publisher != ''">publisher,</if>
             <if test="topicDetails != null and topicDetails != ''">topic_details,</if>
@@ -117,7 +116,6 @@
             <if test="mainpageLink != null and mainpageLink != null">#{mainpageLink},</if>
             <if test="paperDeadline != null">#{paperDeadline},</if>
             <if test="followNum != null and followNum != ''">#{followNum},</if>
-            <if test="attendNum != null and attendNum != ''">{attendNum},</if>
             <if test="impactFactor != null and impactFactor != ''">#{impactFactor},</if>
             <if test="publisher != null and publisher != ''">#{publisher},</if>
             <if test="topicDetails != null and topicDetails != ''">#{topicDetails},</if>
@@ -172,9 +170,9 @@
     删除期刊
     int delete(Integer id);
     -->
-    <delete id="delete" parameterType="int">
+    <delete id="delete" parameterType="string">
         delete from journal
-        where id=#{id}
+        where journal_id=#{journalId}
     </delete>
 
     <!--
@@ -183,18 +181,16 @@
     -->
     <update id="update" parameterType="journal">
         update journal set
-        <if test="journalId != null and journalId != ''">journal_id=#{journalId},</if>
         <if test="ccfRank != null and ccfRank != ''">ccf_rank=#{ccfRank},</if>
         <if test="sub != null and sub != ''">sub=#{sub},</if>
         <if test="dblpLink != null and dblpLink != ''">dblp_link=#{dblpLink},</if>
-        <if test="mainpageLink != null and mainpageLink != null">mainpage_link=#{mainpageLink},</if>
+        <if test="mainpageLink != null and mainpageLink != ''">mainpage_link=#{mainpageLink},</if>
         <if test="paperDeadline != null">paper_deadline=#{paperDeadline},</if>
-        <if test="followNum != null and followNum != ''">follow_num=#{followNum},</if>
-        <if test="attendNum != null and attendNum != ''">attend_num=#{attendNum},</if>
-        <if test="impactFactor != null and impactFactor != ''">impact_factor=#{impactFactor},</if>
+        <if test="followNum != null">follow_num=#{followNum},</if>
+        <if test="impactFactor != null">impact_factor=#{impactFactor},</if>
         <if test="publisher != null and publisher != ''">publisher=#{publisher},</if>
         <if test="topicDetails != null and topicDetails != ''">topic_details=#{topicDetails},</if>
-        <if test="isPostponed != null and isPostponed != ''">is_postponed=#{isPostponed}</if>
+        <if test="isPostponed != null ">is_postponed=#{isPostponed}</if>
         where journal_id=#{journalId}
 
     </update>
@@ -219,25 +215,7 @@
         where journal_id=#{journalId}
     </update>
 
-    <!--
-    更新参加数（增加）
-    int addAttendNum(String journalId);
-    -->
-    <update id="addAttendNum">
-        update journal set
-            attend_num = attend_num + 1
-        where journal_id=#{journalId}
-    </update>
 
-    <!--
-   更新参加数（减少）
-   int subAttendNum(String journalId);
-   -->
-    <update id="subAttendNum">
-        update journal set
-            attend_num = attend_num - 1
-        where journal_id=#{journalId}
-    </update>
 
 
 

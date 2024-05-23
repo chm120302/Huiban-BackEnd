@@ -19,7 +19,6 @@ public class JournalDetail {
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date paperDeadline;
     private Integer followNum;
-    private Integer attendNum;
     private double impactFactor;
     private String publisher;
     private String topicDetails;
@@ -28,7 +27,8 @@ public class JournalDetail {
     public JournalDetail() {
     }
 
-    public JournalDetail(String journalId, String ccfRank, String sub, String dblpLink, String mainpageLink, Date paperDeadline, Integer followNum, Integer attendNum,  double impactFactor, String publisher, String topicDetails, boolean isPostponed) {
+    public JournalDetail(String journalId, String ccfRank, String sub, String dblpLink, String mainpageLink, Date paperDeadline, Integer followNum, double impactFactor, String publisher, String topicDetails, boolean isPostponed) {
+
         this.journalId = journalId;
         this.ccfRank = ccfRank;
         this.sub = sub;
@@ -36,7 +36,6 @@ public class JournalDetail {
         this.mainpageLink = mainpageLink;
         this.paperDeadline = paperDeadline;
         this.followNum = followNum;
-        this.attendNum = attendNum;
         this.impactFactor = impactFactor;
         this.publisher = publisher;
         this.topicDetails = topicDetails;
@@ -51,13 +50,6 @@ public class JournalDetail {
         this.dblpLink = dblpLink;
     }
 
-    public Integer getAttendNum() {
-        return attendNum;
-    }
-
-    public void setAttendNum(Integer attendNum) {
-        this.attendNum = attendNum;
-    }
 
 
     public Integer getId() {
@@ -160,7 +152,6 @@ public class JournalDetail {
                 ", mainpageLink='" + mainpageLink + '\'' +
                 ", paperDeadline=" + paperDeadline +
                 ", followNum=" + followNum +
-                ", attendNum=" + attendNum +
                 ", impactFactor=" + impactFactor +
                 ", publisher='" + publisher + '\'' +
                 ", topicDetails='" + topicDetails + '\'' +

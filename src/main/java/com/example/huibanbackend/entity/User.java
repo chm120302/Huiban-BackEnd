@@ -19,14 +19,12 @@ public class User {
     private List<Journal> followJournals;
     //用户参加会议列表
     private List<Conference> attendConferences;
-    //用户参加期刊列表
-    private List<Journal> attendJournals;
 
     public User(){
 
     }
 
-    public User(String email, String imageUrl, String userName, String institution, String password, List<Conference> followConferences, List<Journal> followJournals, List<Conference> attendConferences, List<Journal> attendJournals) {
+    public User(String email, String imageUrl, String userName, String institution, String password, List<Conference> followConferences, List<Journal> followJournals, List<Conference> attendConferences) {
 
         this.email = email;
         this.imageUrl = imageUrl;
@@ -36,7 +34,7 @@ public class User {
         this.followConferences = followConferences;
         this.followJournals = followJournals;
         this.attendConferences = attendConferences;
-        this.attendJournals = attendJournals;
+
     }
 
     public List<Conference> getAttendConferences() {
@@ -47,13 +45,6 @@ public class User {
         this.attendConferences = attendConferences;
     }
 
-    public List<Journal> getAttendJournals() {
-        return attendJournals;
-    }
-
-    public void setAttendJournals(List<Journal> attendJournals) {
-        this.attendJournals = attendJournals;
-    }
 
     public Integer getId() {
         return id;
@@ -122,7 +113,6 @@ public class User {
                 ", followConferences=" + followConferences +
                 ", followJournals=" + followJournals +
                 ", attendConferences=" + attendConferences +
-                ", attendJournals=" + attendJournals +
                 '}';
     }
 }

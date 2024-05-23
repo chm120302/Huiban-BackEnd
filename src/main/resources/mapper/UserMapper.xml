@@ -43,7 +43,6 @@
             <result property="mainpageLink" column="mainpage_link"/>
             <result property="paperDeadline" column="paper_deadline"/>
             <result property="followNum" column="follow_num"/>
-            <result property="attendNum" column="attend_num"/>
             <result property="impactFactor" column="impact_factor"/>
             <result property="publisher" column="publisher"/>
             <result property="topicDetails" column="topic_details"/>
@@ -74,26 +73,10 @@
             <result property="isPostponed" column="is_postponed"/>
         </collection>
 
-        <!-- 配置参加期刊的映射集合-->
-        <collection property="attendJournals" ofType="journal">
-            <id property="id" column="id"/>
-            <result property="journalId" column="journal_id"/>
-            <result property="ccfRank" column="ccf_rank"/>
-            <result property="sub" column="sub"/>
-            <result property="dblpLink" column="dblp_link"/>
-            <result property="mainpageLink" column="mainpage_link"/>
-            <result property="paperDeadline" column="paper_deadline"/>
-            <result property="followNum" column="follow_num"/>
-            <result property="attendNum" column="attend_num"/>
-            <result property="impactFactor" column="impact_factor"/>
-            <result property="publisher" column="publisher"/>
-            <result property="topicDetails" column="topic_details"/>
-            <result property="isPostponed" column="is_postponed"/>
-        </collection>
     </resultMap>
 
     <sql id="getAllIncludeFollow">
-        select u.*, c.*, j.*, cc.*, jj.*
+        select u.*, c.*, j.*, cc.*
         from user u
                  left join followlist ft on u.email = ft.email
                  left join conference c on ft.academic_id = c.conference_id
@@ -101,8 +84,7 @@
                  left join journal j on ft2.academic_id = j.journal_id
                  left join attendlist tt on u.email = tt.email
                  left join conference cc on tt.academic_id = cc.conference_id
-                 left join attendlist2 tt2 on u.email = tt2.email
-                 left join journal jj on tt2.academic_id = jj.journal_id
+
     </sql>
 
     <!--

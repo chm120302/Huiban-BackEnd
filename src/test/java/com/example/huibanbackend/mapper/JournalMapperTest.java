@@ -23,7 +23,7 @@ class JournalMapperTest {
 
     @Test
     void getPopularList() {
-        List<HashMap<String, Integer>> list = journalMapper.getPopularList();
+        List<JournalDetail> list = journalMapper.getPopularList();
         System.out.println("success");
 
     }
@@ -86,7 +86,7 @@ class JournalMapperTest {
 
     @Test
     void delete() {
-        journalMapper.delete(4);
+        journalMapper.delete("TWC");
         System.out.println("success");
     }
 

@@ -14,7 +14,7 @@ import java.util.List;
 public interface JournalMapper {
 
     //查询最受欢迎的5个期刊
-    List<HashMap<String, Integer>> getPopularList();
+    List<JournalDetail> getPopularList();
 
     //查询截稿日期最近的前10个期刊
     List<JournalShow> getRecentList();
@@ -44,7 +44,7 @@ public interface JournalMapper {
 //    int insertBatch(List<Journal> list);
 
     //删除期刊
-    int delete(Integer id);
+    int delete(String journalId);
 
     //更新期刊信息
     int update(Journal journal);
@@ -54,8 +54,4 @@ public interface JournalMapper {
 
     int subFollowNum(@Param("journalId")String journalId);
 
-    //更新参加数
-    int addAttendNum(@Param("journalId")String journalId);
-
-    int subAttendNum(@Param("journalId")String journalId);
 }
