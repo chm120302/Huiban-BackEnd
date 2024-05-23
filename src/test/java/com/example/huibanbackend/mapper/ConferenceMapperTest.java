@@ -26,8 +26,10 @@ class ConferenceMapperTest {
 
     @Test
     void getPopularList() {
-        List<HashMap<String, Integer>> popularList = conferenceMapper.getPopularList();
+        List<ConferenceDetail> popularList = conferenceMapper.getPopularList();
         System.out.println("success");
+//        List<HashMap<String, Integer>> popularList = conferenceMapper.getPopularList();
+//        System.out.println("success");
 
     }
 
@@ -102,7 +104,7 @@ class ConferenceMapperTest {
 
     @Test
     void delete() {
-        conferenceMapper.delete(3);
+        conferenceMapper.delete("date2023");
         System.out.println("success");
     }
 

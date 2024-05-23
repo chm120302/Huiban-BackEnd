@@ -16,8 +16,9 @@
     <!--
     查询最受欢迎的5个会议
     List<HashMap<String, Integer>> getPopularList();
+    List<ConferenceShow> getPopularList();
     -->
-    <select id="getPopularList" resultType="java.util.HashMap">
+    <select id="getPopularList" resultType="conferenceDetail">
         select conference_id, follow_num
         from conference
         order by follow_num desc
@@ -215,9 +216,9 @@
     删除会议
     int delete(Integer id);
     -->
-    <delete id="delete" parameterType="int">
+    <delete id="delete" parameterType="string">
         delete from conference
-        where id=#{id}
+        where conference_id=#{conferenceId}
     </delete>
 
     <!--

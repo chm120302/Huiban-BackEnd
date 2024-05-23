@@ -1,8 +1,8 @@
 package com.example.huibanbackend.controller;
 
 import com.example.huibanbackend.entity.User;
-import com.example.huibanbackend.exception.DuplicateUserException;
-import com.example.huibanbackend.exception.UserNotFoundException;
+import com.example.huibanbackend.exception.DuplicateException;
+import com.example.huibanbackend.exception.NotFoundException;
 import com.example.huibanbackend.service.UserService;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -30,8 +30,9 @@ public class UserController {
 
     @GetMapping("/list")
     @Operation(summary = "get all users' information")
-    public List<User> getUserList(){
-        return userService.getAllInfo();
+    public ResponseEntity<List<User>> getUserList(){
+        List<User> users = userService.getAllInfo();
+        return ResponseEntity.ok(users);
     }
 
     @GetMapping("/info/{email}")
@@ -41,8 +42,14 @@ public class UserController {
             @ApiResponse(responseCode = "401", description = "没有权限"),
             @ApiResponse(responseCode = "404", description = "请求路径没有或页面跳转路径不对")
     })
-    public User getUserInfo(@PathVariable String email){
-        return userService.getAllInfoByEmail(email);
+    public ResponseEntity<User> getUserInfo(@PathVariable String email){
+        try{
+            User user = userService.getAllInfoByEmail(email);
+            return ResponseEntity.ok(user);
+        } catch (NotFoundException e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+
     }
 
 
@@ -55,11 +62,11 @@ public class UserController {
             @ApiResponse(responseCode = "404", description = "请求路径没有或页面跳转路径不对"),
             @ApiResponse(responseCode = "409", description = "服务器在完成请求时发生冲突")
     })
-    public ResponseEntity<User> addUser(@Parameter @RequestBody User user){
+    public ResponseEntity<User> addUser(@RequestBody User user){
         try{
             userService.insert(user);
             return ResponseEntity.status(HttpStatus.CREATED).body(user);
-        }catch (DuplicateUserException e){
+        }catch (DuplicateException e){
             return ResponseEntity.status(HttpStatus.CONFLICT).body(null);
         }
     }
@@ -77,7 +84,7 @@ public class UserController {
         try {
             userService.delete(email);
             return ResponseEntity.noContent().build();
-        } catch (UserNotFoundException e) {
+        } catch (NotFoundException e) {
             return ResponseEntity.notFound().build();
         }
     }
@@ -94,7 +101,7 @@ public class UserController {
         try {
             userService.update(user);
             return ResponseEntity.ok(user);
-        } catch (UserNotFoundException e) {
+        } catch (NotFoundException e) {
             return ResponseEntity.notFound().build();
         }
 
@@ -115,7 +122,7 @@ public class UserController {
         try {
             userService.updatePassword(email, password);
             return ResponseEntity.noContent().build();
-        } catch (UserNotFoundException e) {
+        } catch (NotFoundException e) {
             return ResponseEntity.notFound().build();
         }
     }

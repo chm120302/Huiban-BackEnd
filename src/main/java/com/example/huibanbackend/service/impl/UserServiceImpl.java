@@ -2,8 +2,8 @@ package com.example.huibanbackend.service.impl;
 
 
 import com.example.huibanbackend.entity.User;
-import com.example.huibanbackend.exception.DuplicateUserException;
-import com.example.huibanbackend.exception.UserNotFoundException;
+import com.example.huibanbackend.exception.DuplicateException;
+import com.example.huibanbackend.exception.NotFoundException;
 import com.example.huibanbackend.mapper.UserMapper;
 import com.example.huibanbackend.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +30,7 @@ public class UserServiceImpl implements UserService {
         User user = userMapper.getAllInfoByEmail(email);
         if (user == null) {
             // 该用户不在数据库中
-            throw new UserNotFoundException("User with email " + email + " not found");
+            throw new NotFoundException("User with email " + email + " not found");
         }
         return user;
     }
@@ -41,7 +41,7 @@ public class UserServiceImpl implements UserService {
         User selectUser = userMapper.getByEmail(email);
         if (selectUser != null) {
             // 若用户邮箱已经在数据库中
-            throw new DuplicateUserException("User with email " + user.getEmail() + " already exists");
+            throw new DuplicateException("User with email " + user.getEmail() + " already exists");
         }
         return userMapper.insert(user);
     }
@@ -50,7 +50,7 @@ public class UserServiceImpl implements UserService {
     public int delete(String email) {
        User user = userMapper.getByEmail(email);
        if (user == null) {
-           throw new UserNotFoundException("User with email " + email + " not found");
+           throw new NotFoundException("User with email " + email + " not found");
        }
        return userMapper.delete(email);
     }
@@ -61,7 +61,7 @@ public class UserServiceImpl implements UserService {
         User selectUser = userMapper.getByEmail(email);
         if (selectUser == null) {
             // 该用户不在数据库中
-            throw new UserNotFoundException("User with email " + email + " not found");
+            throw new NotFoundException("User with email " + email + " not found");
         }
         return userMapper.update(user);
     }
@@ -70,7 +70,7 @@ public class UserServiceImpl implements UserService {
     public int updatePassword(String email, String password) {
         User user = userMapper.getByEmail(email);
         if (user == null) {
-            throw new UserNotFoundException("User with email " + email + " not found");
+            throw new NotFoundException("User with email " + email + " not found");
         }
         return userMapper.updatePassword(email, password);
     }

@@ -15,7 +15,7 @@ import java.util.List;
 public interface ConferenceMapper {
 
     //查询最受欢迎的5个会议
-    List<HashMap<String, Integer>> getPopularList();
+    List<ConferenceDetail> getPopularList();
 
     //查询截稿日期最近的前10个会议
     List<ConferenceShow> getRecentList();
@@ -51,7 +51,7 @@ public interface ConferenceMapper {
 //    int insertBatch(List<Conference> cList);
 
     //删除会议
-    int delete(Integer id);
+    int delete(String conferenceId);
 
     //更新会议
     int update(Conference conference);
