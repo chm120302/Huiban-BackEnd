@@ -13,6 +13,12 @@ public class FollowList {
 
     }
 
+    public FollowList(String email, String category, String academicId) {
+        this.email = email;
+        this.category = category;
+        this.academicId = academicId;
+    }
+
     public Integer getId() {
         return id;
     }

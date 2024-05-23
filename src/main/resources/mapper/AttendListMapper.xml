@@ -17,11 +17,11 @@
 
     <!--
     删除参加会议
-    int deleteConf(Integer id);
+    int deleteConf(String conferenceId);
     -->
-    <delete id="deleteConf" parameterType="int">
+    <delete id="deleteConf" >
         delete from attendlist
-        where id=#{id}
+        where academic_id=#{conferenceId} and email=#{email}
     </delete>
 
 

@@ -37,13 +37,13 @@ class FollowListMapperTest {
 
     @Test
     void deleteConf() {
-        followListMapper.deleteConf(2);
+        followListMapper.deleteConf("date2023", "xxx");
         System.out.println("success");
     }
 
     @Test
     void deleteJour() {
-        followListMapper.deleteJour(3);
+        followListMapper.deleteJour("TWC", "xxx");
         System.out.println("success");
     }
 }

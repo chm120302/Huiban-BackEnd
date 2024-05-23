@@ -4,8 +4,11 @@ package com.example.huibanbackend.controller;
 import com.example.huibanbackend.entity.*;
 import com.example.huibanbackend.exception.DuplicateException;
 import com.example.huibanbackend.exception.NotFoundException;
+import com.example.huibanbackend.service.FollowListService;
 import com.example.huibanbackend.service.JournalService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -23,6 +26,9 @@ public class JournalController {
     
     @Autowired
     private JournalService journalService;
+
+    @Autowired
+    private FollowListService followListService;
 
     @GetMapping("/popularList")
     @Operation(summary = "get the top 5 followed journals ")
@@ -176,9 +182,12 @@ public class JournalController {
 
     @PutMapping("/{journalId}/follow/add")
     @Operation(summary = "add follow number of journal")
-    public ResponseEntity<Void> addFollowNum(@PathVariable String journalId){
+    @Parameters(@Parameter(name = "email", description = "user email"))
+    public ResponseEntity<Void> addFollowNum(@PathVariable String journalId, @RequestParam @Parameter String email){
         try{
             journalService.addFollowNum(journalId);
+            FollowList ft = new FollowList(email, "journal", journalId);
+            followListService.insertJour(ft);
             return ResponseEntity.noContent().build();
         } catch (NotFoundException e) {
             return ResponseEntity.notFound().build();
@@ -187,9 +196,11 @@ public class JournalController {
 
     @PutMapping("/{journalId}/follow/sub")
     @Operation(summary = "sub follow number of journal")
-    public ResponseEntity<Void> subFollowNum(@PathVariable String journalId){
+    @Parameters(@Parameter(name = "email", description = "user email"))
+    public ResponseEntity<Void> subFollowNum(@PathVariable String journalId, @RequestParam @Parameter String email){
         try{
             journalService.subFollowNum(journalId);
+            followListService.deleteJour(journalId, email);
             return ResponseEntity.noContent().build();
         } catch (NotFoundException e) {
             return ResponseEntity.notFound().build();

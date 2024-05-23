@@ -25,26 +25,12 @@ class AttendMapperTest {
 
     }
 
-    @Test
-    void insertJour() {
-        AttendList attendList = new AttendList();
-        attendList.setEmail("xxx@163.com");
-        attendList.setCategory("journal");
-        attendList.setAcademicId("Future Generation Computer Systems");
-        attendMapper.insertJour(attendList);
-        System.out.println("success");
-    }
 
     @Test
     void deleteConf() {
-        attendMapper.deleteConf(2);
+        attendMapper.deleteConf("date2023", "xxx");
         System.out.println("success");
     }
 
-    @Test
-    void deleteJour() {
-        attendMapper.deleteJour(3);
-        System.out.println("success");
-    }
 
 }

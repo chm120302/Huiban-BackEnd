@@ -17,10 +17,10 @@ public interface FollowListMapper {
     int insertJour(FollowList followList);
 
     //删除关注会议
-    int deleteConf(Integer id);
+    int deleteConf(@Param("conferenceId") String conferenceId, @Param("email") String email);
 
     //删除关注期刊
-    int deleteJour(Integer id);
+    int deleteJour(@Param("journalId") String journalId, @Param("email") String email);
 
 
 //    //批量删除关注信息

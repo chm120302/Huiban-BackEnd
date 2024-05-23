@@ -25,20 +25,20 @@
 
     <!--
     删除关注会议
-    int deleteConf(Integer id);
+    int deleteConf(String conferenceId);
     -->
-    <delete id="deleteConf" parameterType="int">
+    <delete id="deleteConf" >
         delete from followlist
-        where id=#{id}
+        where academic_id=#{conferenceId} and email=#{email}
     </delete>
 
     <!--
     删除关注期刊
-    int deleteJour(Integer id);
+    int deleteJour(String journalId);
     -->
-    <delete id="deleteJour" parameterType="int">
+    <delete id="deleteJour" >
         delete from followlist2
-        where id=#{id}
+        where academic_id=#{journalId} and email=#{email}
     </delete>
 
 

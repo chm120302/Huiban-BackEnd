@@ -1,12 +1,12 @@
 package com.example.huibanbackend.controller;
 
-import com.example.huibanbackend.entity.Conference;
-import com.example.huibanbackend.entity.ConferenceDetail;
-import com.example.huibanbackend.entity.ConferenceShow;
+import com.example.huibanbackend.entity.*;
 import com.example.huibanbackend.exception.DuplicateException;
 import com.example.huibanbackend.exception.NotFoundException;
 import com.example.huibanbackend.mapper.ConferenceMapper;
+import com.example.huibanbackend.service.AttendListService;
 import com.example.huibanbackend.service.ConferenceService;
+import com.example.huibanbackend.service.FollowListService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
@@ -31,6 +31,12 @@ public class ConferenceController {
 
     @Autowired
     private ConferenceService conferenceService;
+
+    @Autowired
+    private FollowListService followListService;
+
+    @Autowired
+    private AttendListService attendListService;
 
 
     @GetMapping("/popularList")
@@ -220,9 +226,12 @@ public class ConferenceController {
 
     @PutMapping("/{conferenceId}/follow/add")
     @Operation(summary = "add follow number of conference")
-    public ResponseEntity<Void> addFollowNum(@PathVariable String conferenceId){
+    @Parameters(@Parameter(name = "email", description = "user email"))
+    public ResponseEntity<Void> addFollowNum(@PathVariable String conferenceId, @RequestParam @Parameter String email){
         try{
             conferenceService.addFollowNum(conferenceId);
+            FollowList ft = new FollowList(email, "conference", conferenceId);
+            followListService.insertConf(ft);
             return ResponseEntity.noContent().build();
         } catch (NotFoundException e) {
             return ResponseEntity.notFound().build();
@@ -231,9 +240,11 @@ public class ConferenceController {
 
     @PutMapping("/{conferenceId}/follow/sub")
     @Operation(summary = "sub follow number of conference")
-    public ResponseEntity<Void> subFollowNum(@PathVariable String conferenceId){
+    @Parameters(@Parameter(name = "email", description = "user email"))
+    public ResponseEntity<Void> subFollowNum(@PathVariable String conferenceId, @RequestParam @Parameter String email){
         try{
             conferenceService.subFollowNum(conferenceId);
+            followListService.deleteConf(conferenceId, email);
             return ResponseEntity.noContent().build();
         } catch (NotFoundException e) {
             return ResponseEntity.notFound().build();
@@ -242,9 +253,12 @@ public class ConferenceController {
 
     @PutMapping("/{conferenceId}/attend/add")
     @Operation(summary = "add attend number of conference")
-    public ResponseEntity<Void> addAttendNum(@PathVariable String conferenceId){
+    @Parameters(@Parameter(name = "email", description = "user email"))
+    public ResponseEntity<Void> addAttendNum(@PathVariable String conferenceId, @RequestParam @Parameter String email){
         try{
             conferenceService.addAttendNum(conferenceId);
+            AttendList att = new AttendList(email, "conference", conferenceId);
+            attendListService.insertConf(att);
             return ResponseEntity.noContent().build();
         } catch (NotFoundException e) {
             return ResponseEntity.notFound().build();
@@ -253,9 +267,11 @@ public class ConferenceController {
 
     @PutMapping("/{conferenceId}/attend/sub")
     @Operation(summary = "sub attend number of conference")
-    public ResponseEntity<Void> subAttendNum(@PathVariable String conferenceId){
+    @Parameters(@Parameter(name = "email", description = "user email"))
+    public ResponseEntity<Void> subAttendNum(@PathVariable String conferenceId, @RequestParam @Parameter String email){
         try{
             conferenceService.subAttendNum(conferenceId);
+            attendListService.deleteConf(conferenceId, email);
             return ResponseEntity.noContent().build();
         } catch (NotFoundException e) {
             return ResponseEntity.notFound().build();
