@@ -1,5 +1,6 @@
 package com.example.huibanbackend.controller;
 
+import com.example.huibanbackend.entity.Result;
 import com.example.huibanbackend.entity.User;
 import com.example.huibanbackend.exception.DuplicateException;
 import com.example.huibanbackend.exception.NotFoundException;
@@ -15,6 +16,7 @@ import jakarta.annotation.Resource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -29,25 +31,29 @@ public class UserController {
     public UserService userService;
 
     @GetMapping("/list")
+    @PreAuthorize("@myAccess.hasAuthority('4')")
     @Operation(summary = "get all users' information")
-    public ResponseEntity<List<User>> getUserList(){
+    public Result<List<User>> getUserList(){
         List<User> users = userService.getAllInfo();
-        return ResponseEntity.ok(users);
+        return Result.Success("get all", users);
     }
 
     @GetMapping("/info/{email}")
     @Operation(summary = "get user information by email")
+    @PreAuthorize("@myAccess.hasAuthority('5')")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "请求成功"),
             @ApiResponse(responseCode = "401", description = "没有权限"),
             @ApiResponse(responseCode = "404", description = "请求路径没有或页面跳转路径不对")
     })
-    public ResponseEntity<User> getUserInfo(@PathVariable String email){
+    public Result<User> getUserInfo(@PathVariable String email){
         try{
             User user = userService.getAllInfoByEmail(email);
-            return ResponseEntity.ok(user);
+            return Result.Success(user);
+
         } catch (NotFoundException e){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+            return Result.fail(404, "not found", null);
+
         }
 
     }
@@ -55,6 +61,7 @@ public class UserController {
 
     @PostMapping
     @Operation(summary = "add user")
+    @PreAuthorize("@myAccess.hasAuthority('3')")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "请求成功"),
             @ApiResponse(responseCode = "201", description = "已创建,成功请求并创建了新的资源"),
@@ -62,17 +69,20 @@ public class UserController {
             @ApiResponse(responseCode = "404", description = "请求路径没有或页面跳转路径不对"),
             @ApiResponse(responseCode = "409", description = "服务器在完成请求时发生冲突")
     })
-    public ResponseEntity<User> addUser(@RequestBody User user){
+    public Result<User> addUser(@RequestBody User user){
         try{
             userService.insert(user);
-            return ResponseEntity.status(HttpStatus.CREATED).body(user);
+            return Result.Success("create", user);
+
         }catch (DuplicateException e){
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(null);
+            return Result.fail(HttpStatus.CONFLICT.value(), "conflict", null);
+
         }
     }
 
     @DeleteMapping("/{email}")
     @Operation(summary = "delete user")
+    @PreAuthorize("@myAccess.hasAuthority('6')")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "请求成功"),
             @ApiResponse(responseCode = "204", description = "服务器成功处理，但未返回内容"),
@@ -80,35 +90,39 @@ public class UserController {
             @ApiResponse(responseCode = "403", description = "禁止访问"),
             @ApiResponse(responseCode = "404", description = "请求路径没有或页面跳转路径不对")
     })
-    public ResponseEntity<Void> deleteUser(@PathVariable String email){
+    public Result<Void> deleteUser(@PathVariable String email){
         try {
             userService.delete(email);
-            return ResponseEntity.noContent().build();
+            return Result.Success("delete", null);
+
         } catch (NotFoundException e) {
-            return ResponseEntity.notFound().build();
+            return Result.fail(HttpStatus.NOT_FOUND.value(), "not found", null);
         }
     }
 
     @PutMapping("/update")
     @Operation(summary = "update user information not include password")
+    @PreAuthorize("@myAccess.hasAuthority('2')")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "请求成功"),
             @ApiResponse(responseCode = "401", description = "没有权限"),
             @ApiResponse(responseCode = "403", description = "禁止访问"),
             @ApiResponse(responseCode = "404", description = "请求路径没有或页面跳转路径不对")
     })
-    public ResponseEntity<User> updateUser(@RequestBody User user){
+    public Result<User> updateUser(@RequestBody User user){
         try {
             userService.update(user);
-            return ResponseEntity.ok(user);
+            return Result.Success("update", user);
+
         } catch (NotFoundException e) {
-            return ResponseEntity.notFound().build();
+            return Result.fail(HttpStatus.NOT_FOUND.value(), "not found", null);
         }
 
     }
 
-    @PutMapping("/{email}/changePassword")
+    @PutMapping("/changePassword")
     @Operation(summary = "update user's password")
+    @PreAuthorize("@myAccess.hasAuthority('1')")
     @Parameters(@Parameter(name = "password", description = "password"))
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "请求成功"),
@@ -118,12 +132,14 @@ public class UserController {
             @ApiResponse(responseCode = "404", description = "请求路径没有或页面跳转路径不对")
 
     })
-    public ResponseEntity<Void> changePassword(@PathVariable String email, @RequestParam @Parameter String password){
+    public Result<Void> changePassword(@RequestBody User user){
         try {
+            String email = user.getEmail();
+            String password = user.getPassword();
             userService.updatePassword(email, password);
-            return ResponseEntity.noContent().build();
+            return Result.Success("change password", null);
         } catch (NotFoundException e) {
-            return ResponseEntity.notFound().build();
+            return Result.fail(HttpStatus.NOT_FOUND.value(), "not found", null);
         }
     }
 

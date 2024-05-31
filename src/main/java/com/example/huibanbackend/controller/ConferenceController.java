@@ -18,6 +18,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
@@ -41,137 +42,146 @@ public class ConferenceController {
 
     @GetMapping("/popularList")
     @Operation(summary = "get the top 5 followed conferences ")
+    @PreAuthorize("@myAccess.hasAuthority('14')")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "请求成功"),
             @ApiResponse(responseCode = "401", description = "没有权限"),
             @ApiResponse(responseCode = "404", description = "请求路径没有或页面跳转路径不对")
     })
-    public ResponseEntity<List<ConferenceDetail>> getPopularConferences(){
-        return ResponseEntity.ok(conferenceService.getPopularList());
+    public Result<List<ConferenceDetail>> getPopularConferences(){
+        return Result.Success("get popular", conferenceService.getPopularList());
+
     }
-//    public ResponseEntity<List<HashMap<String, Integer>>> getPopularConferences() {
-//        return ResponseEntity.ok(conferenceService.getPopularList());
-//
-//    }
 
 
     @GetMapping("/recentList")
     @Operation(summary = "get the 10 conferences with the latest deadlines")
+    @PreAuthorize("@myAccess.hasAuthority('13')")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "请求成功"),
             @ApiResponse(responseCode = "401", description = "没有权限"),
             @ApiResponse(responseCode = "404", description = "请求路径没有或页面跳转路径不对")
     })
-    public ResponseEntity<List<ConferenceShow>> getRecentConferences() {
-        return ResponseEntity.ok(conferenceService.getRecentList());
+    public Result<List<ConferenceShow>> getRecentConferences() {
+        return Result.Success("get recent", conferenceService.getPopularList());
 
     }
 
 
     @GetMapping("/list")
+    @PreAuthorize("@myAccess.hasAuthority('15')")
     @Operation(summary = "get all conferences")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "请求成功"),
             @ApiResponse(responseCode = "401", description = "没有权限"),
             @ApiResponse(responseCode = "404", description = "请求路径没有或页面跳转路径不对")
     })
-    public ResponseEntity<List<ConferenceShow>> getAllConferences() {
-        return ResponseEntity.ok(conferenceService.getAllShow());
+    public Result<List<ConferenceShow>> getAllConferences() {
+        return Result.Success("get all", conferenceService.getAllShow());
+
     }
 
 
     @GetMapping("/list/{conferenceId}")
     @Operation(summary = "get conference show information by id")
+    @PreAuthorize("@myAccess.hasAuthority('16')")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "请求成功"),
             @ApiResponse(responseCode = "401", description = "没有权限"),
             @ApiResponse(responseCode = "404", description = "请求路径没有或页面跳转路径不对")
     })
-    public ResponseEntity<ConferenceShow> getConference(@PathVariable String conferenceId) {
+    public Result<ConferenceShow> getConference(@PathVariable String conferenceId) {
         try{
             ConferenceShow cs = conferenceService.getById(conferenceId);
-            return ResponseEntity.ok(cs);
+            return Result.Success("get", cs);
+
         }catch (NotFoundException e){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+            return Result.fail(HttpStatus.NOT_FOUND.value(), "not found", null);
         }
     }
 
 
     @GetMapping("/list/rank/{ccfRank}")
     @Operation(summary = "get conference show information by ccf rank")
+    @PreAuthorize("@myAccess.hasAuthority('20')")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "请求成功"),
             @ApiResponse(responseCode = "401", description = "没有权限"),
             @ApiResponse(responseCode = "404", description = "请求路径没有或页面跳转路径不对")
     })
-    public ResponseEntity<List<ConferenceShow>> getConferenceByCcfRank(@PathVariable String ccfRank) {
-        return ResponseEntity.ok(conferenceService.getByCCFRank(ccfRank));
+    public Result<List<ConferenceShow>> getConferenceByCcfRank(@PathVariable String ccfRank) {
+        return Result.Success("get", conferenceService.getByCCFRank(ccfRank));
     }
 
 
     @GetMapping("/list/title/{title}")
     @Operation(summary = "get conference show information by title")
+    @PreAuthorize("@myAccess.hasAuthority('18')")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "请求成功"),
             @ApiResponse(responseCode = "401", description = "没有权限"),
             @ApiResponse(responseCode = "404", description = "请求路径没有或页面跳转路径不对")
     })
-    public ResponseEntity<List<ConferenceShow>> getConferenceByTitle(@PathVariable String title) {
-        return ResponseEntity.ok(conferenceService.getByTitle(title));
+    public Result<List<ConferenceShow>> getConferenceByTitle(@PathVariable String title) {
+        return Result.Success("get", conferenceService.getByTitle(title));
     }
 
 
     @GetMapping("/list/sub/{sub}")
     @Operation(summary = "get conference show information by sub")
+    @PreAuthorize("@myAccess.hasAuthority('19')")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "请求成功"),
             @ApiResponse(responseCode = "401", description = "没有权限"),
             @ApiResponse(responseCode = "404", description = "请求路径没有或页面跳转路径不对")
     })
-    public ResponseEntity<List<ConferenceShow>> getConferenceBySub(@PathVariable String sub) {
-        return ResponseEntity.ok(conferenceService.getBySub(sub));
+    public Result<List<ConferenceShow>> getConferenceBySub(@PathVariable String sub) {
+        return Result.Success("get", conferenceService.getBySub(sub));
     }
 
 
     @GetMapping("/list/")
     @Operation(summary = "get conference show information with the startTime between startDate and endDate")
+    @PreAuthorize("@myAccess.hasAuthority('22')")
     @Parameters({@Parameter(name = "startDate", description = "start date"), @Parameter(name = "endDate", description = "end date")})
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "请求成功"),
             @ApiResponse(responseCode = "401", description = "没有权限"),
             @ApiResponse(responseCode = "404", description = "请求路径没有或页面跳转路径不对")
     })
-    public ResponseEntity<List<ConferenceShow>> getByPeriod(@DateTimeFormat(pattern = "yyyy-MM-dd") @RequestParam @Parameter Date startDate,  @DateTimeFormat(pattern = "yyyy-MM-dd") @RequestParam @Parameter Date endDate) {
-        //需要测试前端json格式返回的string能不能变为date
-        return ResponseEntity.ok(conferenceService.getByPeriod(startDate, endDate));
+    public Result<List<ConferenceShow>> getByPeriod(@DateTimeFormat(pattern = "yyyy-MM-dd") @RequestParam @Parameter Date startDate,  @DateTimeFormat(pattern = "yyyy-MM-dd") @RequestParam @Parameter Date endDate) {
+        return Result.Success("get",conferenceService.getByPeriod(startDate, endDate));
     }
 
     @GetMapping("/list/detail")
     @Operation(summary = "get all conferences' details")
+    @PreAuthorize("@myAccess.hasAuthority('21')")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "请求成功"),
             @ApiResponse(responseCode = "401", description = "没有权限"),
             @ApiResponse(responseCode = "404", description = "请求路径没有或页面跳转路径不对")
     })
-    public ResponseEntity<List<ConferenceDetail>> getAllConferenceDetails(){
-        return ResponseEntity.ok(conferenceService.getAllDetail());
+    public Result<List<ConferenceDetail>> getAllConferenceDetails(){
+        return Result.Success("get", conferenceService.getAllDetail());
     }
 
 
     @GetMapping("/list/{conferenceId}/detail")
     @Operation(summary = "get conference detail by id")
-    public ResponseEntity<ConferenceDetail> getConferenceDetail(@PathVariable String conferenceId){
+    @PreAuthorize("@myAccess.hasAuthority('17')")
+    public Result<ConferenceDetail> getConferenceDetail(@PathVariable String conferenceId){
         try{
             ConferenceDetail cd = conferenceService.getDetailById(conferenceId);
-            return ResponseEntity.ok(cd);
+            return Result.Success("get", cd);
         }catch (NotFoundException e){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+            return Result.fail(HttpStatus.NOT_FOUND.value(), "not found", null);
         }
     }
 
 
     @PostMapping
     @Operation(summary = "add conference")
+    @PreAuthorize("@myAccess.hasAuthority('12')")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "请求成功"),
             @ApiResponse(responseCode = "201", description = "已创建,成功请求并创建了新的资源"),
@@ -179,17 +189,18 @@ public class ConferenceController {
             @ApiResponse(responseCode = "404", description = "请求路径没有或页面跳转路径不对"),
             @ApiResponse(responseCode = "409", description = "服务器在完成请求时发生冲突")
     })
-    public ResponseEntity<Conference> addConference(@RequestBody Conference conference) {
+    public Result<Conference> addConference(@RequestBody Conference conference) {
          try{
              conferenceService.insert(conference);
-             return ResponseEntity.status(HttpStatus.CREATED).body(conference);
+             return Result.Success("add", conference);
          }catch (DuplicateException e){
-             return ResponseEntity.status(HttpStatus.CONFLICT).body(null);
+             return Result.fail(HttpStatus.CONFLICT.value(), "duplicate", null);
          }
     }
 
 
     @DeleteMapping("/{conferenceId}")
+    @PreAuthorize("@myAccess.hasAuthority('23')")
     @Operation(summary = "delete conference")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "请求成功"),
@@ -198,83 +209,88 @@ public class ConferenceController {
             @ApiResponse(responseCode = "403", description = "禁止访问"),
             @ApiResponse(responseCode = "404", description = "请求路径没有或页面跳转路径不对")
     })
-    public ResponseEntity<Void> deleteConference(@PathVariable String conferenceId) {
+    public Result<Void> deleteConference(@PathVariable String conferenceId) {
         try{
             conferenceService.delete(conferenceId);
-            return ResponseEntity.noContent().build();
+            return Result.Success("delete", conferenceId);
         }catch (NotFoundException e){
-            return ResponseEntity.notFound().build();
+            return Result.fail(HttpStatus.NOT_FOUND.value(), "not found", null);
         }
     }
 
     @PutMapping("/update")
     @Operation(summary = "update conference information")
+    @PreAuthorize("@myAccess.hasAuthority('11')")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "请求成功"),
             @ApiResponse(responseCode = "401", description = "没有权限"),
             @ApiResponse(responseCode = "403", description = "禁止访问"),
             @ApiResponse(responseCode = "404", description = "请求路径没有或页面跳转路径不对")
     })
-    public ResponseEntity<Conference> updateConference(@RequestBody Conference conference) {
+    public Result<Conference> updateConference(@RequestBody Conference conference) {
         try {
             conferenceService.update(conference);
-            return ResponseEntity.ok(conference);
+            return Result.Success("update", conference);
         } catch (NotFoundException e) {
-            return ResponseEntity.notFound().build();
+            return Result.fail(HttpStatus.NOT_FOUND.value(), "not found", null);
         }
     }
 
     @PutMapping("/{conferenceId}/follow/add")
     @Operation(summary = "add follow number of conference")
+    @PreAuthorize("@myAccess.hasAuthority('8')")
     @Parameters(@Parameter(name = "email", description = "user email"))
-    public ResponseEntity<Void> addFollowNum(@PathVariable String conferenceId, @RequestParam @Parameter String email){
+    public Result<Void> addFollowNum(@PathVariable String conferenceId, @RequestParam @Parameter String email){
         try{
             conferenceService.addFollowNum(conferenceId);
             FollowList ft = new FollowList(email, "conference", conferenceId);
             followListService.insertConf(ft);
-            return ResponseEntity.noContent().build();
+            return Result.Success("add follow", conferenceId);
         } catch (NotFoundException e) {
-            return ResponseEntity.notFound().build();
+            return Result.fail(HttpStatus.NOT_FOUND.value(), "not found", null);
         }
     }
 
     @PutMapping("/{conferenceId}/follow/sub")
     @Operation(summary = "sub follow number of conference")
+    @PreAuthorize("@myAccess.hasAuthority('7')")
     @Parameters(@Parameter(name = "email", description = "user email"))
-    public ResponseEntity<Void> subFollowNum(@PathVariable String conferenceId, @RequestParam @Parameter String email){
+    public Result<Void> subFollowNum(@PathVariable String conferenceId, @RequestParam @Parameter String email){
         try{
             conferenceService.subFollowNum(conferenceId);
             followListService.deleteConf(conferenceId, email);
-            return ResponseEntity.noContent().build();
+            return Result.Success("sub follow", conferenceId);
         } catch (NotFoundException e) {
-            return ResponseEntity.notFound().build();
+            return Result.fail(HttpStatus.NOT_FOUND.value(), "not found", null);
         }
     }
 
     @PutMapping("/{conferenceId}/attend/add")
     @Operation(summary = "add attend number of conference")
+    @PreAuthorize("@myAccess.hasAuthority('10')")
     @Parameters(@Parameter(name = "email", description = "user email"))
-    public ResponseEntity<Void> addAttendNum(@PathVariable String conferenceId, @RequestParam @Parameter String email){
+    public Result<Void> addAttendNum(@PathVariable String conferenceId, @RequestParam @Parameter String email){
         try{
             conferenceService.addAttendNum(conferenceId);
             AttendList att = new AttendList(email, "conference", conferenceId);
             attendListService.insertConf(att);
-            return ResponseEntity.noContent().build();
+            return Result.Success("add attend", conferenceId);
         } catch (NotFoundException e) {
-            return ResponseEntity.notFound().build();
+            return Result.fail(HttpStatus.NOT_FOUND.value(), "not found", null);
         }
     }
 
     @PutMapping("/{conferenceId}/attend/sub")
     @Operation(summary = "sub attend number of conference")
+    @PreAuthorize("@myAccess.hasAuthority('9')")
     @Parameters(@Parameter(name = "email", description = "user email"))
-    public ResponseEntity<Void> subAttendNum(@PathVariable String conferenceId, @RequestParam @Parameter String email){
+    public Result<Void> subAttendNum(@PathVariable String conferenceId, @RequestParam @Parameter String email){
         try{
             conferenceService.subAttendNum(conferenceId);
             attendListService.deleteConf(conferenceId, email);
-            return ResponseEntity.noContent().build();
+            return Result.Success("sub attend", conferenceId);
         } catch (NotFoundException e) {
-            return ResponseEntity.notFound().build();
+            return Result.fail(HttpStatus.NOT_FOUND.value(), "not found", null);
         }
     }
 

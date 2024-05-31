@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.huibanbackend.mapper.PermMapper">
+
+    <!--
+    根据email获得用户的权限
+    List<SysPerm> getPermByEmail(String email);
+    -->
+    <select id="getPermByEmail" resultType="sysPerm">
+        select p.*
+        from user u
+        left join sys_user_role ur on ur.user_id = u.email
+        left join sys_role_perm rm on ur.role_id = rm.role_id
+        left join sys_perm p on rm.perm_id = p.id
+        where email = #{email}
+    </select>
+</mapper>

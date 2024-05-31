@@ -1,6 +1,5 @@
 package com.example.huibanbackend.service.impl;
 
-
 import com.example.huibanbackend.entity.User;
 import com.example.huibanbackend.exception.DuplicateException;
 import com.example.huibanbackend.exception.NotFoundException;
@@ -8,16 +7,13 @@ import com.example.huibanbackend.mapper.UserMapper;
 import com.example.huibanbackend.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserMapper userMapper;
-
 
     @Override
     public List<User> getAllInfo() {

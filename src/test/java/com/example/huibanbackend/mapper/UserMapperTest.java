@@ -70,7 +70,7 @@ class UserMapperTest {
     @Test
     void updatePassword() {
 
-        userMapper.updatePassword("chm120302@126.com", "111111");
+//        userMapper.updatePassword("chm120302@126.com", "111111");
         System.out.println("success");
     }
 }

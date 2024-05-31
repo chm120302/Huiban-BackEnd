@@ -2,6 +2,7 @@ package com.example.huibanbackend.controller;
 
 
 import com.example.huibanbackend.entity.Comment;
+import com.example.huibanbackend.entity.Result;
 import com.example.huibanbackend.service.CommentService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -12,6 +13,7 @@ import jakarta.annotation.Resource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -29,20 +31,20 @@ public class CommentController {
 
     @GetMapping("/{academicId}/comments")
     @Operation(summary = "list the comments about conference/ journal")
+    @PreAuthorize("@myAccess.hasAuthority('25')")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "请求成功"),
             @ApiResponse(responseCode = "401", description = "没有权限"),
             @ApiResponse(responseCode = "404", description = "请求路径没有或页面跳转路径不对")
     })
-    public List<Comment> listComments(Model model, @PathVariable String academicId) {
+    public Result<List<Comment>> listComments(Model model, @PathVariable String academicId) {
         List<Comment> comments = commentService.listComment(academicId);
-//        model.addAttribute("comments", comments);
-//        return "comment :: commentList";
-        return comments;
+        return Result.Success("get", comments);
     }
 
     @PostMapping("/comment")
     @Operation(summary = "add comment")
+    @PreAuthorize("@myAccess.hasAuthority('24')")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "请求成功"),
             @ApiResponse(responseCode = "201", description = "已创建,成功请求并创建了新的资源"),
@@ -50,7 +52,7 @@ public class CommentController {
             @ApiResponse(responseCode = "401", description = "没有权限"),
             @ApiResponse(responseCode = "404", description = "请求路径没有或页面跳转路径不对")
     })
-    public ResponseEntity<Comment> addComment(@Parameter @RequestBody Comment comment) {
+    public Result<Comment> addComment(@Parameter @RequestBody Comment comment) {
         if(comment.getParentComment() == null){
             comment.setParentComment(null);
             comment.setParentId(-1);
@@ -62,25 +64,26 @@ public class CommentController {
         }
         int flag = commentService.saveComment(comment);
         if(flag == 1){
-            return ResponseEntity.status(HttpStatus.CREATED).body(comment);
+            return Result.Success("add comment", comment);
         }
-        return ResponseEntity.status(HttpStatus.CONFLICT).body(null);
+        return Result.fail(HttpStatus.CONFLICT.value(), "conflict", null);
 //        return "redirect:/comment";
     }
 
     @DeleteMapping("/comment/{id}")
     @Operation(summary = "delete comment")
+    @PreAuthorize("@myAccess.hasAuthority('26')")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "请求成功"),
             @ApiResponse(responseCode = "401", description = "没有权限"),
             @ApiResponse(responseCode = "404", description = "请求路径没有或页面跳转路径不对")
     })
-    public ResponseEntity<Integer> deleteComment(@PathVariable Integer id) {
+    public Result<Integer> deleteComment(@PathVariable Integer id) {
         int isDeleted = commentService.deleteComment(id);
         if(isDeleted != 1){
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return Result.fail(HttpStatus.NOT_FOUND.value(), "not found", null);
         }
-        return new ResponseEntity<>(id, HttpStatus.OK);
+        return Result.Success("delete comment", id);
     }
 
 

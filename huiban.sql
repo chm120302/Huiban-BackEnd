@@ -12,7 +12,6 @@ DROP TABLE IF EXISTS journal;
 DROP TABLE IF EXISTS followList;
 DROP TABLE IF EXISTS followList2;
 DROP TABLE IF EXISTS attendList;
-DROP TABLE IF EXISTS attendList2;
 DROP TABLE IF EXISTS comment;
 
 
@@ -34,7 +33,7 @@ CREATE TABLE user
 -- 初始化用户信息
 INSERT INTO user VALUES (null, 'chm120302@126.com', 'https://ts1.cn.mm.bing.net/th/id/R-C.748160bf925a7acb3ba1c9514bbc60db?rik=AYY%2bJ9WcXYIMgw&riu=http%3a%2f%2fseopic.699pic.com%2fphoto%2f50017%2f0822.jpg_wh1200.jpg&ehk=CMVcdZMU6xxsjVjafO70cFcmJvD62suFC1ytk8UuAUk%3d&risl=&pid=ImgRaw&r=0', 'chm', 'ECNU', '123456');
 INSERT INTO user VALUES (null, 'xxx@163.com', 'https://ts1.cn.mm.bing.net/th/id/R-C.6b9074faed6dae2a0457e690c2aa3a03?rik=6V%2fv2rXhPCf7Pg&riu=http%3a%2f%2fn.sinaimg.cn%2fsinacn20115%2f534%2fw1280h854%2f20190221%2f9461-htknpmf9890147.jpg&ehk=RyGDdQrMiIWbz7Uxa%2fLSPOz2iXvM8JpbkBIZgttQkWc%3d&risl=&pid=ImgRaw&r=0', 'admin', 'ECNU', '12345678');
-
+INSERT INTO user VALUES (null, 'admin', 'ddd', 'admin', 'ecnu', 'admin123');
 
 
 -- ---------------------------
@@ -234,3 +233,193 @@ CREATE TABLE comment
     PRIMARY KEY (id) USING BTREE
  ) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '评论表';
 
+
+# RBAC
+-- -------------------------------
+-- 权限表：记录权限种类
+-- -------------------------------
+CREATE TABLE sys_perm
+(
+    id            varchar(64)    CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '权限id',
+    func_name     varchar(128)  CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT 'NULL' NOT NULL COMMENT '功能名称',
+    path          varchar(256)  CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '路由地址',
+    status        char  DEFAULT '0'  NULL COMMENT '功能状态(0 正常 1 停用)',
+    perms         varchar(100)    CHARACTER SET utf8 COLLATE utf8_general_ci NULL COMMENT '权限标识',
+    create_time   datetime NULL COMMENT '创建时间',
+    del_flag      int DEFAULT 0  NULL COMMENT '是否删除(0未删除  1已删除)',
+    remark        varchar(500)   CHARACTER SET utf8 COLLATE utf8_general_ci NULL COMMENT '备注',
+    PRIMARY KEY (id) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '权限表';
+
+-- 初始化权限
+
+INSERT INTO sys_perm (id, func_name, path, status, perms, create_time, del_flag, remark) VALUES ('change_password', '修改密码', '/api/users/changePassword', '0', '1', NOW(), 0, '');
+INSERT INTO sys_perm (id, func_name, path, status, perms, create_time, del_flag, remark) VALUES ('update_user', '修改用户信息', '/api/users/update', '0', '2', NOW(), 0, '');
+INSERT INTO sys_perm (id, func_name, path, status, perms, create_time, del_flag, remark) VALUES ('add_user', '添加用户', '/api/users', '0', '3', NOW(), 0, '');
+INSERT INTO sys_perm (id, func_name, path, status, perms, create_time, del_flag, remark) VALUES ('get_user', '查看用户列表', '/api/users/list', '0', '4', NOW(), 0, '');
+INSERT INTO sys_perm (id, func_name, path, status, perms, create_time, del_flag, remark) VALUES ('get_user_info', '查看用户信息', '/api/users/info/{email}', '0', '5', NOW(), 0, '');
+INSERT INTO sys_perm (id, func_name, path, status, perms, create_time, del_flag, remark) VALUES ('del_user', '删除用户', '/api/users/{email}', '0', '6', NOW(), 0, '');
+
+INSERT INTO sys_perm (id, func_name, path, status, perms, create_time, del_flag, remark) VALUES ('sub_follow_conference', '减少会议', '/api/conferences/{conferenceId}/follow/sub', '0', '7', NOW(), 0, '');
+INSERT INTO sys_perm (id, func_name, path, status, perms, create_time, del_flag, remark) VALUES ('add_follow_conference', '添加会议', '/api/conferences/{conferenceId}/follow/add', '0', '8', NOW(), 0, '');
+INSERT INTO sys_perm (id, func_name, path, status, perms, create_time, del_flag, remark) VALUES ('sub_attend_conference', '减少会议', '/api/conferences/{conferenceId}/attend/sub', '0', '9', NOW(), 0, '');
+INSERT INTO sys_perm (id, func_name, path, status, perms, create_time, del_flag, remark) VALUES ('add_attend_conference', '添加会议', '/api/conferences/{conferenceId}/attend/add', '0', '10', NOW(), 0, '');
+INSERT INTO sys_perm (id, func_name, path, status, perms, create_time, del_flag, remark) VALUES ('update_conference', '更新会议', '/api/conferences/update', '0', '11', NOW(), 0, '');
+INSERT INTO sys_perm (id, func_name, path, status, perms, create_time, del_flag, remark) VALUES ('add_conference', '添加会议', '/api/conferences', '0', '12', NOW(), 0, '');
+INSERT INTO sys_perm (id, func_name, path, status, perms, create_time, del_flag, remark) VALUES ('recent_conference', '截稿会议', '/api/conferences/recentList', '0', '13', NOW(), 0, '');
+INSERT INTO sys_perm (id, func_name, path, status, perms, create_time, del_flag, remark) VALUES ('popular_conference', '受欢迎会议', '/api/conferences/popularList', '0', '14', NOW(), 0, '');
+INSERT INTO sys_perm (id, func_name, path, status, perms, create_time, del_flag, remark) VALUES ('get_conference_list', '查看会议', '/api/conferences/list', '0', '15', NOW(), 0, '');
+INSERT INTO sys_perm (id, func_name, path, status, perms, create_time, del_flag, remark) VALUES ('get_conference_show', '查看会议', '/api/conferences/list/{conferenceId}', '0', '16', NOW(), 0, '');
+INSERT INTO sys_perm (id, func_name, path, status, perms, create_time, del_flag, remark) VALUES ('get_conference_detail', '查看会议', '/api/conferences/list/{conferenceId}/detail', '0', '17', NOW(), 0, '');
+INSERT INTO sys_perm (id, func_name, path, status, perms, create_time, del_flag, remark) VALUES ('get_conference_show_by_title', '查看会议', '/api/conferences/list/title/{title}', '0', '18', NOW(), 0, '');
+INSERT INTO sys_perm (id, func_name, path, status, perms, create_time, del_flag, remark) VALUES ('get_conference_show_by_sub', '查看会议', '/api/conferences/list/sub/{sub}', '0', '19', NOW(), 0, '');
+INSERT INTO sys_perm (id, func_name, path, status, perms, create_time, del_flag, remark) VALUES ('get_conference_show_by_rank', '查看会议', '/api/conferences/list/rank/{ccfRank}', '0', '20', NOW(), 0, '');
+INSERT INTO sys_perm (id, func_name, path, status, perms, create_time, del_flag, remark) VALUES ('get_conference_detail_list', '查看会议', '/api/conferences/list/detail', '0', '21', NOW(), 0, '');
+INSERT INTO sys_perm (id, func_name, path, status, perms, create_time, del_flag, remark) VALUES ('get_conference_by_date', '查看会议', '/api/conferences/list/', '0', '22', NOW(), 0, '');
+INSERT INTO sys_perm (id, func_name, path, status, perms, create_time, del_flag, remark) VALUES ('del_conference', '删除会议', '/api/conferences/{conferenceId}', '0', '23', NOW(), 0, '');
+
+INSERT INTO sys_perm (id, func_name, path, status, perms, create_time, del_flag, remark) VALUES ('add_comment', '添加评论', '/api/comments/comment', '0', '24', NOW(), 0 ,'');
+INSERT INTO sys_perm (id, func_name, path, status, perms, create_time, del_flag, remark) VALUES ('get_comment', '查看评论', '/api/comments/{academicId}/comment', '0', '25', NOW(), 0 ,'');
+INSERT INTO sys_perm (id, func_name, path, status, perms, create_time, del_flag, remark) VALUES ('del_comment', '删除评论', '/api/comments/comment/{id}', '0', '26', NOW(), 0 ,'');
+
+INSERT INTO sys_perm (id, func_name, path, status, perms, create_time, del_flag, remark) VALUES ('sub_follow_journal', '减少期刊', '/api/journals/{journalId}/follow/sub', '0', '27', NOW(), 0, '');
+INSERT INTO sys_perm (id, func_name, path, status, perms, create_time, del_flag, remark) VALUES ('add_follow_journal', '添加期刊', '/api/journals/{journalId}/follow/add', '0', '28', NOW(), 0, '');
+INSERT INTO sys_perm (id, func_name, path, status, perms, create_time, del_flag, remark) VALUES ('update_journal', '更新期刊', '/api/journals/update', '0', '29', NOW(), 0, '');
+INSERT INTO sys_perm (id, func_name, path, status, perms, create_time, del_flag, remark) VALUES ('add_journal', '添加期刊', '/api/journals', '0', '30', NOW(), 0, '');
+INSERT INTO sys_perm (id, func_name, path, status, perms, create_time, del_flag, remark) VALUES ('recent_journal', '截稿期刊', '/api/journals/recentList', '0', '31', NOW(), 0, '');
+INSERT INTO sys_perm (id, func_name, path, status, perms, create_time, del_flag, remark) VALUES ('popular_journal', '受欢迎期刊', '/api/journals/popularList', '0', '32', NOW(), 0, '');
+INSERT INTO sys_perm (id, func_name, path, status, perms, create_time, del_flag, remark) VALUES ('get_journal_list', '查看期刊', '/api/journals/list', '0', '33', NOW(), 0, '');
+INSERT INTO sys_perm (id, func_name, path, status, perms, create_time, del_flag, remark) VALUES ('get_journal_show', '查看期刊', '/api/journals/list/{journalId}', '0', '34', NOW(), 0, '');
+INSERT INTO sys_perm (id, func_name, path, status, perms, create_time, del_flag, remark) VALUES ('get_journal_detail', '查看期刊', '/api/journals/list/{journalId}/detail', '0', '35', NOW(), 0, '');
+INSERT INTO sys_perm (id, func_name, path, status, perms, create_time, del_flag, remark) VALUES ('get_journal_show_by_sub', '查看期刊', '/api/journals/list/sub/{sub}', '0', '36', NOW(), 0, '');
+INSERT INTO sys_perm (id, func_name, path, status, perms, create_time, del_flag, remark) VALUES ('get_journal_show_by_rank', '查看期刊', '/api/journals/list/rank/{ccfRank}', '0', '37', NOW(), 0, '');
+INSERT INTO sys_perm (id, func_name, path, status, perms, create_time, del_flag, remark) VALUES ('get_journal_detail_list', '查看期刊', '/api/journals/list/detail', '0', '38', NOW(), 0, '');
+INSERT INTO sys_perm (id, func_name, path, status, perms, create_time, del_flag, remark) VALUES ('del_journal', '删除期刊', '/api/journals/{journalId}', '0', '39', NOW(), 0, '');
+
+# -- --------------------------------
+# -- 系统用户表：记录系统用户（用user表即可）
+# -- --------------------------------
+# CREATE TABLE sys_user
+# (
+#     email       varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '邮箱',
+#     password    varchar(8)   CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '密码',
+#     PRIMARY KEY (email) USING BTREE
+# ) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '用户表';
+#
+# INSERT INTO sys_user (email, password) VALUES ('chm120302@126.com', '123456');
+# INSERT INTO sys_user (email, password) VALUES ('admin', 'admin123');
+
+
+-- ---------------------------------
+-- 系统角色表：记录角色种类
+-- ---------------------------------
+CREATE TABLE sys_role
+(
+    id  varchar(64)   CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '角色id',
+    name  varchar(128) CHARACTER SET utf8 COLLATE utf8_general_ci  NULL COMMENT '角色名',
+    role_key   varchar(128)  CHARACTER SET utf8 COLLATE utf8_general_ci  NULL COMMENT '角色字符串',
+    status char DEFAULT '0'  NULL COMMENT '角色状态(0正常 1停用)',
+    del_flag  int DEFAULT 0 NULL COMMENT '是否删除',
+    create_time  datetime  NULL COMMENT '创建时间',
+    remark  varchar(500)   CHARACTER SET utf8 COLLATE utf8_general_ci NULL COMMENT '备注',
+    PRIMARY KEY (id) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '权限表';
+
+INSERT INTO sys_role (id, name, role_key, status, del_flag, create_time, remark) VALUES ('ROLE_ADMIN', '管理员', 'admin', '0', 0, NOW(), '');
+INSERT INTO sys_role (id, name, role_key, status, del_flag, create_time, remark) VALUES ('ROLE_USER', '普通用户', 'user', '0', 0, NOW(), '');
+
+
+-- ------------------------------------
+-- 角色权限表
+-- ------------------------------------
+CREATE TABLE sys_role_perm
+(
+    role_id   varchar(64)   CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '角色id',
+    perm_id   varchar(64)    CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '权限id',
+    PRIMARY KEY (role_id, perm_id) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '角色权限表';
+
+-- 初始化角色权限
+INSERT INTO sys_role_perm (role_id, perm_id) VALUES ('ROLE_ADMIN', 'get_user');
+INSERT INTO sys_role_perm (role_id, perm_id) VALUES ('ROLE_ADMIN', 'add_user');
+INSERT INTO sys_role_perm (role_id, perm_id) VALUES ('ROLE_ADMIN', 'del_user');
+INSERT INTO sys_role_perm (role_id, perm_id) VALUES ('ROLE_ADMIN', 'update_user');
+INSERT INTO sys_role_perm (role_id, perm_id) VALUES ('ROLE_ADMIN', 'get_user_info');
+
+INSERT INTO sys_role_perm (role_id, perm_id) VALUES ('ROLE_ADMIN', 'update_conference');
+INSERT INTO sys_role_perm (role_id, perm_id) VALUES ('ROLE_ADMIN', 'add_conference');
+INSERT INTO sys_role_perm (role_id, perm_id) VALUES ('ROLE_ADMIN', 'recent_conference');
+INSERT INTO sys_role_perm (role_id, perm_id) VALUES ('ROLE_ADMIN', 'popular_conference');
+INSERT INTO sys_role_perm (role_id, perm_id) VALUES ('ROLE_ADMIN', 'get_conference_list');
+INSERT INTO sys_role_perm (role_id, perm_id) VALUES ('ROLE_ADMIN', 'get_conference_show');
+INSERT INTO sys_role_perm (role_id, perm_id) VALUES ('ROLE_ADMIN', 'get_conference_detail');
+INSERT INTO sys_role_perm (role_id, perm_id) VALUES ('ROLE_ADMIN', 'get_conference_show_by_title');
+INSERT INTO sys_role_perm (role_id, perm_id) VALUES ('ROLE_ADMIN', 'get_conference_show_by_sub');
+INSERT INTO sys_role_perm (role_id, perm_id) VALUES ('ROLE_ADMIN', 'get_conference_show_by_rank');
+INSERT INTO sys_role_perm (role_id, perm_id) VALUES ('ROLE_ADMIN', 'get_conference_detail_list');
+INSERT INTO sys_role_perm (role_id, perm_id) VALUES ('ROLE_ADMIN', 'get_conference_by_date');
+INSERT INTO sys_role_perm (role_id, perm_id) VALUES ('ROLE_ADMIN', 'del_conference');
+
+INSERT INTO sys_role_perm (role_id, perm_id) VALUES ('ROLE_ADMIN', 'add_comment');
+INSERT INTO sys_role_perm (role_id, perm_id) VALUES ('ROLE_ADMIN', 'get_comment');
+INSERT INTO sys_role_perm (role_id, perm_id) VALUES ('ROLE_ADMIN', 'del_comment');
+
+INSERT INTO sys_role_perm (role_id, perm_id) VALUES ('ROLE_ADMIN', 'update_journal');
+INSERT INTO sys_role_perm (role_id, perm_id) VALUES ('ROLE_ADMIN', 'add_journal');
+INSERT INTO sys_role_perm (role_id, perm_id) VALUES ('ROLE_ADMIN', 'recent_journal');
+INSERT INTO sys_role_perm (role_id, perm_id) VALUES ('ROLE_ADMIN', 'popular_journal');
+INSERT INTO sys_role_perm (role_id, perm_id) VALUES ('ROLE_ADMIN', 'get_journal_list');
+INSERT INTO sys_role_perm (role_id, perm_id) VALUES ('ROLE_ADMIN', 'get_journal_show');
+INSERT INTO sys_role_perm (role_id, perm_id) VALUES ('ROLE_ADMIN', 'get_journal_detail');
+INSERT INTO sys_role_perm (role_id, perm_id) VALUES ('ROLE_ADMIN', 'get_journal_show_by_sub');
+INSERT INTO sys_role_perm (role_id, perm_id) VALUES ('ROLE_ADMIN', 'get_journal_show_by_rank');
+INSERT INTO sys_role_perm (role_id, perm_id) VALUES ('ROLE_ADMIN', 'get_journal_detail_list');
+INSERT INTO sys_role_perm (role_id, perm_id) VALUES ('ROLE_ADMIN', 'del_journal');
+
+INSERT INTO sys_role_perm (role_id, perm_id) VALUES ('ROLE_USER', 'change_password');
+INSERT INTO sys_role_perm (role_id, perm_id) VALUES ('ROLE_USER', 'update_user');
+INSERT INTO sys_role_perm (role_id, perm_id) VALUES ('ROLE_USER', 'add_user');
+INSERT INTO sys_role_perm (role_id, perm_id) VALUES ('ROLE_USER', 'get_user_info');
+
+
+INSERT INTO sys_role_perm (role_id, perm_id) VALUES ('ROLE_USER', 'sub_follow_conference');
+INSERT INTO sys_role_perm (role_id, perm_id) VALUES ('ROLE_USER', 'add_follow_conference');
+INSERT INTO sys_role_perm (role_id, perm_id) VALUES ('ROLE_USER', 'sub_attend_conference');
+INSERT INTO sys_role_perm (role_id, perm_id) VALUES ('ROLE_USER', 'add_attend_conference');
+INSERT INTO sys_role_perm (role_id, perm_id) VALUES ('ROLE_USER', 'recent_conference');
+INSERT INTO sys_role_perm (role_id, perm_id) VALUES ('ROLE_USER', 'popular_conference');
+INSERT INTO sys_role_perm (role_id, perm_id) VALUES ('ROLE_USER', 'get_conference_list');
+INSERT INTO sys_role_perm (role_id, perm_id) VALUES ('ROLE_USER', 'get_conference_show');
+INSERT INTO sys_role_perm (role_id, perm_id) VALUES ('ROLE_USER', 'get_conference_detail');
+INSERT INTO sys_role_perm (role_id, perm_id) VALUES ('ROLE_USER', 'get_conference_show_by_title');
+INSERT INTO sys_role_perm (role_id, perm_id) VALUES ('ROLE_USER', 'get_conference_show_by_sub');
+INSERT INTO sys_role_perm (role_id, perm_id) VALUES ('ROLE_USER', 'get_conference_show_by_rank');
+INSERT INTO sys_role_perm (role_id, perm_id) VALUES ('ROLE_USER', 'get_conference_by_date');
+
+INSERT INTO sys_role_perm (role_id, perm_id) VALUES ('ROLE_USER', 'add_comment');
+INSERT INTO sys_role_perm (role_id, perm_id) VALUES ('ROLE_USER', 'get_comment');
+INSERT INTO sys_role_perm (role_id, perm_id) VALUES ('ROLE_USER', 'del_comment');
+
+INSERT INTO sys_role_perm (role_id, perm_id) VALUES ('ROLE_USER', 'sub_follow_journal');
+INSERT INTO sys_role_perm (role_id, perm_id) VALUES ('ROLE_USER', 'add_follow_journal');
+INSERT INTO sys_role_perm (role_id, perm_id) VALUES ('ROLE_USER', 'recent_journal');
+INSERT INTO sys_role_perm (role_id, perm_id) VALUES ('ROLE_USER', 'popular_journal');
+INSERT INTO sys_role_perm (role_id, perm_id) VALUES ('ROLE_USER', 'get_journal_list');
+INSERT INTO sys_role_perm (role_id, perm_id) VALUES ('ROLE_USER', 'get_journal_show');
+INSERT INTO sys_role_perm (role_id, perm_id) VALUES ('ROLE_USER', 'get_journal_detail');
+INSERT INTO sys_role_perm (role_id, perm_id) VALUES ('ROLE_USER', 'get_journal_show_by_sub');
+INSERT INTO sys_role_perm (role_id, perm_id) VALUES ('ROLE_USER', 'get_journal_show_by_rank');
+
+
+-- ------------------------------------
+-- 用户角色表
+-- ------------------------------------
+CREATE TABLE sys_user_role
+(
+    user_id  varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '邮箱',
+    role_id  varchar(64)   CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '角色id',
+    PRIMARY KEY (user_id, role_id) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '用户角色表';
+
+INSERT INTO sys_user_role (user_id, role_id) VALUES ('chm120302@126.com', 'ROLE_USER');
+INSERT INTO sys_user_role (user_id, role_id) VALUES ('admin', 'ROLE_ADMIN');
