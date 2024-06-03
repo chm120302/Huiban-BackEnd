@@ -9,6 +9,7 @@ import com.example.huibanbackend.mapper.UserRoleMapper;
 import com.example.huibanbackend.security.service.SecurityUserService;
 import com.example.huibanbackend.security.service.impl.SecurityUserServiceImpl;
 import com.example.huibanbackend.service.UserService;
+import com.example.huibanbackend.utils.AvatarHelper;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
@@ -55,8 +56,10 @@ public class LoginController {
         if(Objects.nonNull(_user)){
             return Result.fail("用户id已存在");
         }
-        try {
-
+        try { //自动生成base64编码的头像
+             if(user.getImageUrl() == null || user.getImageUrl().isEmpty()){
+                 user.setImageUrl(AvatarHelper.createBase64Avatar());
+             }
             userMapper.insert(user);
             userRoleMapper.insertUserRole(email);
             return Result.Success("用户注册成功");
