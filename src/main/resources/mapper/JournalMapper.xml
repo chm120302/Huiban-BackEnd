@@ -89,12 +89,11 @@
             <if test="sub != null and sub != ''">sub,</if>
             <if test="dblpLink != null and dblpLink != ''">dblp_link,</if>
             <if test="mainpageLink != null and mainpageLink != null">mainpage_link,</if>
-            <if test="paperDeadline != null">paper_deadline,</if>
-            <if test="followNum != null and followNum != ''">follow_num,</if>
-            <if test="impactFactor != null and impactFactor != ''">impact_factor,</if>
+            <if test="followNum != null">follow_num,</if>
+            <if test="impactFactor != null">impact_factor,</if>
             <if test="publisher != null and publisher != ''">publisher,</if>
             <if test="topicDetails != null and topicDetails != ''">topic_details,</if>
-            <if test="isPostponed != null and isPostponed != ''">is_postponed</if>
+            <if test="citeScore != null">cite_score</if>
         </trim>
 
         <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -103,12 +102,11 @@
             <if test="sub != null and sub != ''">#{sub},</if>
             <if test="dblpLink != null and dblpLink != ''">#{dblpLink},</if>
             <if test="mainpageLink != null and mainpageLink != null">#{mainpageLink},</if>
-            <if test="paperDeadline != null">#{paperDeadline},</if>
-            <if test="followNum != null and followNum != ''">#{followNum},</if>
-            <if test="impactFactor != null and impactFactor != ''">#{impactFactor},</if>
+            <if test="followNum != null ">#{followNum},</if>
+            <if test="impactFactor != null">#{impactFactor},</if>
             <if test="publisher != null and publisher != ''">#{publisher},</if>
             <if test="topicDetails != null and topicDetails != ''">#{topicDetails},</if>
-            <if test="isPostponed != null and isPostponed != ''">#{isPostponed}</if>
+            <if test="citeScore != null">#{cite_score}</if>
         </trim>
     </insert>
 
@@ -133,12 +131,11 @@
         <if test="sub != null and sub != ''">sub=#{sub},</if>
         <if test="dblpLink != null and dblpLink != ''">dblp_link=#{dblpLink},</if>
         <if test="mainpageLink != null and mainpageLink != ''">mainpage_link=#{mainpageLink},</if>
-        <if test="paperDeadline != null">paper_deadline=#{paperDeadline},</if>
         <if test="followNum != null">follow_num=#{followNum},</if>
         <if test="impactFactor != null">impact_factor=#{impactFactor},</if>
         <if test="publisher != null and publisher != ''">publisher=#{publisher},</if>
         <if test="topicDetails != null and topicDetails != ''">topic_details=#{topicDetails},</if>
-        <if test="isPostponed != null ">is_postponed=#{isPostponed}</if>
+        <if test="citeScore != null ">cite_score=#{citeScore}</if>
         where journal_id=#{journalId}
 
     </update>
