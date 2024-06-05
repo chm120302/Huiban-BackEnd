@@ -135,18 +135,17 @@ CREATE TABLE journal
     sub                  varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '所在领域',
     dblp_link            varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '期刊dblp链接',
     mainpage_link        varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '期刊主页链接',
-    paper_deadline       date NULL DEFAULT NULL COMMENT '截稿时间',
     follow_num           int NULL DEFAULT 0 COMMENT '期刊收藏数量',
     impact_factor        float  NULL DEFAULT NULL COMMENT '期刊影响因子',
     publisher            varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '出版商',
     topic_details        text  CHARACTER SET utf8 COLLATE utf8_general_ci NULL  COMMENT '会议主题',
-    is_postponed         boolean NOT NULL DEFAULT false COMMENT '是否延期',
+    cite_score           float NULL DEFAULT NULL COMMENT '引用率',
     PRIMARY KEY (id) USING BTREE,
     UNIQUE INDEX (journal_id) USING BTREE
 )ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT ='期刊信息表';
 
 -- 初始化期刊信息
-INSERT INTO journal VALUES (null, 'IEEE Journal on Selected Areas in Communications', 'A', 'computer networking', 'https://dblp.org/db/journals/jsac/index.html', 'https://ieeexplore.ieee.org/xpl/RecentIssue.jsp?punumber=49', '2024-05-31', 0,  16.4, 'IEEE',
+INSERT INTO journal VALUES (null, 'IEEE Journal on Selected Areas in Communications', 'A', 'computer networking', 'https://dblp.org/db/journals/jsac/index.html', 'https://ieeexplore.ieee.org/xpl/RecentIssue.jsp?punumber=49',  0,  16.4, 'IEEE',
                             'Conventional security architectures and models are considered a single network architecture solution, where devices authenticated within the network are assumed to be implicitly trusted. Such a conventional solution assumes that once devices have been authenticated within the network, are free to access, move, or exfiltrate data. This may introduce security threats and attacks. Although such an approach may be adopted in certain network scenarios, it definitely cannot be applied to NGNs. Zero-Trust security was introduced to overcome these obstacles, in which it does not rely on entry-point authentication, but rather uses context-aware, dynamic, and intelligent authentication schemes to detect and prevent security threats and attacks. Given that zero-trust security is a new security paradigm, little work has been done in this area to secure NGNs using zero-trust models. Zero-trust security models will highly benefit from two elements: threat intelligence and decentralized authentication. Continuous and dynamic trust evaluation is needed to attain high levels of access control in NGN. The use of Artificial Intelligence (AI) and Deep Learning (DL) will grant tremendous capabilities for zero-trust architectures to maintain high levels of intrusion detection and prevention. Moreover, through decentralized authentication methods like blockchain, data will both be stored and shared safely.
 
 This Special Issue aims to foster original research and innovative solutions on the above subject to tackle the challenging issues related to security and trust in NGNs. We welcome the dissemination of high-quality research on emerging ideas, approaches, theories, frameworks, and practices of zero-trust in NGNs. Researchers, developers, and industry experts are welcome to submit their work that may focus on fundamental methodological studies or use cases and application demonstrations.
@@ -164,10 +163,10 @@ Topics of interest include, but are not limited to:
 - Security of virtual Environments (e.g., Metaverse) in 6G.
 - Conflict detection using AI/ML embedding/representation models.
 - Access management for AI/ML model life cycle management in 6G networks.
-- Integration of Zero-trust at the physical, data link, and network layers of the OSI model. ', false);
+- Integration of Zero-trust at the physical, data link, and network layers of the OSI model. ', 1.2);
 
-INSERT INTO journal VALUES (null, 'IEEE Internet of Things', 'C', 'computer networking','', '', null,  0, null,  'IEEE', 'details', false);
-INSERT INTO journal VALUES (null, 'TWC', 'B', 'computer networking', '', '', null,  0, null, 'IEEE', 'dd', false);
+INSERT INTO journal VALUES (null, 'IEEE Internet of Things', 'C', 'computer networking','', '',  0, null,  'IEEE', 'details', 2.3);
+INSERT INTO journal VALUES (null, 'TWC', 'B', 'computer networking', '',  '',  0, null, 'IEEE', 'dd', 5.5);
 
 -- ---------------------------
 -- 用户关注会议列表：记录用户收藏的会议

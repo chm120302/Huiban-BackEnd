@@ -7,12 +7,16 @@ import com.example.huibanbackend.mapper.ConferenceMapper;
 import com.example.huibanbackend.service.AttendListService;
 import com.example.huibanbackend.service.ConferenceService;
 import com.example.huibanbackend.service.FollowListService;
+import com.example.huibanbackend.service.UserService;
+import com.example.huibanbackend.utils.JwtTokenUtils;
+import com.example.huibanbackend.utils.WebUtils;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -39,10 +43,16 @@ public class ConferenceController {
     @Autowired
     private AttendListService attendListService;
 
+    @Autowired
+    private UserService userService;
+
+    @Autowired
+    private HttpServletRequest userHttpRequest;
+
 
     @GetMapping("/popularList")
     @Operation(summary = "get the top 5 followed conferences ")
-    @PreAuthorize("@myAccess.hasAuthority('14')")
+//    @PreAuthorize("@myAccess.hasAuthority('14')")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "请求成功"),
             @ApiResponse(responseCode = "401", description = "没有权限"),
@@ -56,14 +66,14 @@ public class ConferenceController {
 
     @GetMapping("/recentList")
     @Operation(summary = "get the 10 conferences with the latest deadlines")
-    @PreAuthorize("@myAccess.hasAuthority('13')")
+//    @PreAuthorize("@myAccess.hasAuthority('13')")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "请求成功"),
             @ApiResponse(responseCode = "401", description = "没有权限"),
             @ApiResponse(responseCode = "404", description = "请求路径没有或页面跳转路径不对")
     })
     public Result<List<ConferenceShow>> getRecentConferences() {
-        return Result.Success("get recent", conferenceService.getPopularList());
+        return Result.Success("get recent", conferenceService.getRecentList());
 
     }
 
@@ -240,12 +250,14 @@ public class ConferenceController {
     @Operation(summary = "add follow number of conference")
     @PreAuthorize("@myAccess.hasAuthority('8')")
     @Parameters(@Parameter(name = "email", description = "user email"))
-    public Result<Void> addFollowNum(@PathVariable String conferenceId, @RequestParam @Parameter String email){
+    public Result<Void> addFollowNum(@PathVariable String conferenceId){
         try{
+            String email = WebUtils.getEmailFromHeader(userHttpRequest);
             conferenceService.addFollowNum(conferenceId);
             FollowList ft = new FollowList(email, "conference", conferenceId);
             followListService.insertConf(ft);
-            return Result.Success("add follow", conferenceId);
+            User user = userService.getAllInfoByEmail(email);
+            return Result.Success("add follow, return user's info", user);
         } catch (NotFoundException e) {
             return Result.fail(HttpStatus.NOT_FOUND.value(), "not found", null);
         }
@@ -255,11 +267,13 @@ public class ConferenceController {
     @Operation(summary = "sub follow number of conference")
     @PreAuthorize("@myAccess.hasAuthority('7')")
     @Parameters(@Parameter(name = "email", description = "user email"))
-    public Result<Void> subFollowNum(@PathVariable String conferenceId, @RequestParam @Parameter String email){
+    public Result<Void> subFollowNum(@PathVariable String conferenceId){
         try{
+            String email = WebUtils.getEmailFromHeader(userHttpRequest);
             conferenceService.subFollowNum(conferenceId);
             followListService.deleteConf(conferenceId, email);
-            return Result.Success("sub follow", conferenceId);
+            User user = userService.getAllInfoByEmail(email);
+            return Result.Success("sub follow, return user's info", user);
         } catch (NotFoundException e) {
             return Result.fail(HttpStatus.NOT_FOUND.value(), "not found", null);
         }
@@ -269,12 +283,14 @@ public class ConferenceController {
     @Operation(summary = "add attend number of conference")
     @PreAuthorize("@myAccess.hasAuthority('10')")
     @Parameters(@Parameter(name = "email", description = "user email"))
-    public Result<Void> addAttendNum(@PathVariable String conferenceId, @RequestParam @Parameter String email){
+    public Result<Void> addAttendNum(@PathVariable String conferenceId){
         try{
+            String email = WebUtils.getEmailFromHeader(userHttpRequest);
             conferenceService.addAttendNum(conferenceId);
             AttendList att = new AttendList(email, "conference", conferenceId);
             attendListService.insertConf(att);
-            return Result.Success("add attend", conferenceId);
+            User user = userService.getAllInfoByEmail(email);
+            return Result.Success("add attend, return user's info", user);
         } catch (NotFoundException e) {
             return Result.fail(HttpStatus.NOT_FOUND.value(), "not found", null);
         }
@@ -284,11 +300,13 @@ public class ConferenceController {
     @Operation(summary = "sub attend number of conference")
     @PreAuthorize("@myAccess.hasAuthority('9')")
     @Parameters(@Parameter(name = "email", description = "user email"))
-    public Result<Void> subAttendNum(@PathVariable String conferenceId, @RequestParam @Parameter String email){
+    public Result<Void> subAttendNum(@PathVariable String conferenceId){
         try{
+            String email = WebUtils.getEmailFromHeader(userHttpRequest);
             conferenceService.subAttendNum(conferenceId);
             attendListService.deleteConf(conferenceId, email);
-            return Result.Success("sub attend", conferenceId);
+            User user = userService.getAllInfoByEmail(email);
+            return Result.Success("sub attend, return user's info", user);
         } catch (NotFoundException e) {
             return Result.fail(HttpStatus.NOT_FOUND.value(), "not found", null);
         }

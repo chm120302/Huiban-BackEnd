@@ -6,6 +6,7 @@ import com.example.huibanbackend.exception.DuplicateException;
 import com.example.huibanbackend.exception.NotFoundException;
 import com.example.huibanbackend.service.UserService;
 
+import com.example.huibanbackend.utils.WebUtils;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
@@ -13,6 +14,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Resource;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,6 +32,9 @@ public class UserController {
     @Autowired
     public UserService userService;
 
+    @Autowired
+    private HttpServletRequest request;
+
     @GetMapping("/list")
     @PreAuthorize("@myAccess.hasAuthority('4')")
     @Operation(summary = "get all users' information")
@@ -38,7 +43,7 @@ public class UserController {
         return Result.Success("get all", users);
     }
 
-    @GetMapping("/info/{email}")
+    @GetMapping("/info")
     @Operation(summary = "get user information by email")
     @PreAuthorize("@myAccess.hasAuthority('5')")
     @ApiResponses(value = {
@@ -46,7 +51,8 @@ public class UserController {
             @ApiResponse(responseCode = "401", description = "没有权限"),
             @ApiResponse(responseCode = "404", description = "请求路径没有或页面跳转路径不对")
     })
-    public Result<User> getUserInfo(@PathVariable String email){
+    public Result<User> getUserInfo(){
+        String email = WebUtils.getEmailFromHeader(request);
         try{
             User user = userService.getAllInfoByEmail(email);
             return Result.Success(user);
@@ -110,6 +116,8 @@ public class UserController {
             @ApiResponse(responseCode = "404", description = "请求路径没有或页面跳转路径不对")
     })
     public Result<User> updateUser(@RequestBody User user){
+        String email = WebUtils.getEmailFromHeader(request);
+        user.setEmail(email);
         try {
             userService.update(user);
             return Result.Success("update", user);
@@ -134,7 +142,7 @@ public class UserController {
     })
     public Result<Void> changePassword(@RequestBody User user){
         try {
-            String email = user.getEmail();
+            String email = WebUtils.getEmailFromHeader(request);
             String password = user.getPassword();
             userService.updatePassword(email, password);
             return Result.Success("change password", null);

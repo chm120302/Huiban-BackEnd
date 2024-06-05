@@ -28,11 +28,7 @@ class JournalMapperTest {
 
     }
 
-    @Test
-    void getRecentList() {
-        List<JournalShow> list = journalMapper.getRecentList();
-        System.out.println("success");
-    }
+
 
     @Test
     void getAllShow() {
@@ -78,7 +74,6 @@ class JournalMapperTest {
         j.setCcfRank("B");
         j.setSub("computer networking");
         j.setImpactFactor(4.474);
-        j.setPaperDeadline(dateUtils.stringToDate("yyyy-MM-dd", "2024-06-15"));
         journalMapper.insert(j);
         System.out.println("success");
     }
@@ -94,7 +89,6 @@ class JournalMapperTest {
     void update() {
         Journal j = new Journal();
         j.setJournalId("IEEE Journal on Selected Areas in Communications");
-        j.setPostponed(true);
         journalMapper.update(j);
         System.out.println("success");
     }

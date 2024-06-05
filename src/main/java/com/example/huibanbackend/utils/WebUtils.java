@@ -50,6 +50,15 @@ public class WebUtils {
     }
 
 
+    public static String getEmailFromHeader(HttpServletRequest request) {
+        String token = request.getHeader("Authorization");
+        if (Objects.isNull(token)) {
+            return null;
+        }
+        token = token.substring(7);
+        return JwtTokenUtils.getEmailFromToken(token);
+    }
+
 
 
     /**

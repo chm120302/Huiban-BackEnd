@@ -13,15 +13,22 @@ public class JournalShow {
     private String journalId;
     private String ccfRank;
     private String sub;
-//    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "UTC")
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private Date paperDeadline;
-    private double impactFactor;
+    private Double impactFactor;
     private String publisher;
-    private boolean isPostponed;
+    private Double citeScore;
 
     public JournalShow(){
 
+    }
+
+    public JournalShow(Integer id, String journalId, String ccfRank, String sub, Double impactFactor, String publisher, Double citeScore) {
+        this.id = id;
+        this.journalId = journalId;
+        this.ccfRank = ccfRank;
+        this.sub = sub;
+        this.impactFactor = impactFactor;
+        this.publisher = publisher;
+        this.citeScore = citeScore;
     }
 
     public Integer getId() {
@@ -56,21 +63,11 @@ public class JournalShow {
         this.sub = sub;
     }
 
-
-    public Date getPaperDeadline() {
-        return paperDeadline;
-    }
-
-    public void setPaperDeadline(Date paperDeadline) {
-        this.paperDeadline = paperDeadline;
-    }
-
-
-    public double getImpactFactor() {
+    public Double getImpactFactor() {
         return impactFactor;
     }
 
-    public void setImpactFactor(double impactFactor) {
+    public void setImpactFactor(Double impactFactor) {
         this.impactFactor = impactFactor;
     }
 
@@ -82,12 +79,12 @@ public class JournalShow {
         this.publisher = publisher;
     }
 
-    public boolean isPostponed() {
-        return isPostponed;
+    public Double getCiteScore() {
+        return citeScore;
     }
 
-    public void setPostponed(boolean postponed) {
-        isPostponed = postponed;
+    public void setCiteScore(Double citeScore) {
+        this.citeScore = citeScore;
     }
 
     @Override
@@ -97,12 +94,9 @@ public class JournalShow {
                 ", journalId='" + journalId + '\'' +
                 ", ccfRank='" + ccfRank + '\'' +
                 ", sub='" + sub + '\'' +
-                ", paperDeadline=" + paperDeadline +
                 ", impactFactor=" + impactFactor +
                 ", publisher='" + publisher + '\'' +
-                ", isPostponed=" + isPostponed +
+                ", citeScore=" + citeScore +
                 '}';
     }
-
-
 }

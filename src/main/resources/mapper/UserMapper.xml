@@ -11,81 +11,83 @@
         <result property="institution" column="institution"/>
         <result property="password" column="password"/>
         <!-- 配置关注会议的映射集合-->
-        <collection property="followConferences" ofType="conference">
-            <id property="id" column="id"/>
-            <result property="conferenceId" column="conference_id"/>
-            <result property="title" column="title"/>
-            <result property="fullTitle" column="full_title"/>
-            <result property="ccfRank" column="ccf_rank"/>
-            <result property="sub" column="sub"/>
-            <result property="year" column="year"/>
-            <result property="dblpLink" column="dblp_link"/>
-            <result property="mainpageLink" column="mainpage_link"/>
-            <result property="place" column="place"/>
-            <result property="abstractDeadline" column="abstract_deadline"/>
-            <result property="paperDeadline" column="paper_deadline"/>
-            <result property="startTime" column="start_time"/>
-            <result property="followNum" column="follow_num"/>
-            <result property="attendNum" column="attend_num"/>
-            <result property="acceptedRate" column="accepted_rate"/>
-            <result property="sessionNum" column="session_num"/>
-            <result property="topicDetails" column="topic_details"/>
-            <result property="isPostponed" column="is_postponed"/>
-        </collection>
+        <collection property="followConferences" ofType="conference" select="selectFollowConf" column="email" javaType="ArrayList"/>
+
 
         <!-- 配置关注期刊的映射集合-->
-        <collection property="followJournals" ofType="journal">
-            <id property="id" column="id"/>
-            <result property="journalId" column="journal_id"/>
-            <result property="ccfRank" column="ccf_rank"/>
-            <result property="sub" column="sub"/>
-            <result property="dblpLink" column="dblp_link"/>
-            <result property="mainpageLink" column="mainpage_link"/>
-            <result property="paperDeadline" column="paper_deadline"/>
-            <result property="followNum" column="follow_num"/>
-            <result property="impactFactor" column="impact_factor"/>
-            <result property="publisher" column="publisher"/>
-            <result property="topicDetails" column="topic_details"/>
-            <result property="isPostponed" column="is_postponed"/>
-        </collection>
+        <collection property="followJournals" ofType="journal" select="selectFollowJour" column="email" javaType="ArrayList"/>
+
 
         <!-- 配置参加会议的映射集合-->
-        <collection property="attendConferences" ofType="conference">
-            <id property="id" column="id"/>
-            <result property="conferenceId" column="conference_id"/>
-            <result property="title" column="title"/>
-            <result property="fullTitle" column="full_title"/>
-            <result property="ccfRank" column="ccf_rank"/>
-            <result property="sub" column="sub"/>
-            <result property="year" column="year"/>
-            <result property="dblpLink" column="dblp_link"/>
-            <result property="mainpageLink" column="mainpage_link"/>
-            <result property="place" column="place"/>
-            <result property="abstractDeadline" column="abstract_deadline"/>
-            <result property="paperDeadline" column="paper_deadline"/>
-            <result property="startTime" column="start_time"/>
-            <result property="endTime" column="end_time"/>
-            <result property="followNum" column="follow_num"/>
-            <result property="attendNum" column="attend_num"/>
-            <result property="acceptedRate" column="accepted_rate"/>
-            <result property="sessionNum" column="session_num"/>
-            <result property="topicDetails" column="topic_details"/>
-            <result property="isPostponed" column="is_postponed"/>
-        </collection>
+        <collection property="attendConferences" ofType="conference" select="selectAttendConf" column="email" javaType="ArrayList"/>
 
     </resultMap>
 
     <sql id="getAllIncludeFollow">
-        select u.*, c.*, j.*, cc.*
-        from user u
-                 left join followlist ft on u.email = ft.email
-                 left join conference c on ft.academic_id = c.conference_id
-                 left join followlist2 ft2 on u.email = ft2.email
-                 left join journal j on ft2.academic_id = j.journal_id
-                 left join attendlist tt on u.email = tt.email
-                 left join conference cc on tt.academic_id = cc.conference_id
+     select *
+     from user u
 
     </sql>
+    <resultMap id="conf" type="conference">
+        <id property="id" column="id"/>
+        <result property="conferenceId" column="conference_id"/>
+        <result property="title" column="title"/>
+        <result property="fullTitle" column="full_title"/>
+        <result property="ccfRank" column="ccf_rank"/>
+        <result property="sub" column="sub"/>
+        <result property="year" column="year"/>
+        <result property="dblpLink" column="dblp_link"/>
+        <result property="mainpageLink" column="mainpage_link"/>
+        <result property="place" column="place"/>
+        <result property="abstractDeadline" column="abstract_deadline"/>
+        <result property="paperDeadline" column="paper_deadline"/>
+        <result property="startTime" column="start_time"/>
+        <result property="followNum" column="follow_num"/>
+        <result property="attendNum" column="attend_num"/>
+        <result property="acceptedRate" column="accepted_rate"/>
+        <result property="sessionNum" column="session_num"/>
+        <result property="topicDetails" column="topic_details"/>
+        <result property="isPostponed" column="is_postponed"/>
+    </resultMap>
+
+    <resultMap id="jour" type="journal">
+        <id property="id" column="id"/>
+        <result property="journalId" column="journal_id"/>
+        <result property="ccfRank" column="ccf_rank"/>
+        <result property="sub" column="sub"/>
+        <result property="dblpLink" column="dblp_link"/>
+        <result property="mainpageLink" column="mainpage_link"/>
+        <result property="followNum" column="follow_num"/>
+        <result property="impactFactor" column="impact_factor"/>
+        <result property="publisher" column="publisher"/>
+        <result property="topicDetails" column="topic_details"/>
+        <result property="citeScore" column="cite_score"/>
+    </resultMap>
+
+    <select id="selectFollowConf" parameterType="string" resultMap="conf">
+        select c.*
+        from user u
+        left join followlist ft on u.email = ft.email
+        left join conference c on ft.academic_id = c.conference_id
+        where u.email=#{email}
+    </select>
+
+    <select id="selectFollowJour" parameterType="string" resultMap="jour">
+        select j.*
+        from user u
+        left join followlist2 ft2 on u.email = ft2.email
+        left join journal j on ft2.academic_id = j.journal_id
+        where u.email=#{email}
+    </select>
+
+    <select id="selectAttendConf" parameterType="string" resultMap="conf">
+        select cc.*
+        from user u
+                 left join attendlist tt on u.email = tt.email
+                 left join conference cc on tt.academic_id = cc.conference_id
+        where u.email=#{email}
+    </select>
+
 
     <!--
     查询所有用户的信息包括收藏列表

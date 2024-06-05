@@ -25,11 +25,6 @@ public class JournalServiceImpl implements JournalService {
     }
 
     @Override
-    public List<JournalShow> getRecentList() {
-        return journalMapper.getRecentList();
-    }
-
-    @Override
     public List<JournalShow> getAllShow() {
         return journalMapper.getAllShow();
     }

@@ -15,32 +15,39 @@ public class Journal {
     private String sub;
     private String dblpLink;
     private String mainpageLink;
-//    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "UTC")
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private Date paperDeadline;
     private Integer followNum;
     private Double impactFactor;
     private String publisher;
     private String topicDetails;
-    private Boolean isPostponed;
+    private Double citeScore;
 
     public Journal(){}
 
-    public Journal(String journalId, String ccfRank, String sub, String dblpLink, String mainpageLink, Date paperDeadline, Integer followNum, Double impactFactor, String publisher, String topicDetails, Boolean isPostponed) {
-
+    public Journal(Integer id, String journalId, String ccfRank, String sub, String dblpLink, String mainpageLink, Integer followNum, Double impactFactor, String publisher, String topicDetails, Double citeScore) {
+        this.id = id;
         this.journalId = journalId;
         this.ccfRank = ccfRank;
         this.sub = sub;
         this.dblpLink = dblpLink;
         this.mainpageLink = mainpageLink;
-        this.paperDeadline = paperDeadline;
         this.followNum = followNum;
         this.impactFactor = impactFactor;
         this.publisher = publisher;
         this.topicDetails = topicDetails;
-        this.isPostponed = isPostponed;
+        this.citeScore = citeScore;
     }
 
+    public void setImpactFactor(Double impactFactor) {
+        this.impactFactor = impactFactor;
+    }
+
+    public Double getCiteScore() {
+        return citeScore;
+    }
+
+    public void setCiteScore(Double citeScore) {
+        this.citeScore = citeScore;
+    }
 
     public Integer getId() {
         return id;
@@ -90,13 +97,6 @@ public class Journal {
         this.mainpageLink = mainpageLink;
     }
 
-    public Date getPaperDeadline() {
-        return paperDeadline;
-    }
-
-    public void setPaperDeadline(Date paperDeadline) {
-        this.paperDeadline = paperDeadline;
-    }
 
     public Integer getFollowNum() {
         return followNum;
@@ -132,13 +132,6 @@ public class Journal {
         this.topicDetails = topicDetails;
     }
 
-    public Boolean isPostponed() {
-        return isPostponed;
-    }
-
-    public void setPostponed(boolean postponed) {
-        isPostponed = postponed;
-    }
 
     @Override
     public String toString() {
@@ -149,12 +142,11 @@ public class Journal {
                 ", sub='" + sub + '\'' +
                 ", dblpLink='" + dblpLink + '\'' +
                 ", mainpageLink='" + mainpageLink + '\'' +
-                ", paperDeadline=" + paperDeadline +
                 ", followNum=" + followNum +
                 ", impactFactor=" + impactFactor +
                 ", publisher='" + publisher + '\'' +
                 ", topicDetails='" + topicDetails + '\'' +
-                ", isPostponed=" + isPostponed +
+                ", citeScore=" + citeScore +
                 '}';
     }
 }

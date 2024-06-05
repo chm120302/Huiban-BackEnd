@@ -16,9 +16,6 @@ public interface JournalMapper {
     //查询最受欢迎的5个期刊
     List<JournalDetail> getPopularList();
 
-    //查询截稿日期最近的前10个期刊
-    List<JournalShow> getRecentList();
-
     //查询所有期刊信息(期刊展示页)
     List<JournalShow> getAllShow();
 
