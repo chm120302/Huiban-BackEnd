@@ -126,18 +126,19 @@
     int update(Journal journal);
     -->
     <update id="update" parameterType="journal">
-        update journal set
-        <if test="ccfRank != null and ccfRank != ''">ccf_rank=#{ccfRank},</if>
-        <if test="sub != null and sub != ''">sub=#{sub},</if>
-        <if test="dblpLink != null and dblpLink != ''">dblp_link=#{dblpLink},</if>
-        <if test="mainpageLink != null and mainpageLink != ''">mainpage_link=#{mainpageLink},</if>
-        <if test="followNum != null">follow_num=#{followNum},</if>
-        <if test="impactFactor != null">impact_factor=#{impactFactor},</if>
-        <if test="publisher != null and publisher != ''">publisher=#{publisher},</if>
-        <if test="topicDetails != null and topicDetails != ''">topic_details=#{topicDetails},</if>
-        <if test="citeScore != null ">cite_score=#{citeScore}</if>
+        update journal
+        <trim prefix="set" suffixOverrides=",">
+            <if test="ccfRank != null and ccfRank != ''">ccf_rank=#{ccfRank},</if>
+            <if test="sub != null and sub != ''">sub=#{sub},</if>
+            <if test="dblpLink != null and dblpLink != ''">dblp_link=#{dblpLink},</if>
+            <if test="mainpageLink != null and mainpageLink != ''">mainpage_link=#{mainpageLink},</if>
+            <if test="followNum != null">follow_num=#{followNum},</if>
+            <if test="impactFactor != null">impact_factor=#{impactFactor},</if>
+            <if test="publisher != null and publisher != ''">publisher=#{publisher},</if>
+            <if test="topicDetails != null and topicDetails != ''">topic_details=#{topicDetails},</if>
+            <if test="citeScore != null ">cite_score=#{citeScore}</if>
+        </trim>
         where journal_id=#{journalId}
-
     </update>
 
     <!--

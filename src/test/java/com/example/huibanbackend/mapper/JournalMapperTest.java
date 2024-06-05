@@ -89,6 +89,7 @@ class JournalMapperTest {
     void update() {
         Journal j = new Journal();
         j.setJournalId("IEEE Journal on Selected Areas in Communications");
+        j.setSub("fff");
         journalMapper.update(j);
         System.out.println("success");
     }

@@ -226,7 +226,8 @@
     int update(Conference conference);
     -->
     <update id="update" parameterType="conference">
-        update conference set
+        update conference
+        <trim prefix="set" suffixOverrides=",">
                               <if test="title != null and title != '' ">title=#{title},</if>
                               <if test="fullTitle != null and fullTitle != '' ">full_title=#{title},</if>
                               <if test="ccfRank != null and ccfRank != ''">ccf_rank=#{ccfRank}, </if>
@@ -245,6 +246,7 @@
                               <if test="sessionNum != null ">session_num=#{sessionNum},</if>
                               <if test="topicDetails != null and topicDetails != ''"> topic_details=#{topicDetails},</if>
                               <if test="isPostponed != null "> is_postponed=#{isPostponed}</if>
+        </trim>
         where conference_id=#{conferenceId}
 
     </update>
