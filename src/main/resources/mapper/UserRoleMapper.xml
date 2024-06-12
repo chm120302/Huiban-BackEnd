@@ -4,6 +4,6 @@
 <mapper namespace="com.example.huibanbackend.mapper.UserRoleMapper">
 
     <insert id="insertUserRole" >
-        insert into sys_user_role values (#{email}, 'ROLE_USER')
+        insert into sys_user_role values (#{email}, #{role})
     </insert>
 </mapper>

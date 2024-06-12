@@ -17,6 +17,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
@@ -54,14 +55,14 @@ public class LoginController {
         String email = user.getEmail();
         User _user = userMapper.getAllInfoByEmail(email);
         if(Objects.nonNull(_user)){
-            return Result.fail("用户id已存在");
+            return Result.fail(HttpStatus.METHOD_NOT_ALLOWED.value(),"用户id已存在", email);
         }
         try { //自动生成base64编码的头像
              if(user.getImageUrl() == null || user.getImageUrl().isEmpty()){
                  user.setImageUrl(AvatarHelper.createBase64Avatar());
              }
             userMapper.insert(user);
-            userRoleMapper.insertUserRole(email);
+            userRoleMapper.insertUserRole(email, "ROLE_USER");
             return Result.Success("用户注册成功");
         }catch (Exception e){
             return Result.fail("用户注册过程中遇到异常：" + e);

@@ -9,9 +9,9 @@ use huiban;
 DROP TABLE IF EXISTS user;
 DROP TABLE IF EXISTS conference;
 DROP TABLE IF EXISTS journal;
-DROP TABLE IF EXISTS followList;
-DROP TABLE IF EXISTS followList2;
-DROP TABLE IF EXISTS attendList;
+DROP TABLE IF EXISTS followlist;
+DROP TABLE IF EXISTS followlist2;
+DROP TABLE IF EXISTS attendlist;
 DROP TABLE IF EXISTS comment;
 
 
@@ -22,7 +22,7 @@ CREATE TABLE user
 (
     id           int NOT NULL  AUTO_INCREMENT COMMENT '编号id',
     email        varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '邮箱',
-    image_url    varchar(512) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '用户头像',
+    image_url    longtext CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '用户头像',
     user_name    varchar(32)  CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '用户名',
     institution  varchar(64)  CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '机构',
     password    varchar(8)   CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '密码',
@@ -197,9 +197,9 @@ CREATE TABLE followList2
 
 
 -- 初始化关注列表
-INSERT INTO followList VALUES (null, 'chm120302@126.com', 'conference', 'date2023');
-INSERT INTO followList2 VALUES (null, 'chm120302@126.com', 'journal', 'IEEE Journal on Selected Areas in Communications');
-INSERT INTO followList2 VALUES (null, 'chm120302@126.com', 'journal', 'IEEE Internet of Things');
+INSERT INTO followlist VALUES (null, 'chm120302@126.com', 'conference', 'date2023');
+INSERT INTO followlist2 VALUES (null, 'chm120302@126.com', 'journal', 'IEEE Journal on Selected Areas in Communications');
+INSERT INTO followlist2 VALUES (null, 'chm120302@126.com', 'journal', 'IEEE Internet of Things');
 
 -- ---------------------------
 -- 用户参加会议列表：记录用户参加的会议

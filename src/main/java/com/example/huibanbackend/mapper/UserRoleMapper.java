@@ -8,5 +8,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface UserRoleMapper {
 
-    int insertUserRole(@Param("email") String email);
+    int insertUserRole(@Param("email") String email, @Param("role") String role);
 }

@@ -24,7 +24,7 @@ public class JwtTokenUtils {
     public static String getJwtToken(String email){
         String jwtToken = JWT.create()
                 .withClaim("email", email)
-                .withExpiresAt(DateUtil.offsetHour(new Date(), 1))
+                .withExpiresAt(DateUtil.offsetDay(new Date(), 1))
                 .sign(Algorithm.HMAC256(SING_VALUE));
         return jwtToken;
     }

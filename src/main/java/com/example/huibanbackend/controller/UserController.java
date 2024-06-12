@@ -4,8 +4,10 @@ import com.example.huibanbackend.entity.Result;
 import com.example.huibanbackend.entity.User;
 import com.example.huibanbackend.exception.DuplicateException;
 import com.example.huibanbackend.exception.NotFoundException;
+import com.example.huibanbackend.mapper.UserRoleMapper;
 import com.example.huibanbackend.service.UserService;
 
+import com.example.huibanbackend.utils.AvatarHelper;
 import com.example.huibanbackend.utils.WebUtils;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -21,6 +23,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.List;
 
 
@@ -34,6 +37,9 @@ public class UserController {
 
     @Autowired
     private HttpServletRequest request;
+
+    @Autowired
+    private UserRoleMapper userRoleMapper;
 
     @GetMapping("/list")
     @PreAuthorize("@myAccess.hasAuthority('4')")
@@ -75,14 +81,26 @@ public class UserController {
             @ApiResponse(responseCode = "404", description = "请求路径没有或页面跳转路径不对"),
             @ApiResponse(responseCode = "409", description = "服务器在完成请求时发生冲突")
     })
-    public Result<User> addUser(@RequestBody User user){
+    public Result<User> addUser(@RequestBody User user, @RequestParam String role){
         try{
+            if(user.getImageUrl() == null || user.getImageUrl().isEmpty()){
+                user.setImageUrl(AvatarHelper.createBase64Avatar());
+            }
             userService.insert(user);
+            if(role.equals("ROLE_ADMIN") || role.equals("ROLE_USER")){
+                userRoleMapper.insertUserRole(user.getEmail(), role);
+            } else {
+                return Result.fail(HttpStatus.BAD_REQUEST.value(), "incorrect role, please input ROLE_ADMIN or ROLE_USER", role);
+            }
+
+
             return Result.Success("create", user);
 
         }catch (DuplicateException e){
             return Result.fail(HttpStatus.CONFLICT.value(), "conflict", null);
 
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 
