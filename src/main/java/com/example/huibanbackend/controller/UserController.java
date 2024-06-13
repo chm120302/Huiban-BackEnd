@@ -15,11 +15,9 @@ import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -33,7 +31,7 @@ import java.util.List;
 public class UserController {
 
     @Autowired
-    public UserService userService;
+    private UserService userService;
 
     @Autowired
     private HttpServletRequest request;
@@ -64,7 +62,7 @@ public class UserController {
             return Result.Success(user);
 
         } catch (NotFoundException e){
-            return Result.fail(404, "not found", null);
+            return Result.fail(HttpStatus.NOT_FOUND.value(), "not found", null);
 
         }
 

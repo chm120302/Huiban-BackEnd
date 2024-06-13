@@ -1,10 +1,12 @@
 package com.example.huibanbackend.utils;
 
-import com.alibaba.fastjson2.JSON;
+
+import com.example.huibanbackend.config.JwtAuthenticationTokenFilter;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -13,7 +15,9 @@ import java.io.IOException;
 import java.util.Objects;
 
 @Slf4j
-public class WebUtils {
+public final class WebUtils {
+
+    private WebUtils(){}
 
     /**
      * 获取Attributes
@@ -55,7 +59,7 @@ public class WebUtils {
         if (Objects.isNull(token)) {
             return null;
         }
-        token = token.substring(7);
+        token = token.substring(JwtAuthenticationTokenFilter.tokenStart);
         return JwtTokenUtils.getEmailFromToken(token);
     }
 
@@ -69,7 +73,7 @@ public class WebUtils {
      */
     public static void renderString(HttpServletResponse response, String string) {
         try {
-            response.setStatus(200);
+            response.setStatus(HttpStatus.OK.value());
             response.setContentType("application/json");
             response.setCharacterEncoding("utf-8");
             response.getWriter().print(string);

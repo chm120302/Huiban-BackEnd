@@ -6,7 +6,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 
 @SpringBootApplication
-
 @MapperScan(value = "com.example.huibanbackend.mapper")
 public class HuibanBackEndApplication {
 

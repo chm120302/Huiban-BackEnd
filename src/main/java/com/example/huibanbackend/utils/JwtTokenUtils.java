@@ -12,13 +12,15 @@ import org.springframework.data.redis.core.ReactiveRedisOperations;
 import java.util.Date;
 
 @Slf4j
-public class JwtTokenUtils {
+public final class JwtTokenUtils {
 
     //额外的数据，越复杂越安全
     private static final String SING_VALUE = "ecnudzpdhuiban";
 
     // 过期时间
     private static ReactiveRedisOperations<Object, Object> redisTemplate;
+
+    private JwtTokenUtils() {}
 
 
     public static String getJwtToken(String email){

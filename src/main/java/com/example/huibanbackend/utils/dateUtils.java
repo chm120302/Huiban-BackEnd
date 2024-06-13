@@ -9,7 +9,11 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.Date;
 
-public class dateUtils {
+public final class dateUtils {
+
+    private dateUtils(){
+
+    }
 
     public static Date stringToDate(String format, String dateString) throws ParseException {
         // format: yyyy-MM-dd or yyyy-MM-dd HH:mm:ss

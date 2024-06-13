@@ -1,6 +1,5 @@
 package com.example.huibanbackend.entity;
 
-import lombok.Getter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

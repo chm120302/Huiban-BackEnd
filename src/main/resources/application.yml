@@ -39,6 +39,6 @@ mybatis:
   config-location: classpath:mybatis-config.xml
   # 实体类的位置
   type-aliases-package: com.example.huibanbackend.entity
-#server:
-#  port: 9001
-#  address: 10.0.4.16
+server:
+  port: 9001
+  address: 10.0.4.16

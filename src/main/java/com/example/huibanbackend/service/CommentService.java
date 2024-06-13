@@ -1,7 +1,6 @@
 package com.example.huibanbackend.service;
 
 import com.example.huibanbackend.entity.Comment;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 

@@ -3,15 +3,14 @@ package com.example.huibanbackend.service.impl;
 import com.example.huibanbackend.entity.Comment;
 import com.example.huibanbackend.mapper.CommentMapper;
 import com.example.huibanbackend.service.CommentService;
-import com.example.huibanbackend.utils.dateUtils;
-import jakarta.annotation.Resource;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 
-import java.util.Date;
+
 import java.util.List;
 
 @Service
@@ -57,7 +56,7 @@ public class CommentServiceImpl implements CommentService {
         //判断是否有子一级评论
         if(!childComments.isEmpty()){
             for(Comment childComment : childComments){
-                String parentName = childComment.getUserName();;
+                String parentName = childComment.getUserName();
                 String parentImage = childComment.getImageUrl();
                 childComment.setParentUsername(parentUsername);
                 childComment.setParentImageurl(parentImageurl);

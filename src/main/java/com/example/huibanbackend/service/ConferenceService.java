@@ -6,7 +6,7 @@ import com.example.huibanbackend.entity.ConferenceShow;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.Date;
-import java.util.HashMap;
+
 import java.util.List;
 
 public interface ConferenceService {

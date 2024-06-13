@@ -18,6 +18,8 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 public class LogAspect {
     private Logger logger = LoggerFactory.getLogger(this.getClass());
     ThreadLocal<Long> startTime = new ThreadLocal<>();
+
+
     //定义切点
     @Pointcut(value = "execution(* com.example.huibanbackend.controller.*.*(..))")
     public void aopWebLog() {

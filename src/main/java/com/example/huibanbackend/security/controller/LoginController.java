@@ -6,9 +6,7 @@ import com.example.huibanbackend.entity.Result;
 import com.example.huibanbackend.entity.User;
 import com.example.huibanbackend.mapper.UserMapper;
 import com.example.huibanbackend.mapper.UserRoleMapper;
-import com.example.huibanbackend.security.service.SecurityUserService;
 import com.example.huibanbackend.security.service.impl.SecurityUserServiceImpl;
-import com.example.huibanbackend.service.UserService;
 import com.example.huibanbackend.utils.AvatarHelper;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -19,7 +17,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;

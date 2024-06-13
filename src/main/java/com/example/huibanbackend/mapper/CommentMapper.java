@@ -1,10 +1,8 @@
 package com.example.huibanbackend.mapper;
 
 import com.example.huibanbackend.entity.Comment;
-import jakarta.annotation.Resource;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;

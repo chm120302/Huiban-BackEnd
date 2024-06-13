@@ -1,6 +1,6 @@
 package com.example.huibanbackend.entity;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.format.annotation.DateTimeFormat;

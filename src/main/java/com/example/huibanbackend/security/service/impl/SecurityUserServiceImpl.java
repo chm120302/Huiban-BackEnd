@@ -6,8 +6,6 @@ import com.example.huibanbackend.entity.LoginUser;
 import com.example.huibanbackend.security.service.SecurityUserService;
 import com.example.huibanbackend.utils.JwtTokenUtils;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.security.authentication.AuthenticationManager;

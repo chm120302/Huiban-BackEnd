@@ -25,6 +25,8 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
     @Autowired
     private StringRedisTemplate redisTemplate;
 
+    public static final int tokenStart = 7;
+
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
@@ -44,7 +46,7 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
             return;
         }
 
-        token = token.substring(7);
+        token = token.substring(tokenStart);
         String userId = JwtTokenUtils.getEmailFromToken(token);
         loginUserString= redisTemplate.opsForValue().get("login_" + userId);
         }catch (Exception e) {

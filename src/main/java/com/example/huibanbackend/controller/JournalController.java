@@ -7,7 +7,6 @@ import com.example.huibanbackend.exception.NotFoundException;
 import com.example.huibanbackend.service.FollowListService;
 import com.example.huibanbackend.service.JournalService;
 import com.example.huibanbackend.service.UserService;
-import com.example.huibanbackend.utils.JwtTokenUtils;
 import com.example.huibanbackend.utils.WebUtils;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -18,7 +17,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
