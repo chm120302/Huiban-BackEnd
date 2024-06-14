@@ -132,8 +132,8 @@ public class UserController {
             @ApiResponse(responseCode = "404", description = "请求路径没有或页面跳转路径不对")
     })
     public Result<User> updateUser(@RequestBody User user){
-        String email = WebUtils.getEmailFromHeader(request);
-        user.setEmail(email);
+//        String email = WebUtils.getEmailFromHeader(request);
+//        user.setEmail(email);
         try {
             userService.update(user);
             return Result.Success("update", user);

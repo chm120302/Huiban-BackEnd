@@ -143,21 +143,21 @@
     -->
     <insert id="insert" parameterType="user">
         insert into user
-        (
+        <trim prefix="(" suffix=")" suffixOverrides=",">
         <if test="email != null and email != ''">email,</if>
         <if test="imageUrl != null and imageUrl != ''">image_url,</if>
         <if test="userName != null and userName != ''">user_name,</if>
         <if test="institution != null and institution != ''">institution,</if>
-        <if test="password != null and password != ''">password</if>
-        )
-        values(
+        <if test="password != null and password != ''">`password`</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
 
         <if test="email != null and email != ''">#{email},</if>
         <if test="imageUrl != null and imageUrl != ''">#{imageUrl},</if>
         <if test="userName != null and userName != ''">#{userName},</if>
         <if test="institution != null and institution != ''">#{institution},</if>
         <if test="password != null and password != ''">#{password}</if>
-        )
+        </trim>
 
     </insert>
 
@@ -175,10 +175,12 @@
     int update(User user);
     -->
     <update id="update" parameterType="user">
-        update user set
+        update user
+        <trim prefix="set" suffixOverrides=",">
         <if test="imageUrl != null and imageUrl != ''">image_url=#{imageUrl},</if>
         <if test="userName != null and userName != ''">user_name=#{userName},</if>
         <if test="institution != null and institution !=''">institution=#{institution}</if>
+        </trim>
         where email=#{email}
     </update>
 

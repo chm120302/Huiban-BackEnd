@@ -91,12 +91,6 @@ public class LoginController {
         }
     }
 
-    @GetMapping("/index")
-    @Operation(summary = "test if the login function is available")
-    public String index() {
-        return "index,security";
-    }
-
 
 
 }
