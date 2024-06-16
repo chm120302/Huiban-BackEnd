@@ -276,6 +276,7 @@ INSERT INTO sys_perm (id, func_name, path, status, perms, create_time, del_flag,
 INSERT INTO sys_perm (id, func_name, path, status, perms, create_time, del_flag, remark) VALUES ('get_conference_detail_list', '查看会议', '/api/conferences/list/detail', '0', '21', NOW(), 0, '');
 INSERT INTO sys_perm (id, func_name, path, status, perms, create_time, del_flag, remark) VALUES ('get_conference_by_date', '查看会议', '/api/conferences/list/', '0', '22', NOW(), 0, '');
 INSERT INTO sys_perm (id, func_name, path, status, perms, create_time, del_flag, remark) VALUES ('del_conference', '删除会议', '/api/conferences/{conferenceId}', '0', '23', NOW(), 0, '');
+INSERT INTO sys_perm (id, func_name, path, status, perms, create_time, del_flag, remark) VALUES ('all_conference', '所有会议信息', '/api/conferences/allList', '0', '40', NOW(), 0, '');
 
 INSERT INTO sys_perm (id, func_name, path, status, perms, create_time, del_flag, remark) VALUES ('add_comment', '添加评论', '/api/comments/comment', '0', '24', NOW(), 0 ,'');
 INSERT INTO sys_perm (id, func_name, path, status, perms, create_time, del_flag, remark) VALUES ('get_comment', '查看评论', '/api/comments/{academicId}/comment', '0', '25', NOW(), 0 ,'');
@@ -358,6 +359,7 @@ INSERT INTO sys_role_perm (role_id, perm_id) VALUES ('ROLE_ADMIN', 'get_conferen
 INSERT INTO sys_role_perm (role_id, perm_id) VALUES ('ROLE_ADMIN', 'get_conference_detail_list');
 INSERT INTO sys_role_perm (role_id, perm_id) VALUES ('ROLE_ADMIN', 'get_conference_by_date');
 INSERT INTO sys_role_perm (role_id, perm_id) VALUES ('ROLE_ADMIN', 'del_conference');
+INSERT INTO sys_role_perm (role_id, perm_id) VALUES ('ROLE_ADMIN', 'all_conference');
 
 INSERT INTO sys_role_perm (role_id, perm_id) VALUES ('ROLE_ADMIN', 'add_comment');
 INSERT INTO sys_role_perm (role_id, perm_id) VALUES ('ROLE_ADMIN', 'get_comment');

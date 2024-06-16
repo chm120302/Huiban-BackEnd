@@ -20,6 +20,11 @@ public class ConferenceServiceImpl implements ConferenceService {
     private ConferenceMapper conferenceMapper;
 
     @Override
+    public List<Conference> getAll() {
+        return conferenceMapper.getAll();
+    }
+
+    @Override
     public List<ConferenceDetail> getPopularList(){
         return conferenceMapper.getPopularList();
     }

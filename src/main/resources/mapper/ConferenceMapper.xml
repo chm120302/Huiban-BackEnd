@@ -13,6 +13,11 @@
         from conference c
     </sql>
 
+    <select id="getAll" resultType="conference">
+        select conference_id, title, full_title, ccf_rank, sub, year, dblp_link, mainpage_link, place, abstract_deadline, paper_deadline, start_time, end_time, follow_num, attend_num, accepted_rate, session_num, topic_details, is_postponed
+        from conference
+    </select>
+
     <!--
     查询最受欢迎的5个会议
     List<HashMap<String, Integer>> getPopularList();

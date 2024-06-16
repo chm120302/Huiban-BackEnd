@@ -101,6 +101,7 @@ public class WebSecurityConfig{
                                 .requestMatchers("/api/conferences/list/detail").hasAuthority("21")
                                 .requestMatchers("/api/conferences/list/").hasAuthority("22")
                                 .requestMatchers("/api/conferences/{conferenceId}").hasAuthority("23")
+                                .requestMatchers("/api/conferences/allList").hasAuthority("40")
                                 .requestMatchers("/api/comments/comment").hasAuthority("24")
                                 .requestMatchers("/api/comments/{academicId}/comment").hasAuthority("25")
                                 .requestMatchers("/api/comments/comment/{id}").hasAuthority("26")
@@ -108,8 +109,7 @@ public class WebSecurityConfig{
                                 .requestMatchers("/api/journals/{journalId}/follow/add").hasAuthority("28")
                                 .requestMatchers("/api/journals/update").hasAuthority("29")
                                 .requestMatchers("/api/journals").hasAuthority("30")
-//                                .requestMatchers("/api/journals/recentList").hasAuthority("31")
-                                .requestMatchers("/api/journals/popularList").permitAll()
+                                .requestMatchers("/api/journals/recentList").hasAuthority("31")
                                 .requestMatchers("/api/journals/list").hasAuthority("33")
                                 .requestMatchers("/api/journals/list/{journalId}").hasAuthority("34")
                                 .requestMatchers("/api/journals/list/{journalId}/detail").hasAuthority("35")
@@ -117,6 +117,7 @@ public class WebSecurityConfig{
                                 .requestMatchers("/api/journals/list/rank/{ccfRank}").hasAuthority("37")
                                 .requestMatchers("/api/journals/list/detail").hasAuthority("38")
                                 .requestMatchers("/api/journals/{journalId}").hasAuthority("39")
+
 
                                 // 允许OPTIONS请求访问
                                 .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()

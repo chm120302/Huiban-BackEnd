@@ -10,6 +10,8 @@ import java.util.Date;
 import java.util.List;
 
 public interface ConferenceService {
+    //查询会议所有信息
+    List<Conference> getAll();
 
     //查询最受欢迎的5个会议
     List<ConferenceDetail> getPopularList();

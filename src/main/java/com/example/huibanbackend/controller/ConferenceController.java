@@ -45,6 +45,13 @@ public class ConferenceController {
     @Autowired
     private HttpServletRequest userHttpRequest;
 
+    @GetMapping("/allList")
+    @Operation(summary = "get the all conferences info")
+    @PreAuthorize("@myAccess.hasAuthority('40')")
+    public Result<List<Conference>> getConferences() {
+        return Result.Success("get all conferences", conferenceService.getAll());
+    }
+
 
     @GetMapping("/popularList")
     @Operation(summary = "get the top 5 followed conferences ")
