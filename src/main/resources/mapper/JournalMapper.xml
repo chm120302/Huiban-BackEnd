@@ -106,7 +106,7 @@
             <if test="impactFactor != null">#{impactFactor},</if>
             <if test="publisher != null and publisher != ''">#{publisher},</if>
             <if test="topicDetails != null and topicDetails != ''">#{topicDetails},</if>
-            <if test="citeScore != null">#{cite_score}</if>
+            <if test="citeScore != null">#{citeScore}</if>
         </trim>
     </insert>
 
